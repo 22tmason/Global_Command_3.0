@@ -1,0 +1,1386 @@
+{
+  "CRI": {
+    "name": "Costa Rica",
+    "population": 5047561,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(121, 65%, 55%)"
+  },
+  "NIC": {
+    "name": "Nicaragua",
+    "population": 6545502,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(233, 65%, 55%)"
+  },
+  "HTI": {
+    "name": "Haiti",
+    "population": 11263077,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(21, 65%, 55%)"
+  },
+  "DOM": {
+    "name": "Dominican Rep.",
+    "population": 10738958,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(307, 65%, 55%)"
+  },
+  "SLV": {
+    "name": "El Salvador",
+    "population": 6453553,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(154, 65%, 55%)"
+  },
+  "GTM": {
+    "name": "Guatemala",
+    "population": 16604026,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(164, 65%, 55%)"
+  },
+  "CUB": {
+    "name": "Cuba",
+    "population": 11333483,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(225, 65%, 55%)"
+  },
+  "HND": {
+    "name": "Honduras",
+    "population": 9746117,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(204, 65%, 55%)"
+  },
+  "USA": {
+    "name": "United States of America",
+    "population": 328239523,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(224, 65%, 55%)"
+  },
+  "CAN": {
+    "name": "Canada",
+    "population": 37589262,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(244, 65%, 55%)"
+  },
+  "MEX": {
+    "name": "Mexico",
+    "population": 127575529,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(328, 65%, 55%)"
+  },
+  "BLZ": {
+    "name": "Belize",
+    "population": 390353,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(241, 65%, 55%)"
+  },
+  "PAN": {
+    "name": "Panama",
+    "population": 4246439,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(253, 65%, 55%)"
+  },
+  "GRL": {
+    "name": "Greenland",
+    "population": 56225,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(224, 65%, 55%)"
+  },
+  "BHS": {
+    "name": "Bahamas",
+    "population": 389482,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(335, 65%, 55%)"
+  },
+  "TTO": {
+    "name": "Trinidad and Tobago",
+    "population": 1394973,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(83, 65%, 55%)"
+  },
+  "PRI": {
+    "name": "Puerto Rico",
+    "population": 3193694,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(79, 65%, 55%)"
+  },
+  "JAM": {
+    "name": "Jamaica",
+    "population": 2948279,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(129, 65%, 55%)"
+  },
+  "IDN": {
+    "name": "Indonesia",
+    "population": 270625568,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(248, 65%, 55%)"
+  },
+  "MYS": {
+    "name": "Malaysia",
+    "population": 31949777,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(236, 65%, 55%)"
+  },
+  "CYP": {
+    "name": "Cyprus",
+    "population": 1198575,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(255, 65%, 55%)"
+  },
+  "IND": {
+    "name": "India",
+    "population": 1366417754,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(149, 65%, 55%)"
+  },
+  "CHN": {
+    "name": "China",
+    "population": 1397715000,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(214, 65%, 55%)"
+  },
+  "ISR": {
+    "name": "Israel",
+    "population": 9053300,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(169, 65%, 55%)"
+  },
+  "PSE": {
+    "name": "Palestine",
+    "population": 4685306,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(94, 65%, 55%)"
+  },
+  "LBN": {
+    "name": "Lebanon",
+    "population": 6855713,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(156, 65%, 55%)"
+  },
+  "SYR": {
+    "name": "Syria",
+    "population": 17070135,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(304, 65%, 55%)"
+  },
+  "KOR": {
+    "name": "South Korea",
+    "population": 51709098,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(292, 65%, 55%)"
+  },
+  "PRK": {
+    "name": "North Korea",
+    "population": 25666161,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(243, 65%, 55%)"
+  },
+  "BTN": {
+    "name": "Bhutan",
+    "population": 763092,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(145, 65%, 55%)"
+  },
+  "OMN": {
+    "name": "Oman",
+    "population": 4974986,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(150, 65%, 55%)"
+  },
+  "UZB": {
+    "name": "Uzbekistan",
+    "population": 33580650,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(193, 65%, 55%)"
+  },
+  "KAZ": {
+    "name": "Kazakhstan",
+    "population": 18513930,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(110, 65%, 55%)"
+  },
+  "TJK": {
+    "name": "Tajikistan",
+    "population": 9321018,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(353, 65%, 55%)"
+  },
+  "MNG": {
+    "name": "Mongolia",
+    "population": 3225167,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(313, 65%, 55%)"
+  },
+  "VNM": {
+    "name": "Vietnam",
+    "population": 96462106,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(22, 65%, 55%)"
+  },
+  "KHM": {
+    "name": "Cambodia",
+    "population": 16486542,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(97, 65%, 55%)"
+  },
+  "ARE": {
+    "name": "United Arab Emirates",
+    "population": 9770529,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(197, 65%, 55%)"
+  },
+  "GEO": {
+    "name": "Georgia",
+    "population": 3720382,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(32, 65%, 55%)"
+  },
+  "AZE": {
+    "name": "Azerbaijan",
+    "population": 10023318,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(28, 65%, 55%)"
+  },
+  "TUR": {
+    "name": "Turkey",
+    "population": 83429615,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(218, 65%, 55%)"
+  },
+  "LAO": {
+    "name": "Laos",
+    "population": 7169455,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(16, 65%, 55%)"
+  },
+  "KGZ": {
+    "name": "Kyrgyzstan",
+    "population": 6456900,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(125, 65%, 55%)"
+  },
+  "ARM": {
+    "name": "Armenia",
+    "population": 2957731,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(187, 65%, 55%)"
+  },
+  "IRQ": {
+    "name": "Iraq",
+    "population": 39309783,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(344, 65%, 55%)"
+  },
+  "IRN": {
+    "name": "Iran",
+    "population": 82913906,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(327, 65%, 55%)"
+  },
+  "QAT": {
+    "name": "Qatar",
+    "population": 2832067,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(194, 65%, 55%)"
+  },
+  "SAU": {
+    "name": "Saudi Arabia",
+    "population": 34268528,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(205, 65%, 55%)"
+  },
+  "PAK": {
+    "name": "Pakistan",
+    "population": 216565318,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(158, 65%, 55%)"
+  },
+  "THA": {
+    "name": "Thailand",
+    "population": 69625582,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(168, 65%, 55%)"
+  },
+  "KWT": {
+    "name": "Kuwait",
+    "population": 4207083,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(263, 65%, 55%)"
+  },
+  "TLS": {
+    "name": "Timor-Leste",
+    "population": 1293119,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(133, 65%, 55%)"
+  },
+  "BRN": {
+    "name": "Brunei",
+    "population": 433285,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(13, 65%, 55%)"
+  },
+  "MMR": {
+    "name": "Myanmar",
+    "population": 54045420,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(99, 65%, 55%)"
+  },
+  "BGD": {
+    "name": "Bangladesh",
+    "population": 163046161,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(124, 65%, 55%)"
+  },
+  "AFG": {
+    "name": "Afghanistan",
+    "population": 38041754,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(178, 65%, 55%)"
+  },
+  "TKM": {
+    "name": "Turkmenistan",
+    "population": 5942089,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(216, 65%, 55%)"
+  },
+  "JOR": {
+    "name": "Jordan",
+    "population": 10101694,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(334, 65%, 55%)"
+  },
+  "NPL": {
+    "name": "Nepal",
+    "population": 28608710,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(109, 65%, 55%)"
+  },
+  "YEM": {
+    "name": "Yemen",
+    "population": 29161922,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(182, 65%, 55%)"
+  },
+  "-99": {
+    "name": "Kosovo",
+    "population": 1794248,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(3, 65%, 55%)"
+  },
+  "PHL": {
+    "name": "Philippines",
+    "population": 108116615,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(30, 65%, 55%)"
+  },
+  "LKA": {
+    "name": "Sri Lanka",
+    "population": 21803000,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(206, 65%, 55%)"
+  },
+  "TWN": {
+    "name": "Taiwan",
+    "population": 23568378,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(270, 65%, 55%)"
+  },
+  "JPN": {
+    "name": "Japan",
+    "population": 126264931,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(348, 65%, 55%)"
+  },
+  "CHL": {
+    "name": "Chile",
+    "population": 18952038,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(299, 65%, 55%)"
+  },
+  "BOL": {
+    "name": "Bolivia",
+    "population": 11513100,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(160, 65%, 55%)"
+  },
+  "PER": {
+    "name": "Peru",
+    "population": 32510453,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(83, 65%, 55%)"
+  },
+  "ARG": {
+    "name": "Argentina",
+    "population": 44938712,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(356, 65%, 55%)"
+  },
+  "SUR": {
+    "name": "Suriname",
+    "population": 581363,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(345, 65%, 55%)"
+  },
+  "GUY": {
+    "name": "Guyana",
+    "population": 782766,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(121, 65%, 55%)"
+  },
+  "BRA": {
+    "name": "Brazil",
+    "population": 211049527,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(61, 65%, 55%)"
+  },
+  "URY": {
+    "name": "Uruguay",
+    "population": 3461734,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(58, 65%, 55%)"
+  },
+  "ECU": {
+    "name": "Ecuador",
+    "population": 17373662,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(71, 65%, 55%)"
+  },
+  "COL": {
+    "name": "Colombia",
+    "population": 50339443,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(231, 65%, 55%)"
+  },
+  "PRY": {
+    "name": "Paraguay",
+    "population": 7044636,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(279, 65%, 55%)"
+  },
+  "VEN": {
+    "name": "Venezuela",
+    "population": 28515829,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(70, 65%, 55%)"
+  },
+  "FLK": {
+    "name": "Falkland Is.",
+    "population": 3398,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(98, 65%, 55%)"
+  },
+  "ETH": {
+    "name": "Ethiopia",
+    "population": 112078730,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(119, 65%, 55%)"
+  },
+  "SSD": {
+    "name": "S. Sudan",
+    "population": 11062113,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(345, 65%, 55%)"
+  },
+  "SOM": {
+    "name": "Somalia",
+    "population": 10192317.3,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(108, 65%, 55%)"
+  },
+  "KEN": {
+    "name": "Kenya",
+    "population": 52573973,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(167, 65%, 55%)"
+  },
+  "MWI": {
+    "name": "Malawi",
+    "population": 18628747,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(186, 65%, 55%)"
+  },
+  "TZA": {
+    "name": "Tanzania",
+    "population": 58005463,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(159, 65%, 55%)"
+  },
+  "MAR": {
+    "name": "Morocco",
+    "population": 36471769,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(331, 65%, 55%)"
+  },
+  "ESH": {
+    "name": "W. Sahara",
+    "population": 603253,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(87, 65%, 55%)"
+  },
+  "COG": {
+    "name": "Congo",
+    "population": 5380508,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(257, 65%, 55%)"
+  },
+  "COD": {
+    "name": "Dem. Rep. Congo",
+    "population": 86790567,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(23, 65%, 55%)"
+  },
+  "NAM": {
+    "name": "Namibia",
+    "population": 2494530,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(9, 65%, 55%)"
+  },
+  "ZAF": {
+    "name": "South Africa",
+    "population": 58558270,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(54, 65%, 55%)"
+  },
+  "LBY": {
+    "name": "Libya",
+    "population": 6777452,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(152, 65%, 55%)"
+  },
+  "TUN": {
+    "name": "Tunisia",
+    "population": 11694719,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(288, 65%, 55%)"
+  },
+  "ZMB": {
+    "name": "Zambia",
+    "population": 17861030,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(290, 65%, 55%)"
+  },
+  "SLE": {
+    "name": "Sierra Leone",
+    "population": 7813215,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(120, 65%, 55%)"
+  },
+  "GIN": {
+    "name": "Guinea",
+    "population": 12771246,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(227, 65%, 55%)"
+  },
+  "LBR": {
+    "name": "Liberia",
+    "population": 4937374,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(32, 65%, 55%)"
+  },
+  "CAF": {
+    "name": "Central African Rep.",
+    "population": 4745185,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(93, 65%, 55%)"
+  },
+  "SDN": {
+    "name": "Sudan",
+    "population": 42813238,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(346, 65%, 55%)"
+  },
+  "DJI": {
+    "name": "Djibouti",
+    "population": 973560,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(17, 65%, 55%)"
+  },
+  "ERI": {
+    "name": "Eritrea",
+    "population": 6081196,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(178, 65%, 55%)"
+  },
+  "CIV": {
+    "name": "C\u00f4te d'Ivoire",
+    "population": 25716544,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(43, 65%, 55%)"
+  },
+  "MLI": {
+    "name": "Mali",
+    "population": 19658031,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(214, 65%, 55%)"
+  },
+  "SEN": {
+    "name": "Senegal",
+    "population": 16296364,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(322, 65%, 55%)"
+  },
+  "NGA": {
+    "name": "Nigeria",
+    "population": 200963599,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(319, 65%, 55%)"
+  },
+  "BEN": {
+    "name": "Benin",
+    "population": 11801151,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(211, 65%, 55%)"
+  },
+  "AGO": {
+    "name": "Angola",
+    "population": 31825295,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(73, 65%, 55%)"
+  },
+  "BWA": {
+    "name": "Botswana",
+    "population": 2303697,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(5, 65%, 55%)"
+  },
+  "ZWE": {
+    "name": "Zimbabwe",
+    "population": 14645468,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(12, 65%, 55%)"
+  },
+  "TCD": {
+    "name": "Chad",
+    "population": 15946876,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(202, 65%, 55%)"
+  },
+  "DZA": {
+    "name": "Algeria",
+    "population": 43053054,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(72, 65%, 55%)"
+  },
+  "MOZ": {
+    "name": "Mozambique",
+    "population": 30366036,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(49, 65%, 55%)"
+  },
+  "SWZ": {
+    "name": "eSwatini",
+    "population": 1148130,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(86, 65%, 55%)"
+  },
+  "BDI": {
+    "name": "Burundi",
+    "population": 11530580,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(138, 65%, 55%)"
+  },
+  "RWA": {
+    "name": "Rwanda",
+    "population": 12626950,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(13, 65%, 55%)"
+  },
+  "UGA": {
+    "name": "Uganda",
+    "population": 44269594,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(320, 65%, 55%)"
+  },
+  "LSO": {
+    "name": "Lesotho",
+    "population": 2125268,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(240, 65%, 55%)"
+  },
+  "CMR": {
+    "name": "Cameroon",
+    "population": 25876380,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(142, 65%, 55%)"
+  },
+  "GAB": {
+    "name": "Gabon",
+    "population": 2172579,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(230, 65%, 55%)"
+  },
+  "NER": {
+    "name": "Niger",
+    "population": 23310715,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(341, 65%, 55%)"
+  },
+  "BFA": {
+    "name": "Burkina Faso",
+    "population": 20321378,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(133, 65%, 55%)"
+  },
+  "TGO": {
+    "name": "Togo",
+    "population": 8082366,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(197, 65%, 55%)"
+  },
+  "GHA": {
+    "name": "Ghana",
+    "population": 30417856,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(186, 65%, 55%)"
+  },
+  "GNB": {
+    "name": "Guinea-Bissau",
+    "population": 1920922,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(49, 65%, 55%)"
+  },
+  "EGY": {
+    "name": "Egypt",
+    "population": 100388073,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(50, 65%, 55%)"
+  },
+  "MRT": {
+    "name": "Mauritania",
+    "population": 4525696,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(113, 65%, 55%)"
+  },
+  "GNQ": {
+    "name": "Eq. Guinea",
+    "population": 1355986,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(68, 65%, 55%)"
+  },
+  "GMB": {
+    "name": "Gambia",
+    "population": 2347706,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(221, 65%, 55%)"
+  },
+  "MDG": {
+    "name": "Madagascar",
+    "population": 26969307,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(355, 65%, 55%)"
+  },
+  "UKR": {
+    "name": "Ukraine",
+    "population": 44385155,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(298, 65%, 55%)"
+  },
+  "BLR": {
+    "name": "Belarus",
+    "population": 9466856,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(47, 65%, 55%)"
+  },
+  "LTU": {
+    "name": "Lithuania",
+    "population": 2786844,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(62, 65%, 55%)"
+  },
+  "RUS": {
+    "name": "Russia",
+    "population": 144373535,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(34, 65%, 55%)"
+  },
+  "CZE": {
+    "name": "Czechia",
+    "population": 10669709,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(188, 65%, 55%)"
+  },
+  "DEU": {
+    "name": "Germany",
+    "population": 83132799,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(121, 65%, 55%)"
+  },
+  "EST": {
+    "name": "Estonia",
+    "population": 1326590,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(118, 65%, 55%)"
+  },
+  "LVA": {
+    "name": "Latvia",
+    "population": 1912789,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(9, 65%, 55%)"
+  },
+  "SWE": {
+    "name": "Sweden",
+    "population": 10285453,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(8, 65%, 55%)"
+  },
+  "FIN": {
+    "name": "Finland",
+    "population": 5520314,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(352, 65%, 55%)"
+  },
+  "LUX": {
+    "name": "Luxembourg",
+    "population": 619896,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(223, 65%, 55%)"
+  },
+  "BEL": {
+    "name": "Belgium",
+    "population": 11484055,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(271, 65%, 55%)"
+  },
+  "MKD": {
+    "name": "North Macedonia",
+    "population": 2083459,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(142, 65%, 55%)"
+  },
+  "ALB": {
+    "name": "Albania",
+    "population": 2854191,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(74, 65%, 55%)"
+  },
+  "ESP": {
+    "name": "Spain",
+    "population": 47076781,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(114, 65%, 55%)"
+  },
+  "DNK": {
+    "name": "Denmark",
+    "population": 5818553,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(328, 65%, 55%)"
+  },
+  "ROU": {
+    "name": "Romania",
+    "population": 19356544,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(89, 65%, 55%)"
+  },
+  "HUN": {
+    "name": "Hungary",
+    "population": 9769949,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(85, 65%, 55%)"
+  },
+  "SVK": {
+    "name": "Slovakia",
+    "population": 5454073,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(175, 65%, 55%)"
+  },
+  "POL": {
+    "name": "Poland",
+    "population": 37970874,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(14, 65%, 55%)"
+  },
+  "IRL": {
+    "name": "Ireland",
+    "population": 4941444,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(101, 65%, 55%)"
+  },
+  "GBR": {
+    "name": "United Kingdom",
+    "population": 66834405,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(215, 65%, 55%)"
+  },
+  "GRC": {
+    "name": "Greece",
+    "population": 10716322,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(0, 65%, 55%)"
+  },
+  "AUT": {
+    "name": "Austria",
+    "population": 8877067,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(198, 65%, 55%)"
+  },
+  "ITA": {
+    "name": "Italy",
+    "population": 60297396,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(122, 65%, 55%)"
+  },
+  "CHE": {
+    "name": "Switzerland",
+    "population": 8574832,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(37, 65%, 55%)"
+  },
+  "NLD": {
+    "name": "Netherlands",
+    "population": 17332850,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(310, 65%, 55%)"
+  },
+  "SRB": {
+    "name": "Serbia",
+    "population": 6944975,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(119, 65%, 55%)"
+  },
+  "HRV": {
+    "name": "Croatia",
+    "population": 4067500,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(78, 65%, 55%)"
+  },
+  "SVN": {
+    "name": "Slovenia",
+    "population": 2087946,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(173, 65%, 55%)"
+  },
+  "BGR": {
+    "name": "Bulgaria",
+    "population": 6975761,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(323, 65%, 55%)"
+  },
+  "MNE": {
+    "name": "Montenegro",
+    "population": 622137,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(284, 65%, 55%)"
+  },
+  "BIH": {
+    "name": "Bosnia and Herz.",
+    "population": 3301000,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(142, 65%, 55%)"
+  },
+  "PRT": {
+    "name": "Portugal",
+    "population": 10269417,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(110, 65%, 55%)"
+  },
+  "MDA": {
+    "name": "Moldova",
+    "population": 2657637,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(176, 65%, 55%)"
+  },
+  "ISL": {
+    "name": "Iceland",
+    "population": 361313,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(42, 65%, 55%)"
+  },
+  "PNG": {
+    "name": "Papua New Guinea",
+    "population": 8776109,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(70, 65%, 55%)"
+  },
+  "AUS": {
+    "name": "Australia",
+    "population": 25364307,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(322, 65%, 55%)"
+  },
+  "FJI": {
+    "name": "Fiji",
+    "population": 889953,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(82, 65%, 55%)"
+  },
+  "NZL": {
+    "name": "New Zealand",
+    "population": 4917000,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(60, 65%, 55%)"
+  },
+  "NCL": {
+    "name": "New Caledonia",
+    "population": 287800,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(212, 65%, 55%)"
+  },
+  "SLB": {
+    "name": "Solomon Is.",
+    "population": 669823,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(97, 65%, 55%)"
+  },
+  "VUT": {
+    "name": "Vanuatu",
+    "population": 299882,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(303, 65%, 55%)"
+  },
+  "ATA": {
+    "name": "Antarctica",
+    "population": 4490,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(165, 65%, 55%)"
+  },
+  "ATF": {
+    "name": "Fr. S. Antarctic Lands",
+    "population": 140,
+    "GDP": 0,
+    "science": 0,
+    "control": 0,
+    "color": "hsl(16, 65%, 55%)"
+  }
+}
