@@ -1,0 +1,64 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: darkblue;
+}
+
+#title-bar {
+  background: gray;
+  color: black;
+  font-family: Impact, Charcoal, sans-serif;
+  font-size: 32px;
+  font-weight: normal;
+  text-align: center;
+  letter-spacing: 2px;
+  padding: 24px 0 24px 0;
+  margin: 0;
+  border: 5px solid goldenrod;
+  box-sizing: border-box;
+  width: 100vw;
+  border-radius: 0;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 3px 15px #8884;
+}
+
+#map {
+  flex: 1 1 auto;
+  width: 100%;
+  display: block;
+}
+
+#toolbar {
+  background: gray;
+  color: black;
+  padding: 20px;
+  font-size: 16px;
+  text-align: center;
+  border: 5px solid goldenrod;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#tooltip {
+  position: absolute;
+  background: grey;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  pointer-events: none;
+  display: none;
+}
+
+path:hover {
+  fill: grey;
+  cursor: pointer;
+}
