@@ -5,15 +5,75 @@
   <title>World Map - Global Command 3.0</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
-    body { margin: 0; background: #111; color: #fff; }
-    svg { width: 100vw; height: 100vh; }
-    path:hover {
-      fill: orange;
-      cursor: pointer;
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: darkblue;
+    }
+
+    #title-bar {
+      background: gray;
+      color: black;
+      font-family: Impact, Charcoal, sans-serif;
+      font-size: 32px;
+      font-weight: normal;
+      text-align: center;
+      letter-spacing: 2px;
+      padding: 24px 0 24px 0;
+      margin: 0;
+      border: 5px solid goldenrod;
+      box-sizing: border-box;
+      width: 100vw;   /* full page width */
+      border-radius: 0;
+      position: relative;
+      z-index: 1;
+      /* Optional shadow for raised look */
+      box-shadow: 0 3px 15px #8884;
+    }
+
+    #logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 6px;
+    }
+
+    #title h1 {
+      font-family: Impact, Charcoal, sans-serif;
+      font-size: 28px;
+      font-weight: normal;
+      color: #f0f0f0;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    #map {
+      flex: 1 1 auto;
+      width: 100%;
+      display: block;
+      /* Remove any height on svg! */
+    }
+
+    #toolbar {
+      background: gray;
+      color: black;
+      padding: 20px;
+      font-size: 16px;
+      text-align: center;
+      border: 5px solid goldenrod;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
     #tooltip {
       position: absolute;
-      background: blue;
+      background: grey;
       color: #fff;
       padding: 6px 12px;
       border-radius: 6px;
@@ -21,9 +81,15 @@
       pointer-events: none;
       display: none;
     }
+
+    path:hover {
+      fill: grey;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+  <div id="title-bar">GLOBAL COMMAND</div>
   <svg id="map"></svg>
   <div id="tooltip"></div>
   <script type="module">
@@ -78,5 +144,8 @@
         });
     });
   </script>
+  <footer id="toolbar">
+    <div id="country-details">Select a country to view details</div>
+  </footer>
 </body>
 </html>
