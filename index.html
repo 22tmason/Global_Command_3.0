@@ -8,11 +8,15 @@
 </head>
 <body>
   <div id="title-bar">GLOBAL COMMAND</div>
-  <svg id="map"></svg>
-  <div id="tooltip"></div>
-  <footer id="toolbsar">
-    <div id="country-details">Select a country to view details</div>
-  </footer>
+  <div id="main-area">
+    <aside id="sidebar">
+      <div id="country-details">Select a country to view details</div>
+    </aside>
+    <div id="map-viewport">
+      <svg id="map"></svg>
+      <div id="tooltip"></div>
+    </div>
+  </div>
   <script type="module" src="main.js"></script>
 </body>
 </html>
