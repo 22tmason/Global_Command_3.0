@@ -5,29 +5,26 @@
     "GDP": 86497.94,
     "science": 345,
     "control": 0,
-    "color": "hsl(121, 65%, 55%)",
-    "gdp_per_capita": 17136.58,
+    "color": "hsl(71.2,65%,55%)",
     "military_power": 172
   },
   "FRA": {
     "name": "France",
-    "population": 67059887,
-    "GDP": 2938277.52,
-    "science": 0,
+    "population": 69160000,
+    "GDP": 3211000,
+    "science": 43843,
     "control": 0,
-    "color": "hsl(0, 0%, 80%)",
-    "gdp_per_capita": 0,
-    "military_power": 0
+    "color": "hsl(108.8,65%,55%)",
+    "military_power": 15329
   },
   "NOR": {
-      "name": "Norway",
-      "population": 5437896,
-      "GDP": 434184.74,
-      "science": 0,
-      "control": 0,
-      "color": "hsl(0, 0%, 80%)",
-      "gdp_per_capita": 0,
-      "military_power": 0
+    "name": "Norway",
+    "population": 5622000,
+    "GDP": 483727,
+    "science": 1904,
+    "control": 0,
+    "color": "hsl(240.7,65%,55%)",
+    "military_power": 900
   },
   "NIC": {
     "name": "Nicaragua",
@@ -35,8 +32,7 @@
     "GDP": 17829.22,
     "science": 71,
     "control": 0,
-    "color": "hsl(233, 65%, 55%)",
-    "gdp_per_capita": 2723.89,
+    "color": "hsl(236.5,65%,55%)",
     "military_power": 35
   },
   "HTI": {
@@ -45,8 +41,7 @@
     "GDP": 19850.83,
     "science": 79,
     "control": 0,
-    "color": "hsl(21, 65%, 55%)",
-    "gdp_per_capita": 1762.47,
+    "color": "hsl(140.2,65%,55%)",
     "military_power": 39
   },
   "DOM": {
@@ -55,8 +50,7 @@
     "GDP": 121444.28,
     "science": 728,
     "control": 0,
-    "color": "hsl(307, 65%, 55%)",
-    "gdp_per_capita": 11308.76,
+    "color": "hsl(85.8,65%,55%)",
     "military_power": 364
   },
   "SLV": {
@@ -65,8 +59,7 @@
     "GDP": 34015.62,
     "science": 136,
     "control": 0,
-    "color": "hsl(154, 65%, 55%)",
-    "gdp_per_capita": 5270.84,
+    "color": "hsl(290.9,65%,55%)",
     "military_power": 68
   },
   "GTM": {
@@ -75,8 +68,7 @@
     "GDP": 102050.47,
     "science": 612,
     "control": 0,
-    "color": "hsl(164, 65%, 55%)",
-    "gdp_per_capita": 6146.13,
+    "color": "hsl(131.9,65%,55%)",
     "military_power": 306
   },
   "CUB": {
@@ -85,8 +77,7 @@
     "GDP": 107351.8,
     "science": 644,
     "control": 0,
-    "color": "hsl(225, 65%, 55%)",
-    "gdp_per_capita": 9472.09,
+    "color": "hsl(73.3,65%,55%)",
     "military_power": 322
   },
   "HND": {
@@ -95,8 +86,7 @@
     "GDP": 34400.51,
     "science": 137,
     "control": 0,
-    "color": "hsl(204, 65%, 55%)",
-    "gdp_per_capita": 3529.66,
+    "color": "hsl(136.0,65%,55%)",
     "military_power": 68
   },
   "USA": {
@@ -105,8 +95,7 @@
     "GDP": 27360935.0,
     "science": 547218,
     "control": 0,
-    "color": "hsl(224, 65%, 55%)",
-    "gdp_per_capita": 83356.61,
+    "color": "hsl(341.2,65%,55%)",
     "military_power": 109443
   },
   "CAN": {
@@ -115,8 +104,7 @@
     "GDP": 2140085.57,
     "science": 32101,
     "control": 0,
-    "color": "hsl(244, 65%, 55%)",
-    "gdp_per_capita": 56933.43,
+    "color": "hsl(52.3,65%,55%)",
     "military_power": 8560
   },
   "MEX": {
@@ -125,8 +113,7 @@
     "GDP": 1788886.82,
     "science": 26833,
     "control": 0,
-    "color": "hsl(328, 65%, 55%)",
-    "gdp_per_capita": 14022.18,
+    "color": "hsl(207.2,65%,55%)",
     "military_power": 7155
   },
   "BLZ": {
@@ -135,8 +122,7 @@
     "GDP": 3281.5,
     "science": 13,
     "control": 0,
-    "color": "hsl(241, 65%, 55%)",
-    "gdp_per_capita": 8406.49,
+    "color": "hsl(37.7,65%,55%)",
     "military_power": 3
   },
   "PAN": {
@@ -145,8 +131,7 @@
     "GDP": 83382.4,
     "science": 333,
     "control": 0,
-    "color": "hsl(253, 65%, 55%)",
-    "gdp_per_capita": 19635.84,
+    "color": "hsl(251.2,65%,55%)",
     "military_power": 166
   },
   "GRL": {
@@ -155,8 +140,7 @@
     "GDP": 3235.81,
     "science": 12,
     "control": 0,
-    "color": "hsl(224, 65%, 55%)",
-    "gdp_per_capita": 57551.09,
+    "color": "hsl(129.8,65%,55%)",
     "military_power": 3
   },
   "BHS": {
@@ -165,8 +149,7 @@
     "GDP": 14338.5,
     "science": 57,
     "control": 0,
-    "color": "hsl(335, 65%, 55%)",
-    "gdp_per_capita": 36814.28,
+    "color": "hsl(31.4,65%,55%)",
     "military_power": 28
   },
   "TTO": {
@@ -175,8 +158,7 @@
     "GDP": 28139.94,
     "science": 112,
     "control": 0,
-    "color": "hsl(83, 65%, 55%)",
-    "gdp_per_capita": 20172.39,
+    "color": "hsl(324.4,65%,55%)",
     "military_power": 56
   },
   "PRI": {
@@ -185,8 +167,7 @@
     "GDP": 117902.3,
     "science": 707,
     "control": 0,
-    "color": "hsl(79, 65%, 55%)",
-    "gdp_per_capita": 36917.22,
+    "color": "hsl(261.6,65%,55%)",
     "military_power": 353
   },
   "JAM": {
@@ -195,8 +176,7 @@
     "GDP": 19423.36,
     "science": 77,
     "control": 0,
-    "color": "hsl(129, 65%, 55%)",
-    "gdp_per_capita": 6588.03,
+    "color": "hsl(161.2,65%,55%)",
     "military_power": 38
   },
   "IDN": {
@@ -205,8 +185,7 @@
     "GDP": 1371171.15,
     "science": 20567,
     "control": 0,
-    "color": "hsl(248, 65%, 55%)",
-    "gdp_per_capita": 5066.67,
+    "color": "hsl(144.4,65%,55%)",
     "military_power": 5484
   },
   "MYS": {
@@ -215,8 +194,7 @@
     "GDP": 399648.83,
     "science": 3197,
     "control": 0,
-    "color": "hsl(236, 65%, 55%)",
-    "gdp_per_capita": 12508.66,
+    "color": "hsl(226.0,65%,55%)",
     "military_power": 1198
   },
   "CYP": {
@@ -225,8 +203,7 @@
     "GDP": 32229.62,
     "science": 128,
     "control": 0,
-    "color": "hsl(255, 65%, 55%)",
-    "gdp_per_capita": 26889.95,
+    "color": "hsl(75.3,65%,55%)",
     "military_power": 64
   },
   "IND": {
@@ -235,8 +212,7 @@
     "GDP": 3549918.92,
     "science": 53248,
     "control": 0,
-    "color": "hsl(149, 65%, 55%)",
-    "gdp_per_capita": 2597.97,
+    "color": "hsl(146.5,65%,55%)",
     "military_power": 14199
   },
   "CHN": {
@@ -245,8 +221,7 @@
     "GDP": 17794781.99,
     "science": 355895,
     "control": 0,
-    "color": "hsl(214, 65%, 55%)",
-    "gdp_per_capita": 12731.34,
+    "color": "hsl(58.6,65%,55%)",
     "military_power": 71179
   },
   "ISR": {
@@ -255,8 +230,7 @@
     "GDP": 509901.5,
     "science": 5099,
     "control": 0,
-    "color": "hsl(169, 65%, 55%)",
-    "gdp_per_capita": 56322.17,
+    "color": "hsl(157.0,65%,55%)",
     "military_power": 1529
   },
   "PSE": {
@@ -265,8 +239,7 @@
     "GDP": 17396.3,
     "science": 69,
     "control": 0,
-    "color": "hsl(94, 65%, 55%)",
-    "gdp_per_capita": 3712.95,
+    "color": "hsl(270.0,65%,55%)",
     "military_power": 34
   },
   "LBN": {
@@ -275,8 +248,7 @@
     "GDP": 20992.42,
     "science": 83,
     "control": 0,
-    "color": "hsl(156, 65%, 55%)",
-    "gdp_per_capita": 3062.03,
+    "color": "hsl(184.2,65%,55%)",
     "military_power": 41
   },
   "SYR": {
@@ -285,8 +257,7 @@
     "GDP": 8980.06,
     "science": 35,
     "control": 0,
-    "color": "hsl(304, 65%, 55%)",
-    "gdp_per_capita": 526.07,
+    "color": "hsl(309.8,65%,55%)",
     "military_power": 8
   },
   "KOR": {
@@ -295,19 +266,17 @@
     "GDP": 1712792.85,
     "science": 25691,
     "control": 0,
-    "color": "hsl(292, 65%, 55%)",
-    "gdp_per_capita": 33123.63,
+    "color": "hsl(175.8,65%,55%)",
     "military_power": 6851
   },
   "PRK": {
     "name": "North Korea",
-    "population": 25666161,
-    "GDP": 0,
-    "science": 0,
+    "population": 26498823,
+    "GDP": 29600,
+    "science": 150,
     "control": 0,
-    "color": "hsl(243, 65%, 55%)",
-    "gdp_per_capita": 0.0,
-    "military_power": 0
+    "color": "hsl(263.7,65%,55%)",
+    "military_power": 55000
   },
   "BTN": {
     "name": "Bhutan",
@@ -315,8 +284,7 @@
     "GDP": 2898.23,
     "science": 11,
     "control": 0,
-    "color": "hsl(145, 65%, 55%)",
-    "gdp_per_capita": 3798.01,
+    "color": "hsl(46.0,65%,55%)",
     "military_power": 2
   },
   "OMN": {
@@ -325,8 +293,7 @@
     "GDP": 108192.46,
     "science": 649,
     "control": 0,
-    "color": "hsl(150, 65%, 55%)",
-    "gdp_per_capita": 21747.29,
+    "color": "hsl(247.0,65%,55%)",
     "military_power": 324
   },
   "UZB": {
@@ -335,8 +302,7 @@
     "GDP": 90889.15,
     "science": 363,
     "control": 0,
-    "color": "hsl(193, 65%, 55%)",
-    "gdp_per_capita": 2706.59,
+    "color": "hsl(343.3,65%,55%)",
     "military_power": 181
   },
   "KAZ": {
@@ -345,8 +311,7 @@
     "GDP": 261421.12,
     "science": 2091,
     "control": 0,
-    "color": "hsl(110, 65%, 55%)",
-    "gdp_per_capita": 14120.24,
+    "color": "hsl(167.4,65%,55%)",
     "military_power": 784
   },
   "TJK": {
@@ -355,8 +320,7 @@
     "GDP": 12060.6,
     "science": 48,
     "control": 0,
-    "color": "hsl(353, 65%, 55%)",
-    "gdp_per_capita": 1293.91,
+    "color": "hsl(318.1,65%,55%)",
     "military_power": 24
   },
   "MNG": {
@@ -365,8 +329,7 @@
     "GDP": 19872.18,
     "science": 79,
     "control": 0,
-    "color": "hsl(313, 65%, 55%)",
-    "gdp_per_capita": 6161.6,
+    "color": "hsl(217.7,65%,55%)",
     "military_power": 39
   },
   "VNM": {
@@ -375,8 +338,7 @@
     "GDP": 429716.97,
     "science": 3437,
     "control": 0,
-    "color": "hsl(22, 65%, 55%)",
-    "gdp_per_capita": 4454.77,
+    "color": "hsl(347.4,65%,55%)",
     "military_power": 1289
   },
   "KHM": {
@@ -385,8 +347,7 @@
     "GDP": 31772.76,
     "science": 127,
     "control": 0,
-    "color": "hsl(97, 65%, 55%)",
-    "gdp_per_capita": 1927.19,
+    "color": "hsl(173.7,65%,55%)",
     "military_power": 63
   },
   "ARE": {
@@ -395,8 +356,7 @@
     "GDP": 504173.45,
     "science": 5041,
     "control": 0,
-    "color": "hsl(197, 65%, 55%)",
-    "gdp_per_capita": 51601.45,
+    "color": "hsl(6.3,65%,55%)",
     "military_power": 1512
   },
   "GEO": {
@@ -405,8 +365,7 @@
     "GDP": 30535.53,
     "science": 122,
     "control": 0,
-    "color": "hsl(32, 65%, 55%)",
-    "gdp_per_capita": 8207.63,
+    "color": "hsl(115.1,65%,55%)",
     "military_power": 61
   },
   "AZE": {
@@ -415,8 +374,7 @@
     "GDP": 72356.18,
     "science": 289,
     "control": 0,
-    "color": "hsl(28, 65%, 55%)",
-    "gdp_per_capita": 7218.79,
+    "color": "hsl(16.7,65%,55%)",
     "military_power": 144
   },
   "TUR": {
@@ -425,8 +383,7 @@
     "GDP": 1108022.37,
     "science": 16620,
     "control": 0,
-    "color": "hsl(218, 65%, 55%)",
-    "gdp_per_capita": 13280.92,
+    "color": "hsl(328.6,65%,55%)",
     "military_power": 4432
   },
   "LAO": {
@@ -435,8 +392,7 @@
     "GDP": 15843.16,
     "science": 63,
     "control": 0,
-    "color": "hsl(16, 65%, 55%)",
-    "gdp_per_capita": 2209.81,
+    "color": "hsl(182.1,65%,55%)",
     "military_power": 31
   },
   "KGZ": {
@@ -445,8 +401,7 @@
     "GDP": 13987.63,
     "science": 55,
     "control": 0,
-    "color": "hsl(125, 65%, 55%)",
-    "gdp_per_capita": 2166.31,
+    "color": "hsl(171.6,65%,55%)",
     "military_power": 27
   },
   "ARM": {
@@ -455,8 +410,7 @@
     "GDP": 24212.13,
     "science": 96,
     "control": 0,
-    "color": "hsl(187, 65%, 55%)",
-    "gdp_per_capita": 8186.05,
+    "color": "hsl(10.5,65%,55%)",
     "military_power": 48
   },
   "IRQ": {
@@ -465,8 +419,7 @@
     "GDP": 250842.78,
     "science": 2006,
     "control": 0,
-    "color": "hsl(344, 65%, 55%)",
-    "gdp_per_capita": 6381.18,
+    "color": "hsl(152.8,65%,55%)",
     "military_power": 752
   },
   "IRN": {
@@ -475,8 +428,7 @@
     "GDP": 401504.51,
     "science": 3212,
     "control": 0,
-    "color": "hsl(327, 65%, 55%)",
-    "gdp_per_capita": 4842.43,
+    "color": "hsl(150.7,65%,55%)",
     "military_power": 1204
   },
   "QAT": {
@@ -485,8 +437,7 @@
     "GDP": 235770.4,
     "science": 1886,
     "control": 0,
-    "color": "hsl(194, 65%, 55%)",
-    "gdp_per_capita": 83250.29,
+    "color": "hsl(272.1,65%,55%)",
     "military_power": 707
   },
   "SAU": {
@@ -495,8 +446,7 @@
     "GDP": 1067582.93,
     "science": 16013,
     "control": 0,
-    "color": "hsl(205, 65%, 55%)",
-    "gdp_per_capita": 31153.45,
+    "color": "hsl(280.5,65%,55%)",
     "military_power": 4270
   },
   "PAK": {
@@ -505,8 +455,7 @@
     "GDP": 338368.46,
     "science": 2706,
     "control": 0,
-    "color": "hsl(158, 65%, 55%)",
-    "gdp_per_capita": 1562.43,
+    "color": "hsl(249.1,65%,55%)",
     "military_power": 1015
   },
   "THA": {
@@ -515,8 +464,7 @@
     "GDP": 514944.99,
     "science": 5149,
     "control": 0,
-    "color": "hsl(168, 65%, 55%)",
-    "gdp_per_capita": 7395.92,
+    "color": "hsl(316.0,65%,55%)",
     "military_power": 1544
   },
   "KWT": {
@@ -525,8 +473,7 @@
     "GDP": 161772.22,
     "science": 970,
     "control": 0,
-    "color": "hsl(263, 65%, 55%)",
-    "gdp_per_capita": 38452.35,
+    "color": "hsl(180.0,65%,55%)",
     "military_power": 485
   },
   "TLS": {
@@ -535,8 +482,7 @@
     "GDP": 2243.14,
     "science": 8,
     "control": 0,
-    "color": "hsl(133, 65%, 55%)",
-    "gdp_per_capita": 1734.67,
+    "color": "hsl(322.3,65%,55%)",
     "military_power": 2
   },
   "BRN": {
@@ -545,8 +491,7 @@
     "GDP": 15128.29,
     "science": 60,
     "control": 0,
-    "color": "hsl(13, 65%, 55%)",
-    "gdp_per_capita": 34915.33,
+    "color": "hsl(44.0,65%,55%)",
     "military_power": 30
   },
   "MMR": {
@@ -555,8 +500,7 @@
     "GDP": 64815.03,
     "science": 259,
     "control": 0,
-    "color": "hsl(99, 65%, 55%)",
-    "gdp_per_capita": 1199.27,
+    "color": "hsl(213.5,65%,55%)",
     "military_power": 129
   },
   "BGD": {
@@ -565,8 +509,7 @@
     "GDP": 437415.33,
     "science": 3499,
     "control": 0,
-    "color": "hsl(124, 65%, 55%)",
-    "gdp_per_capita": 2682.77,
+    "color": "hsl(27.2,65%,55%)",
     "military_power": 1312
   },
   "AFG": {
@@ -575,8 +518,7 @@
     "GDP": 14502.16,
     "science": 58,
     "control": 0,
-    "color": "hsl(178, 65%, 55%)",
-    "gdp_per_capita": 381.22,
+    "color": "hsl(0.0,65%,55%)",
     "military_power": 29
   },
   "TKM": {
@@ -585,8 +527,7 @@
     "GDP": 59887.33,
     "science": 239,
     "control": 0,
-    "color": "hsl(216, 65%, 55%)",
-    "gdp_per_capita": 10078.5,
+    "color": "hsl(320.2,65%,55%)",
     "military_power": 119
   },
   "JOR": {
@@ -595,8 +536,7 @@
     "GDP": 50813.64,
     "science": 203,
     "control": 0,
-    "color": "hsl(334, 65%, 55%)",
-    "gdp_per_capita": 5030.21,
+    "color": "hsl(163.3,65%,55%)",
     "military_power": 101
   },
   "NPL": {
@@ -605,8 +545,7 @@
     "GDP": 40908.07,
     "science": 163,
     "control": 0,
-    "color": "hsl(109, 65%, 55%)",
-    "gdp_per_capita": 1429.92,
+    "color": "hsl(242.8,65%,55%)",
     "military_power": 81
   },
   "YEM": {
@@ -615,19 +554,17 @@
     "GDP": 21606.16,
     "science": 86,
     "control": 0,
-    "color": "hsl(182, 65%, 55%)",
-    "gdp_per_capita": 740.9,
+    "color": "hsl(351.6,65%,55%)",
     "military_power": 43
   },
-  "XKX": {
+  "KOS": {
     "name": "Kosovo",
-    "population": 1794248,
-    "GDP": 0,
-    "science": 0,
+    "population": 1588566,
+    "GDP": 11200,
+    "science": 45,
     "control": 0,
-    "color": "hsl(3, 65%, 55%)",
-    "gdp_per_capita": 0.0,
-    "military_power": 0
+    "color": "hsl(177.9,65%,55%)",
+    "military_power": 15
   },
   "PHL": {
     "name": "Philippines",
@@ -635,8 +572,7 @@
     "GDP": 437146.37,
     "science": 3497,
     "control": 0,
-    "color": "hsl(30, 65%, 55%)",
-    "gdp_per_capita": 4043.29,
+    "color": "hsl(255.3,65%,55%)",
     "military_power": 1311
   },
   "LKA": {
@@ -645,19 +581,17 @@
     "GDP": 84356.86,
     "science": 337,
     "control": 0,
-    "color": "hsl(206, 65%, 55%)",
-    "gdp_per_capita": 3869.05,
+    "color": "hsl(190.5,65%,55%)",
     "military_power": 168
   },
   "TWN": {
     "name": "Taiwan",
-    "population": 23568378,
-    "GDP": 0,
-    "science": 0,
+    "population": 23213962,
+    "GDP": 804890,
+    "science": 8450,
     "control": 0,
-    "color": "hsl(270, 65%, 55%)",
-    "gdp_per_capita": 0.0,
-    "military_power": 0
+    "color": "hsl(330.7,65%,55%)",
+    "military_power": 1635
   },
   "JPN": {
     "name": "Japan",
@@ -665,8 +599,7 @@
     "GDP": 4212945.16,
     "science": 63194,
     "control": 0,
-    "color": "hsl(348, 65%, 55%)",
-    "gdp_per_capita": 33365.92,
+    "color": "hsl(165.3,65%,55%)",
     "military_power": 16851
   },
   "CHL": {
@@ -675,8 +608,7 @@
     "GDP": 335533.33,
     "science": 2684,
     "control": 0,
-    "color": "hsl(299, 65%, 55%)",
-    "gdp_per_capita": 17704.34,
+    "color": "hsl(56.5,65%,55%)",
     "military_power": 1006
   },
   "BOL": {
@@ -685,8 +617,7 @@
     "GDP": 45849.83,
     "science": 183,
     "control": 0,
-    "color": "hsl(160, 65%, 55%)",
-    "gdp_per_capita": 3982.41,
+    "color": "hsl(39.8,65%,55%)",
     "military_power": 91
   },
   "PER": {
@@ -695,8 +626,7 @@
     "GDP": 267603.25,
     "science": 2140,
     "control": 0,
-    "color": "hsl(83, 65%, 55%)",
-    "gdp_per_capita": 8231.3,
+    "color": "hsl(253.3,65%,55%)",
     "military_power": 802
   },
   "ARG": {
@@ -705,8 +635,7 @@
     "GDP": 640591.41,
     "science": 6405,
     "control": 0,
-    "color": "hsl(356, 65%, 55%)",
-    "gdp_per_capita": 14254.78,
+    "color": "hsl(8.4,65%,55%)",
     "military_power": 1921
   },
   "SUR": {
@@ -715,8 +644,7 @@
     "GDP": 3782.44,
     "science": 15,
     "control": 0,
-    "color": "hsl(345, 65%, 55%)",
-    "gdp_per_capita": 6506.16,
+    "color": "hsl(299.3,65%,55%)",
     "military_power": 3
   },
   "GUY": {
@@ -725,8 +653,7 @@
     "GDP": 16786.3,
     "science": 67,
     "control": 0,
-    "color": "hsl(121, 65%, 55%)",
-    "gdp_per_capita": 21444.85,
+    "color": "hsl(134.0,65%,55%)",
     "military_power": 33
   },
   "BRA": {
@@ -735,8 +662,7 @@
     "GDP": 2173665.66,
     "science": 32604,
     "control": 0,
-    "color": "hsl(61, 65%, 55%)",
-    "gdp_per_capita": 10299.32,
+    "color": "hsl(41.9,65%,55%)",
     "military_power": 8694
   },
   "URY": {
@@ -745,8 +671,7 @@
     "GDP": 77240.83,
     "science": 308,
     "control": 0,
-    "color": "hsl(58, 65%, 55%)",
-    "gdp_per_capita": 22312.76,
+    "color": "hsl(339.1,65%,55%)",
     "military_power": 154
   },
   "ECU": {
@@ -755,8 +680,7 @@
     "GDP": 118844.83,
     "science": 713,
     "control": 0,
-    "color": "hsl(71, 65%, 55%)",
-    "gdp_per_capita": 6840.52,
+    "color": "hsl(90.0,65%,55%)",
     "military_power": 356
   },
   "COL": {
@@ -765,8 +689,7 @@
     "GDP": 363540.16,
     "science": 2908,
     "control": 0,
-    "color": "hsl(231, 65%, 55%)",
-    "gdp_per_capita": 7221.78,
+    "color": "hsl(69.1,65%,55%)",
     "military_power": 1090
   },
   "PRY": {
@@ -775,8 +698,7 @@
     "GDP": 42956.26,
     "science": 171,
     "control": 0,
-    "color": "hsl(279, 65%, 55%)",
-    "gdp_per_capita": 6097.73,
+    "color": "hsl(267.9,65%,55%)",
     "military_power": 85
   },
   "VEN": {
@@ -785,19 +707,8 @@
     "GDP": 482359.32,
     "science": 3858,
     "control": 0,
-    "color": "hsl(70, 65%, 55%)",
-    "gdp_per_capita": 16915.49,
+    "color": "hsl(345.3,65%,55%)",
     "military_power": 1447
-  },
-  "FLK": {
-    "name": "Falkland Is.",
-    "population": 3398,
-    "GDP": 0,
-    "science": 0,
-    "control": 0,
-    "color": "hsl(98, 65%, 55%)",
-    "gdp_per_capita": 0.0,
-    "military_power": 0
   },
   "ETH": {
     "name": "Ethiopia",
@@ -805,8 +716,7 @@
     "GDP": 163697.93,
     "science": 982,
     "control": 0,
-    "color": "hsl(119, 65%, 55%)",
-    "gdp_per_capita": 1460.56,
+    "color": "hsl(102.6,65%,55%)",
     "military_power": 491
   },
   "SSD": {
@@ -815,8 +725,7 @@
     "GDP": 11997.8,
     "science": 47,
     "control": 0,
-    "color": "hsl(345, 65%, 55%)",
-    "gdp_per_capita": 1084.58,
+    "color": "hsl(297.2,65%,55%)",
     "military_power": 23
   },
   "SOM": {
@@ -825,8 +734,7 @@
     "GDP": 11679.8,
     "science": 46,
     "control": 0,
-    "color": "hsl(108, 65%, 55%)",
-    "gdp_per_capita": 1145.94,
+    "color": "hsl(293.0,65%,55%)",
     "military_power": 23
   },
   "KEN": {
@@ -835,8 +743,7 @@
     "GDP": 107440.58,
     "science": 644,
     "control": 0,
-    "color": "hsl(167, 65%, 55%)",
-    "gdp_per_capita": 2043.61,
+    "color": "hsl(169.5,65%,55%)",
     "military_power": 322
   },
   "MWI": {
@@ -845,8 +752,7 @@
     "GDP": 14084.34,
     "science": 56,
     "control": 0,
-    "color": "hsl(186, 65%, 55%)",
-    "gdp_per_capita": 756.05,
+    "color": "hsl(224.0,65%,55%)",
     "military_power": 28
   },
   "TZA": {
@@ -855,8 +761,7 @@
     "GDP": 79158.29,
     "science": 316,
     "control": 0,
-    "color": "hsl(159, 65%, 55%)",
-    "gdp_per_capita": 1364.67,
+    "color": "hsl(332.8,65%,55%)",
     "military_power": 158
   },
   "MAR": {
@@ -865,8 +770,7 @@
     "GDP": 141109.37,
     "science": 846,
     "control": 0,
-    "color": "hsl(331, 65%, 55%)",
-    "gdp_per_capita": 3869.0,
+    "color": "hsl(200.9,65%,55%)",
     "military_power": 423
   },
   "ESH": {
@@ -875,8 +779,7 @@
     "GDP": 0,
     "science": 0,
     "control": 0,
-    "color": "hsl(87, 65%, 55%)",
-    "gdp_per_capita": 0.0,
+    "color": "hsl(96.3,65%,55%)",
     "military_power": 0
   },
   "COG": {
@@ -885,8 +788,7 @@
     "GDP": 15321.06,
     "science": 61,
     "control": 0,
-    "color": "hsl(257, 65%, 55%)",
-    "gdp_per_capita": 2847.51,
+    "color": "hsl(67.0,65%,55%)",
     "military_power": 30
   },
   "COD": {
@@ -895,8 +797,7 @@
     "GDP": 66383.29,
     "science": 265,
     "control": 0,
-    "color": "hsl(23, 65%, 55%)",
-    "gdp_per_capita": 764.87,
+    "color": "hsl(64.9,65%,55%)",
     "military_power": 132
   },
   "NAM": {
@@ -905,8 +806,7 @@
     "GDP": 12351.02,
     "science": 49,
     "control": 0,
-    "color": "hsl(9, 65%, 55%)",
-    "gdp_per_capita": 4951.24,
+    "color": "hsl(228.1,65%,55%)",
     "military_power": 24
   },
   "ZAF": {
@@ -915,8 +815,7 @@
     "GDP": 377781.6,
     "science": 3022,
     "control": 0,
-    "color": "hsl(54, 65%, 55%)",
-    "gdp_per_capita": 6451.38,
+    "color": "hsl(353.7,65%,55%)",
     "military_power": 1133
   },
   "LBY": {
@@ -925,8 +824,7 @@
     "GDP": 50491.72,
     "science": 201,
     "control": 0,
-    "color": "hsl(152, 65%, 55%)",
-    "gdp_per_capita": 7449.96,
+    "color": "hsl(188.4,65%,55%)",
     "military_power": 100
   },
   "TUN": {
@@ -935,8 +833,7 @@
     "GDP": 48529.6,
     "science": 194,
     "control": 0,
-    "color": "hsl(288, 65%, 55%)",
-    "gdp_per_capita": 4149.7,
+    "color": "hsl(326.5,65%,55%)",
     "military_power": 97
   },
   "ZMB": {
@@ -945,8 +842,7 @@
     "GDP": 28162.63,
     "science": 112,
     "control": 0,
-    "color": "hsl(290, 65%, 55%)",
-    "gdp_per_capita": 1576.76,
+    "color": "hsl(355.8,65%,55%)",
     "military_power": 56
   },
   "SLE": {
@@ -955,8 +851,7 @@
     "GDP": 3809.83,
     "science": 15,
     "control": 0,
-    "color": "hsl(120, 65%, 55%)",
-    "gdp_per_capita": 487.61,
+    "color": "hsl(288.8,65%,55%)",
     "military_power": 3
   },
   "GIN": {
@@ -965,8 +860,7 @@
     "GDP": 23612.3,
     "science": 94,
     "control": 0,
-    "color": "hsl(227, 65%, 55%)",
-    "gdp_per_capita": 1848.86,
+    "color": "hsl(119.3,65%,55%)",
     "military_power": 47
   },
   "LBR": {
@@ -975,8 +869,7 @@
     "GDP": 4332.0,
     "science": 17,
     "control": 0,
-    "color": "hsl(32, 65%, 55%)",
-    "gdp_per_capita": 877.39,
+    "color": "hsl(186.3,65%,55%)",
     "military_power": 4
   },
   "CAF": {
@@ -985,8 +878,7 @@
     "GDP": 2555.49,
     "science": 10,
     "control": 0,
-    "color": "hsl(93, 65%, 55%)",
-    "gdp_per_capita": 538.54,
+    "color": "hsl(50.2,65%,55%)",
     "military_power": 2
   },
   "SDN": {
@@ -995,8 +887,7 @@
     "GDP": 109327.02,
     "science": 655,
     "control": 0,
-    "color": "hsl(346, 65%, 55%)",
-    "gdp_per_capita": 2553.58,
+    "color": "hsl(282.6,65%,55%)",
     "military_power": 327
   },
   "DJI": {
@@ -1005,8 +896,7 @@
     "GDP": 4098.53,
     "science": 16,
     "control": 0,
-    "color": "hsl(17, 65%, 55%)",
-    "gdp_per_capita": 4209.84,
+    "color": "hsl(81.6,65%,55%)",
     "military_power": 4
   },
   "ERI": {
@@ -1015,8 +905,7 @@
     "GDP": 2065.0,
     "science": 8,
     "control": 0,
-    "color": "hsl(178, 65%, 55%)",
-    "gdp_per_capita": 339.57,
+    "color": "hsl(94.2,65%,55%)",
     "military_power": 2
   },
   "CIV": {
@@ -1025,8 +914,7 @@
     "GDP": 78788.83,
     "science": 315,
     "control": 0,
-    "color": "hsl(43, 65%, 55%)",
-    "gdp_per_capita": 3063.74,
+    "color": "hsl(60.7,65%,55%)",
     "military_power": 157
   },
   "MLI": {
@@ -1035,8 +923,7 @@
     "GDP": 20904.9,
     "science": 83,
     "control": 0,
-    "color": "hsl(214, 65%, 55%)",
-    "gdp_per_capita": 1063.43,
+    "color": "hsl(211.4,65%,55%)",
     "military_power": 41
   },
   "SEN": {
@@ -1045,8 +932,7 @@
     "GDP": 31013.99,
     "science": 124,
     "control": 0,
-    "color": "hsl(322, 65%, 55%)",
-    "gdp_per_capita": 1903.12,
+    "color": "hsl(284.7,65%,55%)",
     "military_power": 62
   },
   "NGA": {
@@ -1055,8 +941,7 @@
     "GDP": 362814.95,
     "science": 2902,
     "control": 0,
-    "color": "hsl(319, 65%, 55%)",
-    "gdp_per_capita": 1805.38,
+    "color": "hsl(234.4,65%,55%)",
     "military_power": 1088
   },
   "BEN": {
@@ -1065,8 +950,7 @@
     "GDP": 19673.28,
     "science": 78,
     "control": 0,
-    "color": "hsl(211, 65%, 55%)",
-    "gdp_per_capita": 1667.06,
+    "color": "hsl(23.0,65%,55%)",
     "military_power": 39
   },
   "AGO": {
@@ -1075,8 +959,7 @@
     "GDP": 84722.96,
     "science": 338,
     "control": 0,
-    "color": "hsl(73, 65%, 55%)",
-    "gdp_per_capita": 2662.13,
+    "color": "hsl(2.1,65%,55%)",
     "military_power": 169
   },
   "BWA": {
@@ -1085,8 +968,7 @@
     "GDP": 19395.77,
     "science": 77,
     "control": 0,
-    "color": "hsl(5, 65%, 55%)",
-    "gdp_per_capita": 8419.41,
+    "color": "hsl(48.1,65%,55%)",
     "military_power": 38
   },
   "ZWE": {
@@ -1095,8 +977,7 @@
     "GDP": 26538.27,
     "science": 106,
     "control": 0,
-    "color": "hsl(12, 65%, 55%)",
-    "gdp_per_capita": 1812.05,
+    "color": "hsl(357.9,65%,55%)",
     "military_power": 53
   },
   "TCD": {
@@ -1105,8 +986,7 @@
     "GDP": 13149.33,
     "science": 52,
     "control": 0,
-    "color": "hsl(202, 65%, 55%)",
-    "gdp_per_capita": 824.57,
+    "color": "hsl(311.9,65%,55%)",
     "military_power": 26
   },
   "DZA": {
@@ -1115,8 +995,7 @@
     "GDP": 239899.49,
     "science": 1919,
     "control": 0,
-    "color": "hsl(72, 65%, 55%)",
-    "gdp_per_capita": 5572.18,
+    "color": "hsl(87.9,65%,55%)",
     "military_power": 719
   },
   "MOZ": {
@@ -1125,8 +1004,7 @@
     "GDP": 20624.6,
     "science": 82,
     "control": 0,
-    "color": "hsl(49, 65%, 55%)",
-    "gdp_per_capita": 679.2,
+    "color": "hsl(219.8,65%,55%)",
     "military_power": 41
   },
   "SWZ": {
@@ -1135,8 +1013,7 @@
     "GDP": 4597.86,
     "science": 18,
     "control": 0,
-    "color": "hsl(86, 65%, 55%)",
-    "gdp_per_capita": 4004.65,
+    "color": "hsl(307.7,65%,55%)",
     "military_power": 4
   },
   "BDI": {
@@ -1145,8 +1022,7 @@
     "GDP": 2642.16,
     "science": 10,
     "control": 0,
-    "color": "hsl(138, 65%, 55%)",
-    "gdp_per_capita": 229.14,
+    "color": "hsl(18.8,65%,55%)",
     "military_power": 2
   },
   "RWA": {
@@ -1155,8 +1031,7 @@
     "GDP": 14097.77,
     "science": 56,
     "control": 0,
-    "color": "hsl(13, 65%, 55%)",
-    "gdp_per_capita": 1116.48,
+    "color": "hsl(278.4,65%,55%)",
     "military_power": 28
   },
   "UGA": {
@@ -1165,8 +1040,7 @@
     "GDP": 49272.88,
     "science": 197,
     "control": 0,
-    "color": "hsl(320, 65%, 55%)",
-    "gdp_per_capita": 1113.02,
+    "color": "hsl(334.9,65%,55%)",
     "military_power": 98
   },
   "LSO": {
@@ -1175,8 +1049,7 @@
     "GDP": 2046.04,
     "science": 8,
     "control": 0,
-    "color": "hsl(240, 65%, 55%)",
-    "gdp_per_capita": 962.72,
+    "color": "hsl(192.6,65%,55%)",
     "military_power": 2
   },
   "CMR": {
@@ -1185,8 +1058,7 @@
     "GDP": 47945.51,
     "science": 191,
     "control": 0,
-    "color": "hsl(142, 65%, 55%)",
-    "gdp_per_capita": 1852.87,
+    "color": "hsl(62.8,65%,55%)",
     "military_power": 95
   },
   "GAB": {
@@ -1195,8 +1067,7 @@
     "GDP": 20516.13,
     "science": 82,
     "control": 0,
-    "color": "hsl(230, 65%, 55%)",
-    "gdp_per_capita": 9443.21,
+    "color": "hsl(110.9,65%,55%)",
     "military_power": 41
   },
   "NER": {
@@ -1205,8 +1076,7 @@
     "GDP": 16819.17,
     "science": 67,
     "control": 0,
-    "color": "hsl(341, 65%, 55%)",
-    "gdp_per_capita": 721.52,
+    "color": "hsl(232.3,65%,55%)",
     "military_power": 33
   },
   "BFA": {
@@ -1215,8 +1085,7 @@
     "GDP": 20324.62,
     "science": 81,
     "control": 0,
-    "color": "hsl(133, 65%, 55%)",
-    "gdp_per_capita": 1000.16,
+    "color": "hsl(25.1,65%,55%)",
     "military_power": 40
   },
   "TGO": {
@@ -1225,8 +1094,7 @@
     "GDP": 9171.26,
     "science": 36,
     "control": 0,
-    "color": "hsl(197, 65%, 55%)",
-    "gdp_per_capita": 1134.72,
+    "color": "hsl(314.0,65%,55%)",
     "military_power": 9
   },
   "GHA": {
@@ -1235,8 +1103,7 @@
     "GDP": 76370.39,
     "science": 305,
     "control": 0,
-    "color": "hsl(186, 65%, 55%)",
-    "gdp_per_capita": 2510.71,
+    "color": "hsl(117.2,65%,55%)",
     "military_power": 152
   },
   "GNB": {
@@ -1245,8 +1112,7 @@
     "GDP": 1966.46,
     "science": 7,
     "control": 0,
-    "color": "hsl(49, 65%, 55%)",
-    "gdp_per_capita": 1023.71,
+    "color": "hsl(123.5,65%,55%)",
     "military_power": 1
   },
   "EGY": {
@@ -1255,8 +1121,7 @@
     "GDP": 395926.08,
     "science": 3167,
     "control": 0,
-    "color": "hsl(50, 65%, 55%)",
-    "gdp_per_capita": 3943.96,
+    "color": "hsl(92.1,65%,55%)",
     "military_power": 1187
   },
   "MRT": {
@@ -1265,8 +1130,7 @@
     "GDP": 10452.58,
     "science": 41,
     "control": 0,
-    "color": "hsl(113, 65%, 55%)",
-    "gdp_per_capita": 2309.61,
+    "color": "hsl(221.9,65%,55%)",
     "military_power": 20
   },
   "GNQ": {
@@ -1275,8 +1139,7 @@
     "GDP": 12116.92,
     "science": 48,
     "control": 0,
-    "color": "hsl(68, 65%, 55%)",
-    "gdp_per_capita": 8935.87,
+    "color": "hsl(125.6,65%,55%)",
     "military_power": 24
   },
   "GMB": {
@@ -1285,8 +1148,7 @@
     "GDP": 2339.9,
     "science": 9,
     "control": 0,
-    "color": "hsl(221, 65%, 55%)",
-    "gdp_per_capita": 996.68,
+    "color": "hsl(121.4,65%,55%)",
     "military_power": 2
   },
   "MDG": {
@@ -1295,8 +1157,7 @@
     "GDP": 16031.7,
     "science": 64,
     "control": 0,
-    "color": "hsl(355, 65%, 55%)",
-    "gdp_per_capita": 594.44,
+    "color": "hsl(205.1,65%,55%)",
     "military_power": 32
   },
   "UKR": {
@@ -1305,8 +1166,7 @@
     "GDP": 178757.02,
     "science": 1072,
     "control": 0,
-    "color": "hsl(298, 65%, 55%)",
-    "gdp_per_capita": 4027.41,
+    "color": "hsl(337.0,65%,55%)",
     "military_power": 536
   },
   "BLR": {
@@ -1315,8 +1175,7 @@
     "GDP": 71857.38,
     "science": 287,
     "control": 0,
-    "color": "hsl(47, 65%, 55%)",
-    "gdp_per_capita": 7590.42,
+    "color": "hsl(35.6,65%,55%)",
     "military_power": 143
   },
   "LTU": {
@@ -1325,8 +1184,7 @@
     "GDP": 77836.4,
     "science": 311,
     "control": 0,
-    "color": "hsl(62, 65%, 55%)",
-    "gdp_per_capita": 27929.95,
+    "color": "hsl(194.7,65%,55%)",
     "military_power": 155
   },
   "RUS": {
@@ -1335,8 +1193,7 @@
     "GDP": 2021421.48,
     "science": 30321,
     "control": 0,
-    "color": "hsl(34, 65%, 55%)",
-    "gdp_per_capita": 14001.33,
+    "color": "hsl(276.3,65%,55%)",
     "military_power": 8085
   },
   "CZE": {
@@ -1345,8 +1202,7 @@
     "GDP": 330858.34,
     "science": 2646,
     "control": 0,
-    "color": "hsl(188, 65%, 55%)",
-    "gdp_per_capita": 31009.12,
+    "color": "hsl(77.4,65%,55%)",
     "military_power": 992
   },
   "DEU": {
@@ -1355,8 +1211,7 @@
     "GDP": 4456081.02,
     "science": 66841,
     "control": 0,
-    "color": "hsl(121, 65%, 55%)",
-    "gdp_per_capita": 53601.96,
+    "color": "hsl(79.5,65%,55%)",
     "military_power": 17824
   },
   "EST": {
@@ -1365,8 +1220,7 @@
     "GDP": 40744.85,
     "science": 162,
     "control": 0,
-    "color": "hsl(118, 65%, 55%)",
-    "gdp_per_capita": 30713.97,
+    "color": "hsl(100.5,65%,55%)",
     "military_power": 81
   },
   "LVA": {
@@ -1375,8 +1229,7 @@
     "GDP": 43627.08,
     "science": 174,
     "control": 0,
-    "color": "hsl(9, 65%, 55%)",
-    "gdp_per_capita": 22808.1,
+    "color": "hsl(198.8,65%,55%)",
     "military_power": 87
   },
   "SWE": {
@@ -1385,8 +1238,7 @@
     "GDP": 593267.7,
     "science": 5932,
     "control": 0,
-    "color": "hsl(8, 65%, 55%)",
-    "gdp_per_capita": 57680.27,
+    "color": "hsl(305.6,65%,55%)",
     "military_power": 1779
   },
   "FIN": {
@@ -1395,8 +1247,7 @@
     "GDP": 300187.2,
     "science": 2401,
     "control": 0,
-    "color": "hsl(352, 65%, 55%)",
-    "gdp_per_capita": 54378.65,
+    "color": "hsl(104.7,65%,55%)",
     "military_power": 900
   },
   "LUX": {
@@ -1405,8 +1256,7 @@
     "GDP": 85755.01,
     "science": 343,
     "control": 0,
-    "color": "hsl(223, 65%, 55%)",
-    "gdp_per_capita": 138337.74,
+    "color": "hsl(196.7,65%,55%)",
     "military_power": 171
   },
   "BEL": {
@@ -1415,8 +1265,7 @@
     "GDP": 632216.58,
     "science": 6322,
     "control": 0,
-    "color": "hsl(271, 65%, 55%)",
-    "gdp_per_capita": 55051.69,
+    "color": "hsl(20.9,65%,55%)",
     "military_power": 1896
   },
   "MKD": {
@@ -1425,8 +1274,7 @@
     "GDP": 14761.24,
     "science": 59,
     "control": 0,
-    "color": "hsl(142, 65%, 55%)",
-    "gdp_per_capita": 7084.97,
+    "color": "hsl(209.3,65%,55%)",
     "military_power": 29
   },
   "ALB": {
@@ -1435,8 +1283,7 @@
     "GDP": 22977.68,
     "science": 91,
     "control": 0,
-    "color": "hsl(74, 65%, 55%)",
-    "gdp_per_capita": 8050.51,
+    "color": "hsl(4.2,65%,55%)",
     "military_power": 45
   },
   "ESP": {
@@ -1445,8 +1292,7 @@
     "GDP": 1580694.71,
     "science": 23710,
     "control": 0,
-    "color": "hsl(114, 65%, 55%)",
-    "gdp_per_capita": 33576.95,
+    "color": "hsl(98.4,65%,55%)",
     "military_power": 6322
   },
   "DNK": {
@@ -1455,8 +1301,7 @@
     "GDP": 404198.76,
     "science": 3233,
     "control": 0,
-    "color": "hsl(328, 65%, 55%)",
-    "gdp_per_capita": 69467.23,
+    "color": "hsl(83.7,65%,55%)",
     "military_power": 1212
   },
   "ROU": {
@@ -1465,8 +1310,7 @@
     "GDP": 351002.58,
     "science": 2808,
     "control": 0,
-    "color": "hsl(89, 65%, 55%)",
-    "gdp_per_capita": 18133.54,
+    "color": "hsl(274.2,65%,55%)",
     "military_power": 1053
   },
   "HUN": {
@@ -1475,8 +1319,7 @@
     "GDP": 212388.91,
     "science": 1699,
     "control": 0,
-    "color": "hsl(85, 65%, 55%)",
-    "gdp_per_capita": 21739.0,
+    "color": "hsl(142.3,65%,55%)",
     "military_power": 637
   },
   "SVK": {
@@ -1485,8 +1328,7 @@
     "GDP": 132793.62,
     "science": 796,
     "control": 0,
-    "color": "hsl(175, 65%, 55%)",
-    "gdp_per_capita": 24347.61,
+    "color": "hsl(301.4,65%,55%)",
     "military_power": 398
   },
   "POL": {
@@ -1495,8 +1337,7 @@
     "GDP": 811229.1,
     "science": 8112,
     "control": 0,
-    "color": "hsl(14, 65%, 55%)",
-    "gdp_per_capita": 21364.51,
+    "color": "hsl(259.5,65%,55%)",
     "military_power": 2433
   },
   "IRL": {
@@ -1505,8 +1346,7 @@
     "GDP": 545629.45,
     "science": 5456,
     "control": 0,
-    "color": "hsl(101, 65%, 55%)",
-    "gdp_per_capita": 110419.03,
+    "color": "hsl(148.6,65%,55%)",
     "military_power": 1636
   },
   "GBR": {
@@ -1515,8 +1355,7 @@
     "GDP": 3340032.38,
     "science": 50100,
     "control": 0,
-    "color": "hsl(215, 65%, 55%)",
-    "gdp_per_capita": 49974.75,
+    "color": "hsl(113.0,65%,55%)",
     "military_power": 13360
   },
   "GRC": {
@@ -1525,8 +1364,7 @@
     "GDP": 238206.31,
     "science": 1905,
     "control": 0,
-    "color": "hsl(0, 65%, 55%)",
-    "gdp_per_capita": 22228.36,
+    "color": "hsl(127.7,65%,55%)",
     "military_power": 714
   },
   "AUT": {
@@ -1535,8 +1373,7 @@
     "GDP": 516034.14,
     "science": 5160,
     "control": 0,
-    "color": "hsl(198, 65%, 55%)",
-    "gdp_per_capita": 58131.15,
+    "color": "hsl(14.7,65%,55%)",
     "military_power": 1548
   },
   "ITA": {
@@ -1545,8 +1382,7 @@
     "GDP": 2254851.21,
     "science": 33822,
     "control": 0,
-    "color": "hsl(122, 65%, 55%)",
-    "gdp_per_capita": 37395.5,
+    "color": "hsl(159.1,65%,55%)",
     "military_power": 9019
   },
   "CHE": {
@@ -1555,8 +1391,7 @@
     "GDP": 884940.4,
     "science": 8849,
     "control": 0,
-    "color": "hsl(37, 65%, 55%)",
-    "gdp_per_capita": 103202.07,
+    "color": "hsl(54.4,65%,55%)",
     "military_power": 2654
   },
   "NLD": {
@@ -1565,8 +1400,7 @@
     "GDP": 1118124.75,
     "science": 16771,
     "control": 0,
-    "color": "hsl(310, 65%, 55%)",
-    "gdp_per_capita": 64509.0,
+    "color": "hsl(238.6,65%,55%)",
     "military_power": 4472
   },
   "SRB": {
@@ -1575,8 +1409,7 @@
     "GDP": 75187.13,
     "science": 300,
     "control": 0,
-    "color": "hsl(119, 65%, 55%)",
-    "gdp_per_capita": 10826.12,
+    "color": "hsl(295.1,65%,55%)",
     "military_power": 150
   },
   "HRV": {
@@ -1585,8 +1418,7 @@
     "GDP": 82688.84,
     "science": 330,
     "control": 0,
-    "color": "hsl(78, 65%, 55%)",
-    "gdp_per_capita": 20329.16,
+    "color": "hsl(138.1,65%,55%)",
     "military_power": 165
   },
   "SVN": {
@@ -1595,8 +1427,7 @@
     "GDP": 68216.78,
     "science": 272,
     "control": 0,
-    "color": "hsl(173, 65%, 55%)",
-    "gdp_per_capita": 32671.72,
+    "color": "hsl(303.5,65%,55%)",
     "military_power": 136
   },
   "BGR": {
@@ -1605,8 +1436,7 @@
     "GDP": 101584.38,
     "science": 609,
     "control": 0,
-    "color": "hsl(323, 65%, 55%)",
-    "gdp_per_capita": 14562.48,
+    "color": "hsl(29.3,65%,55%)",
     "military_power": 304
   },
   "MNE": {
@@ -1615,8 +1445,7 @@
     "GDP": 7404.54,
     "science": 29,
     "control": 0,
-    "color": "hsl(284, 65%, 55%)",
-    "gdp_per_capita": 11901.78,
+    "color": "hsl(215.6,65%,55%)",
     "military_power": 7
   },
   "BIH": {
@@ -1625,8 +1454,7 @@
     "GDP": 27054.89,
     "science": 108,
     "control": 0,
-    "color": "hsl(142, 65%, 55%)",
-    "gdp_per_capita": 8195.97,
+    "color": "hsl(33.5,65%,55%)",
     "military_power": 54
   },
   "PRT": {
@@ -1635,8 +1463,7 @@
     "GDP": 287080.01,
     "science": 2296,
     "control": 0,
-    "color": "hsl(110, 65%, 55%)",
-    "gdp_per_capita": 27954.85,
+    "color": "hsl(265.8,65%,55%)",
     "military_power": 861
   },
   "MDA": {
@@ -1645,8 +1472,7 @@
     "GDP": 16539.44,
     "science": 66,
     "control": 0,
-    "color": "hsl(176, 65%, 55%)",
-    "gdp_per_capita": 6223.36,
+    "color": "hsl(203.0,65%,55%)",
     "military_power": 33
   },
   "ISL": {
@@ -1655,8 +1481,7 @@
     "GDP": 31020.03,
     "science": 124,
     "control": 0,
-    "color": "hsl(42, 65%, 55%)",
-    "gdp_per_capita": 85853.62,
+    "color": "hsl(154.9,65%,55%)",
     "military_power": 62
   },
   "PNG": {
@@ -1665,8 +1490,7 @@
     "GDP": 30932.5,
     "science": 123,
     "control": 0,
-    "color": "hsl(70, 65%, 55%)",
-    "gdp_per_capita": 3524.63,
+    "color": "hsl(257.4,65%,55%)",
     "military_power": 61
   },
   "AUS": {
@@ -1675,8 +1499,7 @@
     "GDP": 1723827.22,
     "science": 25857,
     "control": 0,
-    "color": "hsl(322, 65%, 55%)",
-    "gdp_per_capita": 67962.72,
+    "color": "hsl(12.6,65%,55%)",
     "military_power": 6895
   },
   "FJI": {
@@ -1685,8 +1508,7 @@
     "GDP": 5494.8,
     "science": 21,
     "control": 0,
-    "color": "hsl(82, 65%, 55%)",
-    "gdp_per_capita": 6174.26,
+    "color": "hsl(106.7,65%,55%)",
     "military_power": 5
   },
   "NZL": {
@@ -1695,8 +1517,7 @@
     "GDP": 253465.7,
     "science": 2027,
     "control": 0,
-    "color": "hsl(60, 65%, 55%)",
-    "gdp_per_capita": 51548.85,
+    "color": "hsl(244.9,65%,55%)",
     "military_power": 760
   },
   "NCL": {
@@ -1705,8 +1526,7 @@
     "GDP": 9623.32,
     "science": 38,
     "control": 0,
-    "color": "hsl(212, 65%, 55%)",
-    "gdp_per_capita": 33437.53,
+    "color": "hsl(230.2,65%,55%)",
     "military_power": 9
   },
   "SLB": {
@@ -1715,8 +1535,7 @@
     "GDP": 1631.29,
     "science": 6,
     "control": 0,
-    "color": "hsl(97, 65%, 55%)",
-    "gdp_per_capita": 2435.4,
+    "color": "hsl(286.7,65%,55%)",
     "military_power": 1
   },
   "VUT": {
@@ -1725,18 +1544,7 @@
     "GDP": 1126.31,
     "science": 4,
     "control": 0,
-    "color": "hsl(303, 65%, 55%)",
-    "gdp_per_capita": 3755.84,
+    "color": "hsl(349.5,65%,55%)",
     "military_power": 1
-  },
-  "ATF": {
-    "name": "Fr. S. Antarctic Lands",
-    "population": 140,
-    "GDP": 0,
-    "science": 0,
-    "control": 0,
-    "color": "hsl(16, 65%, 55%)",
-    "gdp_per_capita": 0.0,
-    "military_power": 0
   }
 }
