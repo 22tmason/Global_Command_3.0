@@ -2,26 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>World Map - Global Command 3.0</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- MENU SCREEN -->
+  <div id="menu-screen">
+    <h1 class="menu-title">GLOBAL COMMAND</h1>
+    <div class="menu-buttons">
+      <button id="new-game-btn">New Game</button>
+      <button id="load-game-btn">Load Game</button>
+      <button id="settings-btn">Settings</button>
+    </div>
+  </div>
+
+  <!-- Main Title Bar (shown after start) -->
   <div id="title-bar">GLOBAL COMMAND</div>
-  <div id="main-area">
+
+  <!-- Main Game Area -->
+  <div id="main-area" style="display:none;">
     <aside id="sidebar">
-        <h2 id="country-name">Select a country</h2>
-        <p id="country-population">Population: —</p>
-        <p id="country-gdp">GDP: —</p>
-        <p id="country-science">Science: —</p>
-        <p id="country-gdp-capita">GDP/Capita: —</p>
-        <p id="country-military">Military Power: —</p>
+      <h2 id="country-name">Select a country</h2>
+      <ul id="stats">
+        <li><strong>Population:</strong> <span id="country-population">—</span></li>
+        <li><strong>GDP:</strong> <span id="country-gdp">—</span></li>
+        <li><strong>Science:</strong> <span id="country-science">—</span></li>
+        <li><strong>Military Power:</strong> <span id="country-military">—</span></li>
+      </ul>
+      <button id="confirm-btn" disabled>Confirm Selection</button>
     </aside>
     <div id="map-viewport">
       <svg id="map"></svg>
     </div>
   </div>
+
   <script type="module" src="main.js"></script>
 </body>
 </html>

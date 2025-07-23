@@ -11,32 +11,35 @@ body {
   background-color: darkblue;
 }
 
-#title-bar {
-  background: gray;
-  color: black;
+#title-bar,
+#menu-title-bar {
+  background: #333;
+  color: #000;
   font-family: Impact, Charcoal, sans-serif;
-  font-size: 32px;
+  font-size: 3rem;
+  color: #000;
+  margin: 0 0 2rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
   font-weight: normal;
   text-align: center;
-  letter-spacing: 2px;
-  padding: 24px 0 24px 0;
+  padding: 12px 0;
   margin: 0;
-  border: 5px solid goldenrod;
+  border: 5px solid #F2A900;
   box-sizing: border-box;
   width: 100vw;
-  border-radius: 0;
   position: relative;
   z-index: 1;
   box-shadow: 0 3px 15px #8884;
 }
 
 #toolbar {
-  background: gray;
+  background: #333;
   color: black;
   padding: 20px;
   font-size: 16px;
   text-align: center;
-  border: 5px solid goldenrod;
+  border: 5px solid #F2A900;
   width: 100%;
   box-sizing: border-box;
 }
@@ -52,7 +55,8 @@ path:hover {
   min-height: 0;
   background: darkblue;
   box-sizing: border-box;
-  border: 3px solid goldenrod;
+  border-bottom: 5px solid #F2A900;
+  border-right: 5px solid #F2A900;
   position: relative;
   display: flex;
   align-items: center;
@@ -68,14 +72,16 @@ path:hover {
 }
 
 #sidebar {
-  background: gray;
+  background: #333;
   color: black;
   width: 320px;
   min-width: 220px;
   max-width: 440px;
   padding: 32px 16px;
   box-sizing: border-box;
-  border-right: 4px solid goldenrod;
+  border-right: 5px solid #F2A900;
+  border-bottom: 5px solid #F2A900;
+  border-left: 5px solid #F2A900;
   font-size: 18px;
   font-family: Arial, sans-serif;
 }
@@ -85,3 +91,245 @@ path:hover {
   height: 100%;
   display: block;
 }
+
+/* 2) Apply it to your pending country */
+path.country.pending {
+  /* remove any static stroke/shadow */
+  filter: brightness(100)
+}
+
+#confirm-btn {
+  display: inline-block;
+  margin-top: 1em;
+  padding: 0.6em 1.2em;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #777;           /* match sidebar grey */
+  color: #000;                      /* dark text for contrast */
+  border: 2px solid #F2A900;        /* gold accent */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#confirm-btn:hover:enabled {
+  background-color: #F2A900;        /* gold hover */
+  color: #000;                      /* keep text dark */
+  box-shadow: 0 0 8px rgba(242,169,0,0.6);
+}
+
+#confirm-btn:active:enabled {
+  background-color: #F2A900;        /* slightly darker gold on click */
+}
+
+#confirm-btn:disabled {
+  background-color: #555;           /* darker grey when disabled */
+  color: #aaa;                      /* muted text */
+  border-color: #999;               /* muted border */
+  cursor: not-allowed;
+}
+
+#confirm-btn {
+  /* existing styles... */
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, filter 0.05s ease;
+}
+
+#confirm-btn:active:enabled {
+  /* darken via filter for a fast, smooth press effect */
+  filter: brightness(0.7);
+}
+#menu-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: #001f3f;       /* deep blue */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.menu-content {
+  background: #444;
+  padding: 2rem;
+  border: 4px solid #F2A900; /* gold accent */
+  border-radius: 8px;
+  text-align: center;
+  color: #fff;
+}
+
+.menu-content h1 {
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.menu-content input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border: 2px solid #F2A900;
+  border-radius: 4px;
+  background: #222;
+  color: #fff;
+}
+
+.menu-content input::placeholder {
+  color: #aaa;
+}
+
+.menu-content button {
+  padding: 0.6em 1.2em;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #F2A900;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: filter 0.05s ease;
+}
+
+.menu-content button:active {
+  filter: brightness(0.7);
+}
+
+/* full‐screen dark background, textured if you like */
+#menu-screen {
+  position: fixed; top:0; left:0;
+  width:100vw; height:100vh;
+  background: #0a1a33 url('./assets/metal-grain.png') repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index:1000;
+}
+
+
+/* Glass-panel card */
+.menu-card {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(6px);
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  text-align: center;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+
+/* Title inside the card */
+.menu-card h1 {
+  margin: 0 0 0.5rem;
+  font-family: 'Orbitron', sans-serif; /* sci-fi feel */
+  font-size: 2.5rem;
+  color: #F2A900;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+/* Optional tagline */
+.menu-card .tagline {
+  margin-bottom: 1.5rem;
+  color: #ccc;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* Inputs & button sit full width */
+.menu-card input,
+.menu-card button {
+  width: 100%;
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+
+/* Name field */
+.menu-card input {
+  padding: 0.6rem 1rem;
+  border: 1px solid #666;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+}
+
+.menu-card input::placeholder {
+  color: #888;
+}
+
+/* Start button */
+.menu-card button {
+  padding: 0.8rem 1rem;
+  font-weight: bold;
+  background: #F2A900;
+  color: #000;
+  border: none;
+  box-shadow: 0 4px 12px rgba(242,169,0,0.4);
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.05s ease;
+}
+
+.menu-card button:hover {
+  transform: translateY(-2px);
+}
+
+.menu-card button:active {
+  filter: brightness(0.7);
+}
+
+/* --- Menu Overlay --- */
+#menu-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: #333;              /* dark grey */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Title in Impact, black text */
+.menu-title {
+  font-family: Impact, Charcoal, sans-serif;
+  font-size: 3rem;
+  color: #000;
+  margin: 0 0 2rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+/* Button container */
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 80%;
+  max-width: 300px;
+}
+
+/* Common button style */
+.menu-buttons button {
+  padding: 0.8rem 1rem;
+  font-family: Impact, Charcoal, sans-serif;
+  font-size: 1.1rem;
+  color: #000;
+  background-color: #F2A900;     /* gold accent */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 0.1s ease, transform 0.1s ease;
+}
+
+/* Hover/active feedback */
+.menu-buttons button:hover {
+  transform: translateY(-2px);
+}
+.menu-buttons button:active {
+  filter: brightness(0.85);
+}
+
