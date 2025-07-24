@@ -22,7 +22,61 @@ let countryData      = {};
 let pendingCountryId = null;
 let confirmedCountryId = localStorage.getItem("selectedCountry") || null;
 
-// Hide the main UI until “New Game” is clicked
+// --- NEW: game state & startup functions ---
+const gameState = {
+  playerCountryId: null,
+  control: {}
+};
+
+function startGame() {
+  // give the player full control
+  gameState.playerCountryId = confirmedCountryId;
+  gameState.control[confirmedCountryId] = 100;
+
+  // build the in‐game sidebar HUD
+  buildGameSidebar();
+}
+
+function buildGameSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.innerHTML = `
+    <div id="toolbar">
+      <button id="settings-btn-sidebar">⚙️</button>
+      <div id="time-controls">
+        <button data-speed="0">❚❚</button>
+        <button data-speed="1">1×</button>
+        <button data-speed="2">2×</button>
+        <button data-speed="3">3×</button>
+      </div>
+    </div>
+    <h2 id="in-game-header"></h2>
+    <section id="decision-panel"></section>
+    <section id="diplomacy-panel">
+      <h3>Diplomacy</h3>
+      <div id="other-country-info"></div>
+    </section>
+  `;
+
+  // header = player country name
+  document.getElementById("in-game-header").textContent =
+    countryData[gameState.playerCountryId].name;
+
+  // decision dropdowns placeholders
+  const decision = document.getElementById("decision-panel");
+  ["Population","GDP","Science","Military"].forEach(factor => {
+    const div = document.createElement("div");
+    div.classList.add("dropdown");
+    div.innerHTML = `
+      <button class="dropbtn">${factor}</button>
+      <div class="dropdown-content">
+        <p>No ${factor} decisions yet.</p>
+      </div>`;
+    decision.appendChild(div);
+  });
+
+  document.getElementById("other-country-info")
+    .textContent = "Click another country to inspect it.";
+}
 mainArea.style.display = "none";
 
 // === Menu button handlers ===
@@ -144,6 +198,8 @@ function initGame() {
       pendingCountryId = null;
       g.selectAll("path.country").classed("pending", false);
       confirmBtn.disabled = true;
+
+      startGame();
     });
 
     // --- Restore any prior selection ---
