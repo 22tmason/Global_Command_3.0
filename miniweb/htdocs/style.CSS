@@ -333,3 +333,96 @@ path.country.pending {
   filter: brightness(0.85);
 }
 
+#time-controls {
+  display: flex;
+  gap: 0.5em;
+}
+
+.time-btn {
+  background: #444;
+  color: #fff;
+  border: none;
+  padding: 0.4em 0.8em;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.time-btn:hover {
+  background: #555;
+}
+
+.time-btn.active {
+  background: #F2A900;
+  color: #000;
+}
+
+.time-btn {
+  background: #444;
+  color: #fff;
+  border: none;
+  padding: 0.4em 0.8em;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Hover & active states */
+.time-btn:hover {
+  background: #555;
+}
+
+.time-btn.active {
+  background: #F2A900;
+  color: #000;
+}
+
+/* make the toolbar stack date, settings, then time controls */
+#toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+}
+
+/* date styling */
+.toolbar-date {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* existing time-btn rules (applied to Settings + controls) */
+.time-btn {
+  background: #444;
+  color: #fff;
+  border: none;
+  padding: 0.4em 0.8em;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.time-btn:hover {
+  background: #555;
+}
+
+.time-btn.active {
+  background: #F2A900;
+  color: #000;
+}
+
+/* Container for date + buttons */
+#time-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
+  margin-bottom: 1em;
+}
+
+.toolbar-date {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+}
