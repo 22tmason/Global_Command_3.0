@@ -74,9 +74,7 @@ path:hover {
 #sidebar {
   background: #333;
   color: black;
-  width: 320px;
-  min-width: 220px;
-  max-width: 440px;
+  width: 440px;
   padding: 32px 16px;
   box-sizing: border-box;
   border-right: 5px solid #F2A900;
@@ -425,4 +423,259 @@ path.country.pending {
   color: #fff;
   font-size: 1rem;
   font-weight: bold;
+}
+
+/* Sidebar mode buttons (Diplomacy / Economy / Military) */
+.mode-btn {
+  /* match your time-btn defaults */
+  display: inline-block;
+  margin: 0.2em;
+  padding: 0.6em 1.2em;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #777;           /* same grey as #confirm-btn */
+  color: #000;                      /* dark text */
+  border: 2px solid #F2A900;        /* gold accent */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mode-btn:hover,
+.mode-btn:focus {
+  background-color: #F2A900;        /* gold hover */
+  color: #000;
+  box-shadow: 0 0 8px rgba(242,169,0,0.6);
+}
+
+.mode-btn:active {
+  /* quick press effect */
+  filter: brightness(0.7);
+}
+
+.mode-btn.active {
+  /* indicate which tab is selected */
+  background-color: #F2A900;
+  color: #000;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
+}
+
+/* Ensure the box‐modes container is a flex row */
+#box-modes {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;         /* space between buttons */
+  flex-wrap: nowrap;   /* all on one line */
+  padding: 0.5rem 0;
+  box-sizing: border-box;
+}
+
+#box-modes .mode-btn {
+  flex: 1 1 0;       /* grow/shrink equally */
+  min-width: 0;      /* allow to shrink below its content’s min width */
+  white-space: normal;  /* allow the text to wrap */
+  text-align: center;    /* center text */
+  
+}
+
+/* ── Mode buttons (Diplomacy/Economy/Military) ───────────────── */
+#box-modes {
+  display: flex;
+  gap: 0.5rem;         /* space between buttons */
+  padding: 0.5rem 0;
+  box-sizing: border-box;
+}
+
+/* Container: full-width flex row, no gaps */
+#box-modes {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Buttons: share width, no gaps, unified corners */
+#box-modes .mode-btn {
+  flex: 1 1 0;             /* each button takes equal share */
+  margin: 0;               /* no space between */
+  padding: 0.5em;          /* tighten up vertical padding */
+  font-size: 0.9rem;       /* slightly smaller base font */
+  white-space: nowrap;
+  text-align: center;
+  background-color: #777;
+  color: #000;
+  border: 2px solid #F2A900;
+  border-left: none;       /* remove inner borders */
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* First and last get rounded corners and full border */
+#box-modes .mode-btn:first-child {
+  border-left: 2px solid #F2A900;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+#box-modes .mode-btn:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/* Hover/active styling */
+#box-modes .mode-btn:hover {
+  background-color: #F2A900;
+  box-shadow: 0 0 8px rgba(242,169,0,0.6);
+}
+#box-modes .mode-btn.active {
+  background-color: #F2A900;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
+}
+
+#drag-handle {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+  background: rgba(255,255,255,0.1);
+}
+
+#box-modes {
+  margin-bottom: 1rem;  /* extra space below tabs */
+}
+
+#content-economy {
+  padding: 0 1rem;      /* horizontal padding */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;          /* vertical spacing between metrics */
+}
+
+/* ensure metrics wrap nicely */
+#content-economy .metric {
+  word-wrap: break-word;
+}
+
+/* economy grid */
+.econ-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.econ-card {
+  background: rgba(255,255,255,0.1);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.card-growth {
+  font-size: 0.85rem;
+  color: var(--accent-color);
+}
+
+/* sliders area */
+.econ-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.slider-group {
+  background: rgba(255,255,255,0.05);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.slider-group h4,
+.slider-group summary {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+/* two-column for CI sliders */
+.ci-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.slider-group input[type="range"] {
+  width: 100%;
+  margin: 0.25rem 0;
+}
+
+.slider-group small {
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* 1) Ensure the main row stretches full viewport */
+#main-area {
+  display: flex;           /* already set, but ensure */
+  flex-direction: row;
+  height: 100vh;           /* fill the screen vertically */
+  min-height: 0;           /* allow children to shrink */
+}
+
+/* 2) Sidebar becomes a full-height column */
+#sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;            /* now fills 100vh from its parent */
+  overflow: hidden;        /* prevent children from escaping */
+}
+
+/* 3) Make the content box scrollable */
+#box-content {
+  flex: 1 1 auto;          /* take all remaining vertical space */
+  overflow-y: auto;        /* scroll vertically if needed */
+  padding: 0;              /* if you’d prefer padding inside content-economy */
+  box-sizing: border-box;
+}
+
+/* 4) Optional: keep the header/modes static */
+#box-settings,
+#box-header,
+#box-modes {
+  flex: 0 0 auto;          /* natural height, no shrink/grow */
+}
+
+.econ-card {
+  position: relative;          /* enable absolute positioning inside */
+  padding-bottom: 2.5rem;      /* room for the growth label */
+}
+
+.econ-card {
+  position: relative;
+  padding: 1rem;
+  padding-bottom: 1.5rem; /* room for growth row */
+}
+
+.card-header {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.card-value {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--text);
+}
+
+.card-growth {
+  font-size: 0.85rem;
+  color: var(--accent-color, #F2A900);
 }

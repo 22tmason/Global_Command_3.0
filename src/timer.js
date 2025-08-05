@@ -32,9 +32,11 @@ export function startTimer() {
     simulationDate.setDate(simulationDate.getDate() + 1);
     updateClockDisplay();
 
-    // ← run any “per‐day” logic here, e.g.:
-    // advanceEconomy(1);
-    // advancePopulation(1);
+    // run any per‐day logic first
+    if (window.advanceEconomy) window.advanceEconomy(1);
+
+    // then redraw with updated values
+    if (window.updateEconomy)  window.updateEconomy();
   }, interval);
 }
 
