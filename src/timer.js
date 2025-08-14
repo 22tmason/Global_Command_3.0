@@ -13,12 +13,9 @@ export function resetSimulationDate(date = new Date()) {
   updateClockDisplay();
 }
 
-// Start ticking: 1 day per “tick”
 export function startTimer() {
-  // clear any existing loop
   if (gameTimer) clearInterval(gameTimer);
 
-  // if paused, do nothing
   if (timeScale <= 0) {
     gameTimer = null;
     return;
@@ -35,7 +32,7 @@ export function startTimer() {
     // run any per‐day logic first
     if (window.advanceEconomy) window.advanceEconomy(1);
 
-    // then redraw with updated values
+
     if (window.updateEconomy)  window.updateEconomy();
   }, interval);
 }
@@ -49,7 +46,6 @@ export function pauseTimer() {
 // Change speed (0 = pause, >0 = days/sec)
 export function setTimeScale(newScale) {
   timeScale = newScale;
-  // if we’re already running, restart at the new rate
   if (gameTimer !== null) {
     startTimer();
   }

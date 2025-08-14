@@ -1,7 +1,6 @@
 // src/main.JS
 import { initMap } from "./map.js";
 import { resetSimulationDate } from "./timer.js";
-import { buildGameSidebar, startGame } from "./sidebar.js";
 import { state } from "./state.js";
 
 // DOM refs
@@ -23,11 +22,8 @@ newGameBtn.addEventListener("click", () => {
     fetch("./data/world.geojson").then(r => r.json()),
     fetch("./data/countries.json").then(r => r.json())
   ]).then(([world, countries]) => {
-    // 1) seed country data
     Object.assign(state.countryData, countries);
-    // 2) reset clock
     resetSimulationDate();
-    // 3) render map (this hooks up confirm→startGame for you)
     initMap(world, countries);
   });
 });

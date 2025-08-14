@@ -427,7 +427,6 @@ path.country.pending {
 
 /* Sidebar mode buttons (Diplomacy / Economy / Military) */
 .mode-btn {
-  /* match your time-btn defaults */
   display: inline-block;
   margin: 0.2em;
   padding: 0.6em 1.2em;
@@ -585,7 +584,6 @@ path.country.pending {
 /* sliders area */
 .econ-sliders {
   display: flex;
-  flex-direction: column;
   gap: 1rem;
 }
 
@@ -622,7 +620,7 @@ path.country.pending {
 
 /* 1) Ensure the main row stretches full viewport */
 #main-area {
-  display: flex;           /* already set, but ensure */
+  display: flex;         
   flex-direction: row;
   height: 100vh;           /* fill the screen vertically */
   min-height: 0;           /* allow children to shrink */
@@ -679,3 +677,15 @@ path.country.pending {
   font-size: 0.85rem;
   color: var(--accent-color, #F2A900);
 }
+
+.military-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* Ensure the Tax / Consumption / Investment slider card fills the sidebar width */
+.econ-sliders { width: 100%; }
+.econ-sliders .econ-card { width: 100%; display: block; }
+.slider-group input[type="range"] { width: 100%; box-sizing: border-box; }
