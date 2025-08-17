@@ -115,9 +115,11 @@ export function buildGameSidebar() {
     <div id="time-date">Date: <span id="sim-clock" class="toolbar-date">—</span></div>
     <div id="time-controls">
       <button data-speed="0" class="time-btn" title="Pause">❚❚</button>
-      <button data-speed="1" class="time-btn" title="1× speed">1×</button>
-      <button data-speed="3" class="time-btn" title="3× speed">3×</button>
-      <button data-speed="10" class="time-btn" title="10× speed">10×</button>
+      <button data-speed="5" class="time-btn" title="5× speed">5×</button>
+      <button data-speed="15" class="time-btn" title="15× speed">15×</button>
+      <button data-speed="50" class="time-btn" title="50× speed">50×</button>
+      <button data-speed="100" class="time-btn" title="100× speed">100×</button>
+      <button data-speed="100000" class="time-btn" title="100000× speed">100000×</button>
     </div>
   </div>
 </div>
