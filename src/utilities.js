@@ -1,14 +1,19 @@
 // utilities.js
-// compact-number formatter
+// compact-number formatter + 2dp controller for tidiness
 export function formatCompactNumber(num) {
   if (typeof num !== "number" || isNaN(num)) return "—";
 
   const sign = num < 0 ? "-" : "";
   const absNum = Math.abs(num);
-  
-  if (absNum < 1_000)             return sign + absNum.toString();
-  if (absNum < 1_000_000)         return sign + (absNum/1_000).toFixed(1).replace(/\.0$/,'') + "K";
-  if (absNum < 1_000_000_000)     return sign + (absNum/1_000_000).toFixed(1).replace(/\.0$/,'') + "M";
-  if (absNum < 1_000_000_000_000) return sign + (absNum/1_000_000_000).toFixed(1).replace(/\.0$/,'') + "B";
-  return sign + (absNum/1_000_000_000_000).toFixed(1).replace(/\.0$/,'') + "T";
+
+  function format(n, divisor, suffix) {
+    const val = (n / divisor).toFixed(2); // always 2dp
+    return sign + val + suffix;
+  }
+
+  if (absNum < 1_000)             return sign + absNum.toFixed(2);
+  if (absNum < 1_000_000)         return format(absNum, 1_000, "K");
+  if (absNum < 1_000_000_000)     return format(absNum, 1_000_000, "M");
+  if (absNum < 1_000_000_000_000) return format(absNum, 1_000_000_000, "B");
+  return format(absNum, 1_000_000_000_000, "T");
 }

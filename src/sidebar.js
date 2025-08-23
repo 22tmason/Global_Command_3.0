@@ -115,6 +115,22 @@ export function updateClockDisplay() {
   };
 })();
 
+function showPopup(title, message) {
+  const overlay = document.createElement("div");
+  overlay.className = "popup-overlay";
+  overlay.innerHTML = `
+    <div class="popup-box">
+      <h2>${title}</h2>
+      <p>${message}</p>
+      <button id="popup-ok-btn">OK</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  overlay.querySelector("#popup-ok-btn").addEventListener("click", () => {
+    document.body.removeChild(overlay);
+  });
+}
 
 function ensureDiplomacyState() {
   if (!state.diplomacy) state.diplomacy = { relations: {} };
@@ -881,14 +897,19 @@ function initEconomyLogic() {
 
     const troopUpkPerDay = safeNumber(econ.military.upkeepPerTroopDaily, 0) * troops;
     const equipUpkPerDay = (safeNumber(econ.military.upkeepPerEquipPowerAnnual, 0) / DAYS_IN_YEAR) * equipPower;
-
     const requiredUpkeep = (troopUpkPerDay + equipUpkPerDay) * days;
-    const upkeepPaid = Math.min(requiredUpkeep, Math.max(0, econ.treasury));
+
+    // Budget pool = all defense budget for the day
+    const budgetPerDay = dailyIncome * clamp01(econ.military?.budgetPct ?? 0);
+    let budgetPool = budgetPerDay * days;
+
+    // First cover upkeep from budget
+    const upkeepPaid = Math.min(requiredUpkeep, budgetPool, Math.max(0, econ.treasury));
+    budgetPool -= upkeepPaid;
     econ.treasury -= upkeepPaid;
 
-    const budgetPerDay = dailyIncome * clamp01(econ.military?.budgetPct ?? 0);
-    const procurementPlanned = budgetPerDay * days;
-    const procurementSpend = Math.min(procurementPlanned, Math.max(0, econ.treasury));
+    // Leftover budget goes to procurement
+    const procurementSpend = Math.min(budgetPool, Math.max(0, econ.treasury));
     econ.treasury -= procurementSpend;
 
     const baseDecayPerDay = 0.01 / DAYS_IN_YEAR;
@@ -982,7 +1003,8 @@ function initEconomyLogic() {
     dv("mil-power-delta", formatCompactNumber(safeNumber(econ.last?.powerDelta, 0) * DAYS_IN_YEAR) + " /yr");
     dv("mil-readiness", (clamp01(econ.military.readiness ?? 0.7) * 100).toFixed(0) + "%");
 
-    const netDay = econ.last?.net ?? (dailyIncome - upkeepDay - dailyIncome * clamp01(econ.military?.budgetPct ?? 0));
+    const defenseBudgetDay = dailyIncome * clamp01(econ.military?.budgetPct ?? 0);
+    const netDay = econ.last?.net ?? (dailyIncome - defenseBudgetDay);
     dv("mil-net", formatCompactNumber(netDay * DAYS_IN_YEAR));
     dv("defense-budget-display", Math.round(clamp01(econ.military?.budgetPct ?? 0) * 100) + "%");
     dv("defense-planned-spend", formatCompactNumber(annualIncome * clamp01(econ.military?.budgetPct ?? 0)));

@@ -1,99 +1,168 @@
 // map.js
-import * as d3                  from "https://cdn.skypack.dev/d3@7";
-import { state }               from "./state.js";
+import * as d3 from "https://cdn.skypack.dev/d3@7";
+import { state } from "./state.js";
 import { formatCompactNumber } from "./utilities.js";
-import { startGame }           from "./sidebar.js";
+import { startGame } from "./sidebar.js";
+
+function getShowPopup() {
+  if (typeof window.showPopup === "function") return window.showPopup;
+
+  // Minimal fallback modal
+  return function (title, body) {
+    const overlay = document.createElement("div");
+    overlay.style.cssText =
+      "position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:10000";
+    const box = document.createElement("div");
+    box.style.cssText =
+      "max-width:560px;width:min(90vw,560px);background:#1f1f22;color:#fff;border:1px solid #FFD166;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.5);padding:20px";
+    const h = document.createElement("h3");
+    h.textContent = title;
+    h.style.margin = "0 0 10px 0";
+    const p = document.createElement("p");
+    p.textContent = body;
+    p.style.margin = "0 0 16px 0";
+    const btn = document.createElement("button");
+    btn.textContent = "OK";
+    btn.style.cssText =
+      "background:#FFD166;border:none;color:#000;padding:8px 14px;border-radius:6px;cursor:pointer;font-weight:600";
+    btn.onclick = () => document.body.removeChild(overlay);
+    box.append(h, p, btn);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+  };
+}
+
 const turf = window.turf;
 
+// shared handles used across functions
+let g;              // <g> container
+let colorScale;     // country palette
+
+/**
+ * Paint the player's country black and restore others to their palette color.
+ * Call after confirming a country or after loading a save.
+ */
+export function paintPlayerCountryBlack() {
+  if (!g || !colorScale) return;
+  const pid = state?.gameState?.playerCountryId || state?.confirmedCountryId;
+  g.selectAll("path.country")
+    .attr("fill", d => (d.properties.iso_a3 === pid ? "#000" : colorScale(d.properties.iso_a3)))
+    .classed("player", d => d.properties.iso_a3 === pid);
+}
+
+/**
+ * Initialise the world map, bind interactions, and wire it to the sidebar.
+ * @param {GeoJSON.FeatureCollection} world
+ * @param {Object<string, {name:string, population:number, GDP:number, science?:number, military_power?:number}>} countries
+ */
 export function initMap(world, countries) {
-  // Seed the data
+  // ---------- 0) Seed country data ----------
   Object.assign(state.countryData, countries);
 
-  // 1) Projection & SVG
+  // ---------- 1) Projection & SVG ----------
   const vp     = document.getElementById("map-viewport");
   const width  = vp.clientWidth;
   const height = vp.clientHeight;
-  const svg    = d3.select("#map").attr("width", width).attr("height", height);
-  const g      = svg.append("g");
+
+  const svg = d3.select("#map")
+    .attr("width",  width)
+    .attr("height", height);
+
+  g = svg.append("g"); // assign to module-level variable
+
   const projection = d3.geoNaturalEarth1().fitSize([width, height], world);
   const path       = d3.geoPath().projection(projection);
 
-  // 2) Merge multipart features
-  const grouped = d3.group(world.features, f =>
-    f.properties.iso_a3 || f.properties.ISO_A3 || f.properties.adm0_a3 || "UNKNOWN"
+  // ---------- 2) Merge multipart features by ISO code ----------
+  const grouped = d3.group(
+    world.features,
+    f => f.properties.iso_a3 || f.properties.ISO_A3 || f.properties.adm0_a3 || "UNKNOWN"
   );
+
+  /** @type {GeoJSON.Feature[]} */
   const mergedFeatures = [];
   for (const [iso, group] of grouped) {
     if (group.length === 1) {
       mergedFeatures.push(group[0]);
     } else {
-      const merged = turf.combine({ type: "FeatureCollection", features: group }).features[0];
+      const merged = turf.combine({
+        type: "FeatureCollection",
+        features: group
+      }).features[0];
       merged.properties = { ...group[0].properties, iso_a3: iso };
       mergedFeatures.push(merged);
     }
   }
-
-  // 3) Colour scale
+  getShowPopup()(
+    "Welcome to Global Command",
+    "Click a country to preview it, then press Confirm to start. Once in-game, use the Economy, Diplomacy, and Military tabs to shape your strategy."
+  );
+  // ---------- 3) Colour scale ----------
   const isoList = mergedFeatures.map(d => d.properties.iso_a3);
-  const colorScale = d3.scaleOrdinal()
+  colorScale = d3.scaleOrdinal() // assign to module-level variable
     .domain(isoList)
-    .range(isoList.map((_, i) => d3.interpolateRainbow(i / isoList.length)));
+    .range(isoList.map((_, i) => d3.interpolateRainbow(i / Math.max(1, isoList.length))));
 
-  // 4) Pre-game sidebar updater
-  function updateSidebar(data) {
-    document.getElementById("country-name").textContent       = data.name;
-    document.getElementById("country-population").textContent = formatCompactNumber(data.population);
-    document.getElementById("country-gdp").textContent        = `$${formatCompactNumber(data.GDP * 1e6)}`;
-    document.getElementById("country-science").textContent    = formatCompactNumber(data.science);
-    document.getElementById("country-military").textContent   = formatCompactNumber(data.military_power);
+  // ---------- Helpers (use module-level g/colorScale) ----------
+  function updateSidebar(data = {}) {
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set("country-name",        data.name ?? "—");
+    set("country-population",  formatCompactNumber(data.population ?? 0));
+    set("country-gdp",        `$${formatCompactNumber((data.GDP ?? 0) * 1e6)}`);
+    set("country-science",     formatCompactNumber(data.science ?? 0));
+    set("country-military",    formatCompactNumber(data.military_power ?? 0));
   }
 
-  // 5) Pre-game preview handler
   function previewCountry(event, d) {
     g.selectAll("path.country").classed("pending", false);
     state.pendingCountryId = d.properties.iso_a3;
     d3.select(this).classed("pending", true);
-    updateSidebar(state.countryData[state.pendingCountryId]);
-    document.getElementById("confirm-btn").disabled = false;
+    updateSidebar(state.countryData[state.pendingCountryId] || {});
+    const btn = document.getElementById("confirm-btn");
+    if (btn) btn.disabled = false;
   }
 
-  // Helper: highlight current diplomacy target in-game
   function markDiploTarget(id) {
     g.selectAll("path.country").classed("diplo-target", false);
     if (id) g.select(`#${id}`).classed("diplo-target", true);
   }
+  window.markDiploTarget = markDiploTarget;
 
-  // 6) Draw countries
+  function updateMapControl() {
+    const ctrl = state.gameState?.control || {};
+    g.selectAll("path.country")
+      .classed("controlled", d => (ctrl[d.properties.iso_a3] || 0) >= 100);
+    paintPlayerCountryBlack();
+  }
+  window.updateMapControl = updateMapControl;
+
+  // ---------- 4) Draw countries ----------
   g.selectAll("path.country")
     .data(mergedFeatures)
     .enter().append("path")
       .attr("class", "country")
-      .attr("d", path)
       .attr("id", d => d.properties.iso_a3)
+      .attr("d", path)
       .attr("fill", d => colorScale(d.properties.iso_a3))
       .on("click", function (event, d) {
         const iso = d.properties.iso_a3;
 
-        // If the game hasn't started yet, keep using pre-game preview + confirm flow
+        // If game hasn't started: use pre-game confirm flow
         if (!state.gameState?.playerCountryId) {
           return previewCountry.call(this, event, d);
         }
 
-        // In-game: clicking sets the Diplomacy target (no dropdown)
+        // In-game: clicking selects diplomacy target
         state.gameState.selectedDiploTarget = iso;
         markDiploTarget(iso);
 
-        // Prefer direct hook if sidebar exposed it, else dispatch an event
         if (typeof window.setSelectedCountry === "function") {
           window.setSelectedCountry(iso);
         } else {
           document.dispatchEvent(new CustomEvent("gc:countrySelected", { detail: { id: iso } }));
         }
 
-
-        // Switch to Diplomacy tab if present
-        const dipBtn = document.getElementById("mode-diplomacy");
-        dipBtn?.click?.();
+        document.getElementById("mode-diplomacy")?.click?.();
       })
       .on("mousemove", evt => {
         d3.select("#tooltip")
@@ -103,9 +172,11 @@ export function initMap(world, countries) {
       })
       .on("mouseout", () => d3.select("#tooltip").style("display", "none"));
 
-  // 7) Confirm → startGame
-  document.getElementById("confirm-btn").addEventListener("click", () => {
+  // ---------- 5) Confirm → startGame ----------
+  const confirmBtn = document.getElementById("confirm-btn");
+  confirmBtn?.addEventListener("click", () => {
     if (!state.pendingCountryId) return;
+
     g.selectAll("path.country").classed("selected", false);
 
     state.confirmedCountryId = state.pendingCountryId;
@@ -114,25 +185,46 @@ export function initMap(world, countries) {
 
     state.pendingCountryId = null;
     g.selectAll("path.country").classed("pending", false);
-    document.getElementById("confirm-btn").disabled = true;
+    confirmBtn.disabled = true;
 
+    // Start the game (sidebar + timers)
     startGame();
 
-    // After game starts, default the diplomacy target to any neighbor or first click
+    // Paint current player and control state
+    paintPlayerCountryBlack();
+    updateMapControl();
+
+    // Reset target highlight; user will click a target
     state.gameState.selectedDiploTarget = null;
     markDiploTarget(null);
+
+    // ---------- Post-confirm onboarding popup ----------
+    // ... after startGame(), paintPlayerCountryBlack(), etc.
+    getShowPopup()(
+      "Game Started",
+      "You’re now leading your nation. • Economy: set tax/consumption/investment. • Diplomacy: click other countries to interact (Aid, NAP, Alliance, War). • Military: set budget & draft. Tip: hover labels for tooltips."
+    );
   });
 
-  // 8) Restore prior selection
+  // ---------- 6) Restore prior selection (if any) ----------
   const stored = state.confirmedCountryId || localStorage.getItem("selectedCountry");
   if (stored) {
     g.selectAll("path.country")
       .filter(d => d.properties.iso_a3 === stored)
       .classed("selected", true)
-      .each(() => updateSidebar(state.countryData[stored]));
+      .each(() => {
+        const data = state.countryData[stored];
+        if (data) updateSidebar(data);
+      });
+
+    // Only paint black if a player is actually set (game started / loaded)
+    if (state.gameState?.playerCountryId) {
+      paintPlayerCountryBlack();
+      updateMapControl();
+    }
   }
 
-  // 9) Borders
+  // ---------- 7) Borders ----------
   g.selectAll("path.border")
     .data(mergedFeatures)
     .enter().append("path")
@@ -143,9 +235,10 @@ export function initMap(world, countries) {
       .attr("stroke-width", 0.4)
       .attr("pointer-events", "none");
 
-  // 10) Zoom & pan
-  svg.call(d3.zoom()
-    .scaleExtent([0.5, 8])
-    .on("zoom", e => g.attr("transform", e.transform))
+  // ---------- 8) Zoom & Pan ----------
+  svg.call(
+    d3.zoom()
+      .scaleExtent([0.5, 8])
+      .on("zoom", e => g.attr("transform", e.transform))
   );
 }
