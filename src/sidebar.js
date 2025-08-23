@@ -36,17 +36,86 @@ export function updateClockDisplay() {
   }
 }
 
-/* ======================= Diplomacy State Core ====================== */
-/**
- * Store diplomacy under state.diplomacy:
- *  - relations[a][b] = {
- *      score: -100..+100,
- *      treaties: { nap:boolean, alliance:boolean },
- *      atWar:boolean,
- *      trade: 0..3
- *    }
- * We mirror symmetric fields when we change them.
- */
+(function setupUITooltips(){
+  if (window.__gcTipsInit) return; // ensure once
+  window.__gcTipsInit = true;
+
+  const box = document.createElement("div");
+  box.id = "ui-tooltip";
+  box.setAttribute("role", "tooltip");
+  Object.assign(box.style, {
+    position: "fixed",
+    zIndex: "9999",
+    maxWidth: "260px",
+    padding: "8px 10px 8px 10px",
+    borderRadius: "6px",
+    background: "rgba(20,20,25,0.95)",
+    color: "#fff",
+    fontSize: "12px",
+    lineHeight: "1.35",
+    boxShadow: "0 6px 20px rgba(0,0,0,0.25)",
+    pointerEvents: "none",
+    opacity: "0",
+    transform: "translateY(-4px)",
+    transition: "opacity 120ms ease, transform 120ms ease",
+  });
+  document.body.appendChild(box);
+
+  let currentTarget = null;
+  let hideTimer = null;
+
+  function show(text, x, y) {
+    if (!text) return;
+    box.textContent = text;
+    box.style.opacity = "1";
+    box.style.transform = "translateY(0)";
+    const margin = 12;
+    const rect = box.getBoundingClientRect();
+    const left = Math.min(window.innerWidth - rect.width - margin, Math.max(margin, (x ?? 0) + 12));
+    const top  = Math.min(window.innerHeight - rect.height - margin, Math.max(margin, (y ?? 0) + 12));
+    box.style.left = left + "px";
+    box.style.top  = top + "px";
+  }
+  function hide() { box.style.opacity = "0"; box.style.transform = "translateY(-4px)"; }
+  const findTipEl = (el) => el?.closest?.("[data-tip]") || null;
+
+  document.addEventListener("mousemove", (e) => {
+    const el = findTipEl(e.target);
+    if (el) { currentTarget = el; clearTimeout(hideTimer); show(el.getAttribute("data-tip")||"", e.clientX, e.clientY); }
+    else if (currentTarget) { currentTarget = null; hideTimer = setTimeout(hide, 60); }
+  });
+  document.addEventListener("focusin", (e) => {
+    const el = findTipEl(e.target); if (!el) return;
+    currentTarget = el; const r = el.getBoundingClientRect();
+    show(el.getAttribute("data-tip")||"", r.left + r.width/2, r.top);
+  });
+  document.addEventListener("focusout", () => { if (currentTarget) hide(); });
+  document.addEventListener("touchstart", (e) => {
+    const el = findTipEl(e.target);
+    if (el) { currentTarget = el; const r = el.getBoundingClientRect(); show(el.getAttribute("data-tip")||"", r.left + r.width/2, r.top); }
+    else hide();
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
+
+  // Public API
+  window.tip = function tip(id, text) {
+    const el = document.getElementById(id); if (!el) return;
+    el.setAttribute("data-tip", String(text || ""));
+    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
+    el.setAttribute("aria-describedby", "ui-tooltip");
+  };
+  window.tipMany = function tipMany(map) {
+    if (!map) return;
+    for (const [id, text] of Object.entries(map)) window.tip(id, text);
+  };
+  window.untip = function untip(id) {
+    const el = document.getElementById(id); if (!el) return;
+    el.removeAttribute("data-tip"); el.removeAttribute("aria-describedby");
+    if (el.getAttribute("tabindex") === "0") el.removeAttribute("tabindex");
+  };
+})();
+
+
 function ensureDiplomacyState() {
   if (!state.diplomacy) state.diplomacy = { relations: {} };
   const rel = state.diplomacy.relations;
@@ -181,20 +250,23 @@ export function buildGameSidebar() {
   buildDiplomacy();   // map-driven diplomacy
   buildEconomy();     // seeds econ via initEconomyLogic()
   buildMilitary();    // reads econ
-
   updateClockDisplay();
 }
 
 /* ========================= Page: Diplomacy ========================= */
+/* ===== helpers (safe setters) ===== */
+function setText(id, text) { const el = document.getElementById(id); if (el) el.textContent = String(text); }
+function setDisabled(id, disabled) {
+  const el = document.getElementById(id); if (!el) return;
+  if (disabled) el.setAttribute("disabled", ""); else el.removeAttribute("disabled");
+}
+
+/* ===== build + wiring ===== */
 function buildDiplomacy() {
-  const el = byId("content-diplomacy");
-  if (!el) return;
-
+  const el = byId("content-diplomacy"); if (!el) return;
   ensureDiplomacyState();
-
   el.innerHTML = `
 <div class="diplo-wrap">
-
   <div class="econ-grid">
     <div class="econ-card">
       <div class="card-header">Country</div>
@@ -235,91 +307,93 @@ function buildDiplomacy() {
 </div>
 `;
 
-  // Map → Sidebar hook (unconditional, allows self click; actions get disabled there)
+  // Map → Sidebar hook (map calls this on click)
   window.setSelectedCountry = function setSelectedCountry(id) {
     if (!id) return;
     state.gameState.selectedDiploTarget = String(id);
     renderDiplomacy();
   };
 
-  // Also listen to a custom event (if the map dispatches instead of calling)
+  // Optional: if the map dispatches events instead of calling
   document.addEventListener("gc:countrySelected", (ev) => {
     const id = String(ev?.detail?.id ?? "");
-    window.setSelectedCountry?.(id);
+    if (id) window.setSelectedCountry(id);
   });
 
   // Button wiring
-  byId("btn-diplo-improve")?.addEventListener("click", () => doImprove());
-  byId("btn-diplo-aid")?.addEventListener("click", () => doAid());
-  byId("btn-diplo-toggle-nap")?.addEventListener("click", () => toggleNAP());
-  byId("btn-diplo-toggle-alliance")?.addEventListener("click", () => toggleAlliance());
-  byId("btn-diplo-toggle-war")?.addEventListener("click", () => toggleWar());
+  byId("btn-diplo-improve")?.addEventListener("click", () => doImprove?.());
+  byId("btn-diplo-aid")?.addEventListener("click", () => doAid?.());
+  byId("btn-diplo-toggle-nap")?.addEventListener("click", () => toggleNAP?.());
+  byId("btn-diplo-toggle-alliance")?.addEventListener("click", () => toggleAlliance?.());
+  byId("btn-diplo-toggle-war")?.addEventListener("click", () => toggleWar?.());
 
-  // Initial paint (if the map has already picked a target)
+  // Tooltips for diplomacy (after DOM exists)
+  registerDiplomacyTips();
+
+  // First paint (safe even if econ isn't ready yet)
   renderDiplomacy();
 }
 
+/* ===== render (safe if econ is not initialised yet) ===== */
 function renderDiplomacy() {
-  const playerId  = String(state?.gameState?.playerCountryId ?? "");
-  const targetId  = String(state?.gameState?.selectedDiploTarget ?? "");
+  const playerId = String(state?.gameState?.playerCountryId ?? "");
+  const targetId = String(state?.gameState?.selectedDiploTarget ?? "");
 
-  // Always show the target name if known
+  // Names (target label in header is optional; the card is always present)
   const targetName = state.countryData?.[targetId]?.name ?? "—";
+  setText("diplo-country-name", targetName);
   const targetLbl = document.getElementById("diplo-target-name");
   if (targetLbl) targetLbl.textContent = targetName;
-  const countryCardName = document.getElementById("diplo-country-name");
-  if (countryCardName) countryCardName.textContent = targetName;
 
-  // Treasury & revenue (always visible)
-  const dailyIncome = econ ? (econ.GDP * econ.taxRate) / DAYS_IN_YEAR : 0;
+  // Treasury & revenue (always visible; guard econ)
+  const gdp = Number(econ?.GDP) || 0;
+  const treasury = Number(econ?.treasury) || 0;
+  const taxRate = Number(econ?.taxRate) || 0;
+  const dailyIncome = gdp * taxRate / DAYS_IN_YEAR;
   const annualIncome = dailyIncome * DAYS_IN_YEAR;
-  const tre = econ?.treasury ?? 0;
-  byId("diplo-treasury")?.replaceChildren(document.createTextNode(formatCompactNumber(tre)));
+
+  byId("diplo-treasury")?.replaceChildren(document.createTextNode(formatCompactNumber(treasury)));
   byId("diplo-revenue")?.replaceChildren(document.createTextNode(formatCompactNumber(annualIncome)));
 
-  // No valid target yet
+  // No valid target
   if (!targetId || !state.countryData?.[targetId]) {
     ["diplo-stance","diplo-score","diplo-treaties","diplo-war","diplo-country-name","diplo-cost-improve"]
-      .forEach(id => { const e = byId(id); if (e) e.textContent = "—"; });
+      .forEach(id => setText(id, "—"));
     ["btn-diplo-improve","btn-diplo-aid","btn-diplo-toggle-nap","btn-diplo-toggle-alliance","btn-diplo-toggle-war"]
-      .forEach(id => byId(id)?.setAttribute("disabled",""));
-    const hint = byId("diplo-hint");
-    if (hint) hint.textContent = "Click a country on the map to select a diplomacy target.";
+      .forEach(id => setDisabled(id, true));
+    setText("diplo-hint", "Click a country on the map to select a diplomacy target.");
     return;
   }
 
-  // If self-target: show neutral UI and disable actions (but still show the name)
+  // Self-target: neutral UI + disabled actions
   if (targetId === playerId) {
-    byId("diplo-stance")?.replaceChildren(document.createTextNode("—"));
-    byId("diplo-score")?.replaceChildren(document.createTextNode("—"));
-    byId("diplo-treaties")?.replaceChildren(document.createTextNode("—"));
-    byId("diplo-war")?.replaceChildren(document.createTextNode("No"));
-    // keep country name visible on the card
-    if (countryCardName) countryCardName.textContent = targetName;
-    byId("diplo-cost-improve")?.replaceChildren(document.createTextNode("—"));
+    setText("diplo-stance", "—");
+    setText("diplo-score", "—");
+    setText("diplo-treaties", "—");
+    setText("diplo-war", "No");
+    setText("diplo-cost-improve", "—");
     ["btn-diplo-improve","btn-diplo-aid","btn-diplo-toggle-nap","btn-diplo-toggle-alliance","btn-diplo-toggle-war"]
-      .forEach(id => byId(id)?.setAttribute("disabled",""));
-    const hint = byId("diplo-hint");
-    if (hint) hint.textContent = "Select a different country to conduct diplomacy.";
+      .forEach(id => setDisabled(id, true));
+    setText("diplo-hint", "Select a different country to conduct diplomacy.");
     return;
   }
 
-  // Real target: pull / init relations
+  // Real target: pull relations
   ensureDiplomacyState();
   const R = getRel(playerId, targetId);
-  const improveCost = econ.GDP*0.02;
-  const aidCost     = econ.GDP*0.08;
 
-  // Write UI
-  byId("diplo-stance")?.replaceChildren(document.createTextNode(stanceWord(R.score)));
-  byId("diplo-score")?.replaceChildren(document.createTextNode(String(R.score)));
+  // Costs (now safe even if econ wasn't initialised earlier)
+  const improveCost = gdp * 0.02;  // 2% of GDP
+  const aidCost     = gdp * 0.08;  // 8% of GDP
+
+  setText("diplo-stance", stanceWord(R.score));
+  setText("diplo-score", String(R.score));
   const treatiesStr = `${R.treaties.nap ? "NAP " : ""}${R.treaties.alliance ? "Alliance " : ""}`.trim() || "—";
-  byId("diplo-treaties")?.replaceChildren(document.createTextNode(treatiesStr));
-  byId("diplo-war")?.replaceChildren(document.createTextNode(R.atWar ? "Yes" : "No"));
-  byId("diplo-cost-improve")?.replaceChildren(document.createTextNode(formatCompactNumber(improveCost)));
-  if (countryCardName) countryCardName.textContent = targetName;
+  setText("diplo-treaties", treatiesStr);
+  setText("diplo-war", R.atWar ? "Yes" : "No");
+  setText("diplo-cost-improve", formatCompactNumber(improveCost));
 
-  // Buttons reflect state
+  // Button labels
   const bNap = byId("btn-diplo-toggle-nap");
   const bAll = byId("btn-diplo-toggle-alliance");
   const bWar = byId("btn-diplo-toggle-war");
@@ -327,21 +401,40 @@ function renderDiplomacy() {
   if (bAll) bAll.textContent = R.treaties.alliance ? "Leave Alliance" : "Form Alliance";
   if (bWar) bWar.textContent = R.atWar ? "Offer Peace" : "Declare War";
 
-  // Enable/disable per conditions
-  byId("btn-diplo-improve")?.toggleAttribute?.("disabled", (tre < improveCost));
-  byId("btn-diplo-aid")?.toggleAttribute?.("disabled", (tre < aidCost));
-  bNap?.toggleAttribute?.("disabled", !R.treaties.nap && R.score < 60);
-  bAll?.toggleAttribute?.("disabled", (!R.treaties.alliance && (R.score < 80 || R.atWar)));
+  // Enable/disable (avoid toggleAttribute quirks)
+  setDisabled("btn-diplo-improve", treasury < improveCost);
+  setDisabled("btn-diplo-aid", treasury < aidCost);
+  setDisabled("btn-diplo-toggle-nap", (!R.treaties.nap && R.score < 60));
+  setDisabled("btn-diplo-toggle-alliance", (!R.treaties.alliance && (R.score < 80 || R.atWar)));
 
-  const hint = byId("diplo-hint");
-  if (hint) {
-    hint.textContent =
-      R.treaties.alliance
-        ? "Leaving an alliance reduces relations by 20."
-        : "Improving relations or sending aid can unlock NAPs (≥ 60) and Alliances (≥ 80). Declaring war sets relations to 10.";
-  }
+  // Hint
+  setText(
+    "diplo-hint",
+    R.treaties.alliance
+      ? "Leaving an alliance reduces relations by 20."
+      : "Improving relations or sending aid can unlock NAPs (≥ 60) and Alliances (≥ 80). Declaring war sets relations to 0; peace restores to ~20."
+  );
 }
 
+/* ===== diplomacy tooltips (define once; call after build) ===== */
+function registerDiplomacyTips() {
+  tipMany({
+    "diplo-country-name": "Selected country (also shown at the top).",
+    "diplo-cost-improve": "Cost to buy a +10 relations improvement (based on your GDP).",
+    "diplo-stance": "Relationship stance from a 0–100 score (50 is neutral).",
+    "diplo-score": "Current relations score (0–100).",
+    "diplo-treaties": "Current treaties: Non-Aggression Pact or Alliance.",
+    "diplo-war": "War status with the selected country.",
+    "diplo-treasury": "Your current treasury balance.",
+    "diplo-revenue": "Estimated yearly government revenue.",
+    "btn-diplo-improve": "Spend treasury to improve relations by +10.",
+    "btn-diplo-aid": "Send financial aid to improve relations by +15.",
+    "btn-diplo-toggle-nap": "Sign or renounce a Non-Aggression Pact (requires score ≥ 60).",
+    "btn-diplo-toggle-alliance": "Form or leave an Alliance (requires score ≥ 80 and not at war).",
+    "btn-diplo-toggle-war": "Declare war or offer peace (war sets relations to 0; peace raises to ~20).",
+    "diplo-hint": "Tips and requirements for diplomacy actions."
+  });
+}
 
 /* ======== Diplomacy Actions (spend money, mutate symmetric state) ======== */
 function spend(amount) {
@@ -424,92 +517,128 @@ function toggleWar() {
   const goingToWar = !R.atWar;
 
   if (goingToWar) {
-    // break treaties, tank relations
+    // break treaties, tank relations to 0 (0..100 model)
     R.atWar = true;
     R.treaties.nap = false;
     R.treaties.alliance = false;
-    R.trade = Math.max(0, R.trade - 1);
-    R.score = -80;
+    R.trade = Math.max(0, (R.trade ?? 1) - 1);
+    R.score = 0;
   } else {
-    // peace: stop war, relax hostility towards -20 if worse
+    // peace: stop war, restore to at least 20
     R.atWar = false;
-    R.score = Math.max(R.score, -20);
+    R.score = Math.max(R.score, 20);
   }
   setRelSym(pid, tid, { atWar: R.atWar, treaties: R.treaties, trade: R.trade, score: R.score });
   renderDiplomacy();
 }
 
+
 /* ========================== Page: Economy ========================== */
+
+
 function buildEconomy() {
   const el = byId("content-economy");
   if (!el) return;
-
-  el.innerHTML = `
-<div class="econ-grid">
-  <div class="econ-card">
-    <div class="card-header">Stability</div>
-    <div class="card-value"><span id="stab-value">—%</span></div>
-    <div class="card-growth"><span id="stab-growth">—% /yr</span></div>
-  </div>
-  <div class="econ-card">
-    <div class="card-header">GDP</div>
-    <div class="card-value">$<span id="econ-gdp-total">—</span></div>
-    <div class="card-growth"><span id="econ-gdp-growth">—% /yr</span></div>
-  </div>
-  <div class="econ-card">
-    <div class="card-header">Population</div>
-    <div class="card-value"><span id="econ-population">—</span></div>
-    <div class="card-growth"><span id="econ-pop-growth">—% /yr</span></div>
-  </div>
-  <div class="econ-card">
-    <div class="card-header">Labour Force</div>
-    <div class="card-value"><span id="econ-labour-force">—</span></div>
-    <div class="card-growth"><span id="econ-labour-growth">—% /yr</span></div>
-  </div>
-  <div class="econ-card">
-    <div class="card-header">Productivity</div>
-    <div class="card-value"><span id="econ-labour-productivity">—</span></div>
-    <div class="card-growth"><span id="econ-prod-growth">—% /yr</span></div>
-  </div>
-  <div class="econ-card">
-    <div class="card-header">Treasury</div>
-    <div class="card-value">$<span id="econ-treasury-total">—</span></div>
-    <div class="card-growth">+$<span id="econ-gov-revenue">—</span>/yr</div>
-  </div>
-</div>
-
-<div class="econ-sliders">
-  <div class="econ-card slider-card">
-    <div class="card-header"><span>Tax &amp; C/I</span></div>
-
-    <div class="slider-group">
-      <label>Tax Rate: <span id="tax-rate-display">—%</span></label>
-      <input type="range" id="tax-slider" min="0" max="100" step="1" value="30" />
-      <div class="slider-info">
-        <small>Stab: <span id="tax-stability-effect">—% /yr</span></small>
-        <small>Rev: <span id="tax-revenue-effect">—</span>/yr</small>
-      </div>
+  el.innerHTML = el.innerHTML = `
+  <div class="econ-grid">
+    <div class="econ-card">
+      <div class="card-header">Stability</div>
+      <div class="card-value"><span id="stab-value">—%</span></div>
+      <div class="card-growth"><span id="stab-growth">—% /yr</span></div>
     </div>
-
-    <div class="slider-group">
-      <label>Consumption: <span id="consumption-display">—%</span></label>
-      <input id="consumption-slider" type="range" min="0" max="100" step="1" value="35" />
-      <div class="slider-info">
-        <small>Pop Δ: <span id="ci-pop-effect">—% /yr</span></small>
-      </div>
+    <div class="econ-card">
+      <div class="card-header">GDP</div>
+      <div class="card-value">$<span id="econ-gdp-total">—</span></div>
+      <div class="card-growth"><span id="econ-gdp-growth">—% /yr</span></div>
     </div>
-
-    <div class="slider-group">
-      <label>Investment: <span id="investment-display">—%</span></label>
-      <input id="investment-slider" type="range" min="0" max="100" step="1" value="35" />
-      <div class="slider-info">
-        <small>Prod Δ: <span id="ci-prod-effect">—% /yr</span></small>
-      </div>
+    <div class="econ-card">
+      <div class="card-header">Population</div>
+      <div class="card-value"><span id="econ-population">—</span></div>
+      <div class="card-growth"><span id="econ-pop-growth">—% /yr</span></div>
+    </div>
+    <div class="econ-card">
+      <div class="card-header">Labour Force</div>
+      <div class="card-value"><span id="econ-labour-force">—</span></div>
+      <div class="card-growth"><span id="econ-labour-growth">—% /yr</span></div>
+    </div>
+    <div class="econ-card">
+      <div class="card-header">Productivity</div>
+      <div class="card-value"><span id="econ-labour-productivity">—</span></div>
+      <div class="card-growth"><span id="econ-prod-growth">—% /yr</span></div>
+    </div>
+    <div class="econ-card">
+      <div class="card-header">Treasury</div>
+      <div class="card-value">$<span id="econ-treasury-total">—</span></div>
+      <div class="card-growth">+$<span id="econ-gov-revenue">—</span>/yr</div>
     </div>
   </div>
-</div>
-`;
+
+  <div class="econ-sliders">
+    <div class="econ-card slider-card">
+      <div class="card-header"><span>Tax &amp; C/I</span></div>
+
+      <div class="slider-group">
+        <label>Tax Rate: <span id="tax-rate-display">—%</span></label>
+        <input type="range" id="tax-slider" min="0" max="100" step="1" value="30" />
+        <div class="slider-info">
+          <small>Stab: <span id="tax-stability-effect">—% /yr</span></small>
+          <small>Rev: <span id="tax-revenue-effect">—</span>/yr</small>
+        </div>
+      </div>
+
+      <div class="slider-group">
+        <label>Consumption: <span id="consumption-display">—%</span></label>
+        <input id="consumption-slider" type="range" min="0" max="100" step="1" value="35" />
+        <div class="slider-info">
+          <small>Pop Δ: <span id="ci-pop-effect">—% /yr</span></small>
+        </div>
+      </div>
+
+      <div class="slider-group">
+        <label>Investment: <span id="investment-display">—%</span></label>
+        <input id="investment-slider" type="range" min="0" max="100" step="1" value="35" />
+        <div class="slider-info">
+          <small>Prod Δ: <span id="ci-prod-effect">—% /yr</span></small>
+        </div>
+      </div>
+    </div>
+  </div>
+  `;
+
+  // build the logic (sliders, recalc, etc.)
   initEconomyLogic();
+  // attach tooltips AFTER the DOM exists
+  registerEconomyTips();
+}
+
+// keep this OUTSIDE buildEconomy so it's defined once
+function registerEconomyTips() {
+  tip("stab-value", "Overall social stability. Higher stability → higher labour-force participation. Tax policy affects stability growth.");
+  tip("stab-growth", "Projected annual change in stability based on current tax rate.");
+
+  tip("econ-gdp-total", "Total economic output from civilian labour (GDP).");
+  tip("econ-gdp-growth", "Estimated annual GDP growth, combining labour and productivity growth.");
+
+  tip("econ-population", "Total population. Consumption boosts population growth.");
+  tip("econ-labour-force", "Civilians available to work. Draft reduces this share.");
+  tip("econ-labour-productivity", "Output per worker. Investment increases productivity over time.");
+
+  tip("econ-treasury-total", "The current treasury balance available for government spending, increases from any surplus from government revenue.");
+  
+  // Sliders (users often hover these first)
+  tip("tax-slider", "Tax rate: increases revenue but slows stability growth above ~30% (neutral).");
+  tip("consumption-slider", "Consumption: higher = faster population growth; too low can hurt it.");
+  tip("investment-slider", "Investment: raises productivity growth; neglect slows future output.");
+
+  tip("tax-rate-display", "Current tax rate.");
+  tip("tax-stability-effect", "Stability growth impact from current tax.");
+  tip("tax-revenue-effect", "Estimated yearly government revenue from current tax.");
+
+  tip("consumption-display", "Current consumption share.");
+  tip("ci-pop-effect", "Population growth effect from consumption.");
+
+  tip("investment-display", "Current investment share.");
+  tip("ci-prod-effect", "Productivity growth effect from investment.");
 }
 
 /* ========================= Page: Military ========================= */
@@ -576,7 +705,7 @@ function buildMilitary() {
   </div>
 </div>
 `;
-
+  registerMilitaryTips()
   // budget
   const s = byId("defense-budget-slider");
   if (s) {
@@ -606,6 +735,30 @@ function buildMilitary() {
     };
     d.addEventListener("input", updateDraft);
     updateDraft();
+  }
+
+  function registerMilitaryTips() {
+    // Cards
+    tip("mil-treasury", "Your current treasury balance available for upkeep and procurement.");
+    tip("mil-daily-income", "Estimated yearly government revenue (shown annualized).");
+    tip("mil-power", "Total military power = troop power + equipment power.");
+    tip("mil-power-delta", "Projected yearly change in power from procurement gains and equipment decay.");
+    tip("mil-readiness", "Operational readiness. Falls if upkeep isn’t fully paid; slowly recovers when fully funded.");
+    tip("mil-readiness-trend", "Expected yearly drift in readiness based on current upkeep coverage.");
+    tip("mil-upkeep", "Yearly cost to maintain troops and equipment.");
+    tip("mil-upkeep-paid", "How much upkeep you’re actually paying (annualized).");
+    tip("mil-upkeep-req", "How much upkeep is required to avoid readiness penalties (annualized).");
+    tip("mil-net", "Annual net: revenue − (upkeep + procurement spend).");
+    tip("mil-troop-power", "Troop power scales with troops × √(productivity / baseline).");
+    tip("mil-equip-power", "Equipment power from procurement; it decays over time without upkeep.");
+
+    // Sliders + readouts
+    tip("defense-budget-slider", "Share of revenue allocated to the military (upkeep + procurement).");
+    tip("defense-budget-display", "Current defence budget as a % of revenue.");
+    tip("defense-planned-spend", "Planned annual spend from the current defence budget.");
+    tip("draft-slider", "Share of the labour force conscripted. Increases troops but reduces civilian labour (hurts GDP).");
+    tip("draft-display", "Current draft as a % of the labour force.");
+    tip("draft-troops", "Total drafted troops at the current draft percentage.");
   }
 }
 
@@ -844,6 +997,16 @@ function initEconomyLogic() {
     // also refresh diplomacy money displays if open
     dv("diplo-treasury", formatCompactNumber(econ.treasury));
     dv("diplo-revenue", formatCompactNumber(annualIncome));
+    // slider readouts + effects
+    dv("tax-rate-display", (econ.taxRate * 100).toFixed(0) + "%");
+    dv("tax-stability-effect", (stabRate * 100).toFixed(2) + "% /yr");
+    dv("tax-revenue-effect", formatCompactNumber(annualIncome));
+
+    dv("consumption-display", (econ.cons * 100).toFixed(0) + "%");
+    dv("ci-pop-effect", (popRate * 100).toFixed(2) + "% /yr");
+
+    dv("investment-display", (econ.inv * 100).toFixed(0) + "%");
+    dv("ci-prod-effect", (prodRate * 100).toFixed(2) + "% /yr");
   }
 
   [taxSlider, consSlider, invSlider].filter(Boolean).forEach((slider) =>
