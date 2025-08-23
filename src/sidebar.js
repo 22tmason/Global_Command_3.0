@@ -11,6 +11,7 @@ import {
   simulationDate,
 } from "./timer.js";
 import { formatCompactNumber } from "./utilities.js";
+import { mountLeaderboardContainer, updateLeaderboard, scheduleLeaderboardUpdate } from "./leaderboard.js";
 
 /* ============================= Globals ============================= */
 let econ = null;                    // economy + military live state
@@ -830,6 +831,17 @@ function initEconomyLogic() {
     military: (econ && econ.military) || {},
   };
 
+  window.getLiveCountrySnapshot = function getLiveCountrySnapshot() {
+    if (!window || !econ) return null;
+    return {
+      name: (state.countryData?.[String(state?.gameState?.playerCountryId)]?.name) || "You",
+      population: Number(econ.pop) || 0,
+      GDP: Number(econ.GDP) || 0,
+      militaryPower: Number(econ.military?.power) || 0,
+    };
+  };
+
+
   const GDP_units = gdpReported * 1e6;
   econ.productivity = Math.max(1, GDP_units / Math.max(1, econ.labourForce));
   econ.GDP = econ.labourForce * econ.productivity;
@@ -1062,11 +1074,16 @@ export function startGame() {
   resetSimulationDate();
   buildGameSidebar();
   updateClockDisplay();
+  mountLeaderboardContainer();
+  updateLeaderboard();
 }
 
 /* ==================== Optional helper for timer =================== */
 export function handleSimulationTick(days = 1) {
   if (typeof window.advanceEconomy === "function") window.advanceEconomy(days);
   if (typeof window.updateEconomy === "function") window.updateEconomy();
+  scheduleLeaderboardUpdate(); // throttled refresh
   updateClockDisplay();
 }
+
+window.handleSimulationTick = handleSimulationTick;

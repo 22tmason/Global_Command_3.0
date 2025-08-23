@@ -34,6 +34,7 @@ export function startTimer() {
 
 
     if (window.updateEconomy)  window.updateEconomy();
+    if (window.handleSimulationTick) window.handleSimulationTick(1);
   }, interval);
 }
 
