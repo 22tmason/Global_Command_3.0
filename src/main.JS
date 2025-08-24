@@ -24,6 +24,8 @@ newGameBtn.addEventListener("click", () => {
   ]).then(([world, countries]) => {
     Object.assign(state.countryData, countries);
     resetSimulationDate();
+    import("./ai.js").then(m => m.initAI());
+    import("./war.js"); // registers window.stepWar
     initMap(world, countries);
   });
 });

@@ -2,9 +2,13 @@
 import { state } from "./state.js";
 import { formatCompactNumber } from "./utilities.js";
 
-/** Scale to keep numbers readable */
-const SCALE = 1e18; // tweak if you want bigger/smaller scores
-
+const _prevScore = Object.create(null);
+const PERSONA_LABELS = {
+  balanced: "Balanced",
+  growth:   "Growth",
+  hawk:     "Hawk",
+  volatile: "Volatile",
+};
 /** Ensure the container exists (top-right floating panel) */
 export function mountLeaderboardContainer() {
   if (document.getElementById("leaderboard")) return;
@@ -12,10 +16,11 @@ export function mountLeaderboardContainer() {
   const box = document.createElement("div");
   box.id = "leaderboard";
   box.className = "leaderboard";
-  box.innerHTML = `
-    <h3>Leaderboard</h3>
-    <ol id="leaderboard-list"></ol>
-  `;
+
+  const list = document.createElement("ul");
+  list.id = "leaderboard-list";
+  box.appendChild(list);
+
   document.body.appendChild(box);
 }
 
@@ -48,6 +53,9 @@ export function updateLeaderboard() {
   const entries = Object.keys(state.countryData || {}).map((id) => {
     const snap = snapshotForCountry(id);
     const score = computeScore(snap);
+    const prev = _prevScore[id];
+    const growthYr = prev > 0 ? Math.pow(score / prev, 365) - 1 : null;
+    _prevScore[id] = score;
     return {
       id,
       name: snap.name || state.countryData[id]?.name || id,
@@ -55,6 +63,8 @@ export function updateLeaderboard() {
       GDP: snap.GDP,
       population: snap.population,
       militaryPower: snap.militaryPower,
+      persona: state.countryData[id]?.persona || null,
+      growthYr,
     };
   });
 
@@ -70,16 +80,23 @@ export function updateLeaderboard() {
   }
 
   // Paint
-  listEl.innerHTML = "";
-  top.forEach((e) => {
+    listEl.innerHTML = "";
+    top.forEach((e) => {
     const li = document.createElement("li");
     li.className = (e.id === pid) ? "me" : "";
+
+    const pct = (e.growthYr == null) ? "—" : ((e.growthYr * 100).toFixed(2) + "% /yr");
+    const personaBadge = e.persona ? `<span class="persona p-${e.persona}">${PERSONA_LABELS[e.persona]||e.persona}</span>` : "";
     li.innerHTML = `
-      <span class="name">${e.name}</span>
-      <span class="score">${formatCompactNumber(e.score)}</span>
+        <span class="name">${e.name} ${personaBadge}</span>
+        <span class="score">
+        ${formatCompactNumber(e.score)}
+        <small class="growth">${pct}</small>
+        </span>
     `;
+
     listEl.appendChild(li);
-  });
+    });
 }
 
 /** Optional: gentle throttling if called frequently */

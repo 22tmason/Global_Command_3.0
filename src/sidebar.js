@@ -13,6 +13,10 @@ import {
 import { formatCompactNumber } from "./utilities.js";
 import { mountLeaderboardContainer, updateLeaderboard, scheduleLeaderboardUpdate } from "./leaderboard.js";
 
+const DENOUNCE_DELAY_DAYS    = 7;   // must wait this many sim-days after denouncing to declare war
+const DENOUNCE_COOLDOWN_DAYS = 30;  // cannot re-denounce same target until this passes
+const DENOUNCE_RELATION_PENALTY = 15; // how much to drop relations instantly
+
 /* ============================= Globals ============================= */
 let econ = null;                    // economy + military live state
 const DAYS_IN_YEAR = 365;
@@ -35,6 +39,15 @@ export function updateClockDisplay() {
   } catch {
     el.textContent = String(simulationDate).slice(0, 10);
   }
+}
+function simDay() {
+  const d = (typeof simulationDate !== "undefined" && simulationDate) ? simulationDate : new Date();
+  return Math.floor(d.getTime() / 86400000);
+}
+function canDeclareWarUI(R) {
+  if (R.atWar) return true;
+  if (!R.denounce) return false;
+  return simDay() >= (R.denounce.warEligibleOn ?? Infinity);
 }
 
 (function setupUITooltips(){
@@ -314,6 +327,7 @@ function buildDiplomacy() {
     <div class="card-header"><span>Actions</span></div>
     <div class="diplo-actions">
       <button id="btn-diplo-improve">Improve Relations (+10)</button>
+      <button id="btn-diplo-denounce">Denounce (-10)</button>
       <button id="btn-diplo-aid">$50M Aid (+15)</button>
       <button id="btn-diplo-toggle-nap">Sign NAP</button>
       <button id="btn-diplo-toggle-alliance">Form Alliance</button>
@@ -339,6 +353,7 @@ function buildDiplomacy() {
 
   // Button wiring
   byId("btn-diplo-improve")?.addEventListener("click", () => doImprove?.());
+  byId("btn-diplo-denounce")?.addEventListener("click", () => doDenounce?.());
   byId("btn-diplo-aid")?.addEventListener("click", () => doAid?.());
   byId("btn-diplo-toggle-nap")?.addEventListener("click", () => toggleNAP?.());
   byId("btn-diplo-toggle-alliance")?.addEventListener("click", () => toggleAlliance?.());
@@ -408,6 +423,11 @@ function renderDiplomacy() {
   const treatiesStr = `${R.treaties.nap ? "NAP " : ""}${R.treaties.alliance ? "Alliance " : ""}`.trim() || "—";
   setText("diplo-treaties", treatiesStr);
   setText("diplo-war", R.atWar ? "Yes" : "No");
+  if (R.atWar && typeof window.getWarExhaustion === "function") {
+    const ex = window.getWarExhaustion(String(state.gameState.playerCountryId)) || 0;
+    // e.g., append " (Exh: 34%)" next to "War: Yes"
+    setText("diplo-war", `Yes — Exhaustion: ${(ex*100).toFixed(0)}%`);
+  }
   setText("diplo-cost-improve", formatCompactNumber(improveCost));
 
   // Button labels
@@ -423,6 +443,8 @@ function renderDiplomacy() {
   setDisabled("btn-diplo-aid", treasury < aidCost);
   setDisabled("btn-diplo-toggle-nap", (!R.treaties.nap && R.score < 60));
   setDisabled("btn-diplo-toggle-alliance", (!R.treaties.alliance && (R.score < 80 || R.atWar)));
+  setDisabled("btn-diplo-toggle-war", false);       // <-- add this line
+
 
   // Hint
   setText(
@@ -470,6 +492,17 @@ function doImprove() {
   const COST = 10_000_000; // $10M
   if (!spend(COST)) return;
   modRelScore(pid, tid, +10); // +10 relations
+  renderDiplomacy();
+}
+
+function doDenounce() {
+  const pid = String(state?.gameState?.playerCountryId ?? "");
+  const tid = String(state?.gameState?.selectedDiploTarget ?? "");
+  if (!pid || !tid || pid === tid) return;
+
+  const COST = 10_000_000; // $10M
+  if (!spend(COST)) return;
+  modRelScore(pid, tid, -10); // -10 relations
   renderDiplomacy();
 }
 
@@ -1082,6 +1115,11 @@ export function startGame() {
 export function handleSimulationTick(days = 1) {
   if (typeof window.advanceEconomy === "function") window.advanceEconomy(days);
   if (typeof window.updateEconomy === "function") window.updateEconomy();
+  if (typeof window.stepAI === "function") window.stepAI(days);
+  if (window.stepAI) window.stepAI(days);
+  if (window.updateDiplomacyStyles) window.updateDiplomacyStyles();
+  if (window.updateWarLines) window.updateWarLines();
+
   scheduleLeaderboardUpdate(); // throttled refresh
   updateClockDisplay();
 }

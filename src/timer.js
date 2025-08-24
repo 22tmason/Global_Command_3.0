@@ -1,41 +1,53 @@
 // timer.js
+import { state } from "./state.js";
 import { updateClockDisplay } from "./sidebar.js";
 
-// current speed: days per real second
-export let timeScale = 1;
-export let simulationDate = null;
+// ----- time controls -----
+export let timeScale = 1;                   // days per real second
+export let simulationDate = new Date(2025, 0, 1); // default start date
+window.simulationDate = simulationDate;     // expose to other modules & console
+
+// integer sim-day counter for AI
+if (!state.gameState) state.gameState = {};
+state.gameState.simDay = Math.floor(simulationDate.getTime() / 86400000);
 
 let gameTimer = null;
 
-// Initialize or reset the clock
-export function resetSimulationDate(date = new Date()) {
-  simulationDate = date;
-  updateClockDisplay();
+// Advance the world by N sim-days (1 by default)
+export function advanceDays(days = 1) {
+  // 1) advance the clock
+  simulationDate.setDate(simulationDate.getDate() + days);
+  window.simulationDate = simulationDate;
+  state.gameState.simDay += days;
+
+  // 2) run per-day systems
+  if (window.advanceEconomy)       window.advanceEconomy(days);
+  if (window.updateEconomy)        window.updateEconomy();
+  if (window.handleSimulationTick) window.handleSimulationTick(days);
+  if (window.stepWar)              window.stepWar(days);
+
+  // optional: coalesced UI refreshes
+  if (window.scheduleLeaderboardUpdate) window.scheduleLeaderboardUpdate();
+  if (window.scheduleWarLinesUpdate)    window.scheduleWarLinesUpdate();
+
+  // 3) update the UI date label
+  if (typeof updateClockDisplay === "function") updateClockDisplay(simulationDate);
 }
 
+// Initialize or reset the clock (call on New Game / Load)
+export function resetSimulationDate(date = new Date(2025, 0, 1)) {
+  simulationDate = new Date(date.getTime());
+  window.simulationDate = simulationDate;
+  state.gameState.simDay = Math.floor(simulationDate.getTime() / 86400000);
+  if (typeof updateClockDisplay === "function") updateClockDisplay(simulationDate);
+}
+
+// Start the loop
 export function startTimer() {
-  if (gameTimer) clearInterval(gameTimer);
-
-  if (timeScale <= 0) {
-    gameTimer = null;
-    return;
-  }
-
-  // interval = 1000 ms ÷ speed
-  const interval = 1000 / timeScale;
-
-  gameTimer = setInterval(() => {
-    // advance exactly one day each tick
-    simulationDate.setDate(simulationDate.getDate() + 1);
-    updateClockDisplay();
-
-    // run any per‐day logic first
-    if (window.advanceEconomy) window.advanceEconomy(1);
-
-
-    if (window.updateEconomy)  window.updateEconomy();
-    if (window.handleSimulationTick) window.handleSimulationTick(1);
-  }, interval);
+  pauseTimer();
+  if (timeScale <= 0) return;
+  const interval = 1000 / timeScale;   // 1 tick = 1 sim-day
+  gameTimer = setInterval(() => advanceDays(1), interval);
 }
 
 // Stop the loop
@@ -46,8 +58,9 @@ export function pauseTimer() {
 
 // Change speed (0 = pause, >0 = days/sec)
 export function setTimeScale(newScale) {
-  timeScale = newScale;
-  if (gameTimer !== null) {
-    startTimer();
-  }
+  timeScale = Number(newScale) || 0;
+  if (gameTimer !== null) startTimer(); // restart with new cadence
 }
+
+// (optional) expose for console/testing
+window.advanceDays = advanceDays;

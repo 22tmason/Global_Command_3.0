@@ -15,3 +15,6 @@ export const state = {
     control: {}
   }
 };
+
+window.state = state;
+window.updateWarLines && window.updateWarLines();

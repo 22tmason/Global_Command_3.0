@@ -780,3 +780,54 @@ path.country.pending {
 .leaderboard .score {
   font-variant-numeric: tabular-nums;
 }
+
+#leaderboard .score {
+  display: inline-flex; flex-direction: column; align-items: flex-end;
+}
+#leaderboard .score .growth {
+  opacity: .8; font-size: 11px; margin-top: 2px;
+}
+
+.country.ally  { stroke: #4caf50; stroke-width: 2px; }
+.country.enemy { stroke: #ef5350; stroke-width: 2px; }
+
+#leaderboard .name { display: inline-flex; gap: 6px; align-items: center; }
+#leaderboard .persona {
+  font-size: 11px; padding: 2px 6px; border-radius: 10px;
+  background: rgba(0,0,0,.06);
+}
+#leaderboard .persona.p-balanced { background: rgba(100,149,237,.15); }
+#leaderboard .persona.p-growth   { background: rgba(76,175,80,.18); }
+#leaderboard .persona.p-hawk     { background: rgba(244,67,54,.18); }
+#leaderboard .persona.p-volatile { background: rgba(255,193,7,.22); }
+
+.country.enemy { stroke: #ef5350; stroke-width: 2px; }
+.country.ally  { stroke: #4caf50; stroke-width: 2px; }
+
+#war-links-back .war-link {
+  fill: none;
+  stroke: rgba(0,0,0,.35);
+  stroke-width: 5px;
+  pointer-events: none;
+}
+
+#war-links .war-link {
+  fill: none;
+  stroke: #ef5350;
+  stroke-width: 2px;
+  stroke-dasharray: 6 8;
+  pointer-events: none;
+  animation: dash 2.5s linear infinite;
+  opacity: 0.95;
+}
+
+#war-links .war-link.player {
+  stroke: #ffd166; /* highlight wars involving the player */
+  stroke-width: 3px;
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -28; }
+}
+
+
