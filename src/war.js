@@ -1,5 +1,5 @@
 // war.js — RAW POWER ONLY version.
-// Territory & losses depend solely on raw military power: infantry + equipment.
+// Territory & losses depend solely on raw military power from `military_power`.
 // Posture, readiness, and overclock costs are ignored (kept as no-op stubs for UI).
 import { state } from "./state.js";
 
