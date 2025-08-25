@@ -13,18 +13,19 @@ import {
 import { formatCompactNumber } from "./utilities.js";
 import { mountLeaderboardContainer, updateLeaderboard, scheduleLeaderboardUpdate } from "./leaderboard.js";
 
-const DENOUNCE_DELAY_DAYS    = 7;   // must wait this many sim-days after denouncing to declare war
-const DENOUNCE_COOLDOWN_DAYS = 30;  // cannot re-denounce same target until this passes
-const DENOUNCE_RELATION_PENALTY = 15; // how much to drop relations instantly
-
-/* ============================= Globals ============================= */
-let econ = null;                    // economy + military live state
 const DAYS_IN_YEAR = 365;
 
+/* ============================= Globals ============================= */
+let econ = null; // economy + military live state
+
 /* ============================== Utils ============================== */
-const byId = (id) => /** @type {HTMLElement|null} */ (document.getElementById(id));
-const clamp01 = (x) => Math.max(0, Math.min(1, x));
-const safeNumber = (n, fb = 0) => (Number.isFinite(+n) ? +n : fb);
+const byId   = (id) => /** @type {HTMLElement|null} */ (document.getElementById(id));
+const clamp01   = (x) => Math.max(0, Math.min(1, Number(x)));
+const safeNumber= (n, fb = 0) => (Number.isFinite(+n) ? +n : fb);
+const simDay = () => {
+  const d = (typeof simulationDate !== "undefined" && simulationDate) ? simulationDate : new Date();
+  return Math.floor(d.getTime() / 86400000);
+};
 
 /* ============================== Clock ============================== */
 export function updateClockDisplay() {
@@ -40,16 +41,55 @@ export function updateClockDisplay() {
     el.textContent = String(simulationDate).slice(0, 10);
   }
 }
-function simDay() {
-  const d = (typeof simulationDate !== "undefined" && simulationDate) ? simulationDate : new Date();
-  return Math.floor(d.getTime() / 86400000);
+
+/* ========================== Diplomacy state ======================== */
+function ensureDiplomacyState() {
+  if (!state.diplomacy) state.diplomacy = { relations: {} };
+  const rel = state.diplomacy.relations;
+  const ids = Object.keys(state.countryData || {});
+  for (const a of ids) {
+    rel[a] = rel[a] || {};
+    for (const b of ids) {
+      if (a === b) continue;
+      if (!rel[a][b]) {
+        rel[a][b] = {
+          score: 50, // NEUTRAL baseline on 0..100
+          treaties: { nap: false, alliance: false },
+          atWar: false,
+          trade: 1,
+        };
+      }
+    }
+  }
 }
-function canDeclareWarUI(R) {
-  if (R.atWar) return true;
-  if (!R.denounce) return false;
-  return simDay() >= (R.denounce.warEligibleOn ?? Infinity);
+function getRel(a, b) {
+  ensureDiplomacyState();
+  return state.diplomacy.relations?.[a]?.[b];
+}
+function setRelSym(a, b, patch) {
+  ensureDiplomacyState();
+  const A = getRel(a, b);
+  const B = getRel(b, a);
+  Object.assign(A, patch);
+  Object.assign(B, patch);
+}
+function modRelScore(a, b, delta) {
+  const A = getRel(a, b);
+  const B = getRel(b, a);
+  A.score = Math.max(0, Math.min(100, A.score + delta));
+  B.score = Math.max(0, Math.min(100, B.score + delta));
+}
+function stanceWord(score) {
+  if (score >= 85) return "Allied";
+  if (score >= 70) return "Friendly";
+  if (score >= 55) return "Warm";
+  if (score >= 45) return "Neutral";
+  if (score >= 30) return "Cool";
+  if (score >= 15) return "Hostile";
+  return "Rival";
 }
 
+/* =============================== Tips ============================== */
 (function setupUITooltips(){
   if (window.__gcTipsInit) return; // ensure once
   window.__gcTipsInit = true;
@@ -128,76 +168,6 @@ function canDeclareWarUI(R) {
     if (el.getAttribute("tabindex") === "0") el.removeAttribute("tabindex");
   };
 })();
-
-function showPopup(title, message) {
-  const overlay = document.createElement("div");
-  overlay.className = "popup-overlay";
-  overlay.innerHTML = `
-    <div class="popup-box">
-      <h2>${title}</h2>
-      <p>${message}</p>
-      <button id="popup-ok-btn">OK</button>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-
-  overlay.querySelector("#popup-ok-btn").addEventListener("click", () => {
-    document.body.removeChild(overlay);
-  });
-}
-
-function ensureDiplomacyState() {
-  if (!state.diplomacy) state.diplomacy = { relations: {} };
-  const rel = state.diplomacy.relations;
-
-  const ids = Object.keys(state.countryData || {});
-  for (const a of ids) {
-    rel[a] = rel[a] || {};
-    for (const b of ids) {
-      if (a === b) continue;
-      if (!rel[a][b]) {
-        rel[a][b] = {
-          score: 50, // NEUTRAL baseline on 0..100
-          treaties: { nap: false, alliance: false },
-          atWar: false,
-          trade: 1, // unused now, safe to keep
-        };
-      }
-    }
-  }
-}
-
-function getRel(a, b) {
-  ensureDiplomacyState();
-  return state.diplomacy.relations?.[a]?.[b];
-}
-
-function setRelSym(a, b, patch) {
-  ensureDiplomacyState();
-  const A = getRel(a, b);
-  const B = getRel(b, a);
-  Object.assign(A, patch);
-  Object.assign(B, patch);
-}
-
-function modRelScore(a, b, delta) {
-  const A = getRel(a, b);
-  const B = getRel(b, a);
-  A.score = Math.max(0, Math.min(100, A.score + delta));
-  B.score = Math.max(0, Math.min(100, B.score + delta));
-}
-
-// 0..100 interpretation
-function stanceWord(score) {
-  if (score >= 85) return "Allied";
-  if (score >= 70) return "Friendly";
-  if (score >= 55) return "Warm";
-  if (score >= 45) return "Neutral";
-  if (score >= 30) return "Cool";
-  if (score >= 15) return "Hostile";
-  return "Rival";
-}
-
 
 /* ============================ Sidebar UI =========================== */
 export function buildGameSidebar() {
@@ -291,10 +261,52 @@ function setDisabled(id, disabled) {
   if (disabled) el.setAttribute("disabled", ""); else el.removeAttribute("disabled");
 }
 
+/* ===== small helpers for War Room ===== */
+function injectWarStylesOnce() {
+  if (document.getElementById("war-room-css")) return;
+  const style = document.createElement("style");
+  style.id = "war-room-css";
+  style.textContent = `
+    #war-banner { 
+      display:none; margin:8px 0 10px; padding:8px 10px; border-radius:6px; 
+      font-weight:700; letter-spacing:.5px;
+      background:#3a0; color:#fff; box-shadow:0 4px 10px rgba(0,0,0,.25);
+      animation: warPulse 900ms ease-in-out 0s 3 alternate;
+    }
+    #war-banner.danger { background:#b20000; }
+    @keyframes warPulse { from { transform:scale(1); } to { transform:scale(1.02); } }
+    .war-item { border:1px solid rgba(255,255,255,.08); border-radius:8px; padding:10px; margin-bottom:8px; background:rgba(255,255,255,.02); }
+    .war-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+    .war-name { font-weight:700; }
+    .war-tag { font-size:11px; padding:3px 6px; border-radius:4px; background:#b20000; color:#fff; font-weight:700; letter-spacing:.2px; }
+    .bar { height:6px; background:rgba(255,255,255,.08); border-radius:4px; overflow:hidden; margin:6px 0 0; }
+    .bar > span { display:block; height:100%; background:#ffb400; }
+    .war-row { display:flex; gap:8px; align-items:center; justify-content:space-between; }
+    .war-small { font-size:12px; opacity:.8; }
+    .war-actions { display:flex; gap:6px; margin-top:8px; }
+    .war-actions button { font-size:12px; padding:5px 8px; border-radius:4px; }
+  `;
+  document.head.appendChild(style);
+}
+function getControlShareAgainst(attackerId, defenderId) {
+  if (typeof window.getWarControl === "function") {
+    return clamp01(window.getWarControl(attackerId, defenderId));
+  }
+  // Fallback heuristic if war.js not loaded yet
+  const ctrl = state.gameState?.control || {};
+  const a = Math.max(0, safeNumber(ctrl[attackerId], 0));
+  const b = Math.max(0, safeNumber(ctrl[defenderId], 0));
+  const total = a + b;
+  if (total <= 0) return 0.5;
+  return Math.max(0, Math.min(1, a / total));
+}
+
 /* ===== build + wiring ===== */
 function buildDiplomacy() {
   const el = byId("content-diplomacy"); if (!el) return;
   ensureDiplomacyState();
+  injectWarStylesOnce();
+
   el.innerHTML = `
 <div class="diplo-wrap">
   <div class="econ-grid">
@@ -335,6 +347,14 @@ function buildDiplomacy() {
     </div>
     <small id="diplo-hint" class="muted"></small>
   </div>
+
+  <!-- ===== War Room (always visible) ===== -->
+  <div class="econ-card" id="war-room-card">
+    <div class="card-header"><span>War Room</span></div>
+    <div id="war-banner" class=""></div>
+    <div id="war-list"></div>
+    <small class="muted" id="war-room-empty" style="display:none;">No active wars. Select a country and declare war to begin.</small>
+  </div>
 </div>
 `;
 
@@ -345,7 +365,7 @@ function buildDiplomacy() {
     renderDiplomacy();
   };
 
-  // Optional: if the map dispatches events instead of calling
+  // Optional: event-based selection
   document.addEventListener("gc:countrySelected", (ev) => {
     const id = String(ev?.detail?.id ?? "");
     if (id) window.setSelectedCountry(id);
@@ -359,11 +379,38 @@ function buildDiplomacy() {
   byId("btn-diplo-toggle-alliance")?.addEventListener("click", () => toggleAlliance?.());
   byId("btn-diplo-toggle-war")?.addEventListener("click", () => toggleWar?.());
 
+  // Delegated clicks for war items
+  byId("war-list")?.addEventListener("click", (e) => {
+    const t = e.target;
+    if (!(t instanceof HTMLElement)) return;
+    const foe = t.getAttribute("data-foe");
+    if (!foe) return;
+    if (t.matches(".war-focus")) {
+      window.setSelectedCountry(foe);
+      if (window.markDiploTarget) window.markDiploTarget(foe);
+    } else if (t.matches(".war-offer-peace")) {
+      const pid = String(state?.gameState?.playerCountryId ?? "");
+      setRelSym(pid, foe, { atWar: false, score: Math.max(getRel(pid, foe).score, 20) });
+      renderDiplomacy();
+    }
+  });
+
   // Tooltips for diplomacy (after DOM exists)
   registerDiplomacyTips();
 
-  // First paint (safe even if econ isn't ready yet)
+  // First paint
   renderDiplomacy();
+}
+
+/* ===== War Room list ===== */
+
+function flashWarBanner(text, danger = true) {
+  const b = byId("war-banner");
+  if (!b) return;
+  b.className = danger ? "danger" : "";
+  b.textContent = text;
+  b.style.display = "block";
+  setTimeout(() => { if (b) b.style.display = "none"; }, 2500);
 }
 
 /* ===== render (safe if econ is not initialised yet) ===== */
@@ -371,7 +418,7 @@ function renderDiplomacy() {
   const playerId = String(state?.gameState?.playerCountryId ?? "");
   const targetId = String(state?.gameState?.selectedDiploTarget ?? "");
 
-  // Names (target label in header is optional; the card is always present)
+  // Names
   const targetName = state.countryData?.[targetId]?.name ?? "—";
   setText("diplo-country-name", targetName);
   const targetLbl = document.getElementById("diplo-target-name");
@@ -394,6 +441,7 @@ function renderDiplomacy() {
     ["btn-diplo-improve","btn-diplo-aid","btn-diplo-toggle-nap","btn-diplo-toggle-alliance","btn-diplo-toggle-war"]
       .forEach(id => setDisabled(id, true));
     setText("diplo-hint", "Click a country on the map to select a diplomacy target.");
+    renderWarPanel();
     return;
   }
 
@@ -407,6 +455,7 @@ function renderDiplomacy() {
     ["btn-diplo-improve","btn-diplo-aid","btn-diplo-toggle-nap","btn-diplo-toggle-alliance","btn-diplo-toggle-war"]
       .forEach(id => setDisabled(id, true));
     setText("diplo-hint", "Select a different country to conduct diplomacy.");
+    renderWarPanel();
     return;
   }
 
@@ -422,11 +471,13 @@ function renderDiplomacy() {
   setText("diplo-score", String(R.score));
   const treatiesStr = `${R.treaties.nap ? "NAP " : ""}${R.treaties.alliance ? "Alliance " : ""}`.trim() || "—";
   setText("diplo-treaties", treatiesStr);
-  setText("diplo-war", R.atWar ? "Yes" : "No");
-  if (R.atWar && typeof window.getWarExhaustion === "function") {
-    const ex = window.getWarExhaustion(String(state.gameState.playerCountryId)) || 0;
-    // e.g., append " (Exh: 34%)" next to "War: Yes"
-    setText("diplo-war", `Yes — Exhaustion: ${(ex*100).toFixed(0)}%`);
+
+  // NEW: War readout uses Control %, not exhaustion
+  if (R.atWar) {
+    const ctrlShare = getControlShareAgainst(playerId, targetId);
+    setText("diplo-war", `Yes — Control: ${(ctrlShare*100|0)}%`);
+  } else {
+    setText("diplo-war", "No");
   }
   setText("diplo-cost-improve", formatCompactNumber(improveCost));
 
@@ -438,24 +489,25 @@ function renderDiplomacy() {
   if (bAll) bAll.textContent = R.treaties.alliance ? "Leave Alliance" : "Form Alliance";
   if (bWar) bWar.textContent = R.atWar ? "Offer Peace" : "Declare War";
 
-  // Enable/disable (avoid toggleAttribute quirks)
+  // Enable/disable
   setDisabled("btn-diplo-improve", treasury < improveCost);
   setDisabled("btn-diplo-aid", treasury < aidCost);
   setDisabled("btn-diplo-toggle-nap", (!R.treaties.nap && R.score < 60));
   setDisabled("btn-diplo-toggle-alliance", (!R.treaties.alliance && (R.score < 80 || R.atWar)));
-  setDisabled("btn-diplo-toggle-war", false);       // <-- add this line
-
+  setDisabled("btn-diplo-toggle-war", false);
 
   // Hint
   setText(
     "diplo-hint",
     R.treaties.alliance
       ? "Leaving an alliance reduces relations by 20."
-      : "Improving relations or sending aid can unlock NAPs (≥ 60) and Alliances (≥ 80). Declaring war sets relations to 0; peace restores to ~20."
+      : "Improve relations to unlock NAPs (≥60) and Alliances (≥80). Declaring war sets relations to 0; peace restores to ~20."
   );
+
+  renderWarPanel();
 }
 
-/* ===== diplomacy tooltips (define once; call after build) ===== */
+/* ===== diplomacy tooltips ===== */
 function registerDiplomacyTips() {
   tipMany({
     "diplo-country-name": "Selected country (also shown at the top).",
@@ -463,19 +515,20 @@ function registerDiplomacyTips() {
     "diplo-stance": "Relationship stance from a 0–100 score (50 is neutral).",
     "diplo-score": "Current relations score (0–100).",
     "diplo-treaties": "Current treaties: Non-Aggression Pact or Alliance.",
-    "diplo-war": "War status with the selected country.",
+    "diplo-war": "War status with the selected country. Shows your control if at war.",
     "diplo-treasury": "Your current treasury balance.",
     "diplo-revenue": "Estimated yearly government revenue.",
     "btn-diplo-improve": "Spend treasury to improve relations by +10.",
     "btn-diplo-aid": "Send financial aid to improve relations by +15.",
     "btn-diplo-toggle-nap": "Sign or renounce a Non-Aggression Pact (requires score ≥ 60).",
     "btn-diplo-toggle-alliance": "Form or leave an Alliance (requires score ≥ 80 and not at war).",
-    "btn-diplo-toggle-war": "Declare war or offer peace (war sets relations to 0; peace raises to ~20).",
-    "diplo-hint": "Tips and requirements for diplomacy actions."
+    "btn-diplo-toggle-war": "Declare war or offer peace.",
+    "diplo-hint": "Tips and requirements for diplomacy actions.",
+    "war-room-card": "Live status of active wars: control and yesterday’s losses.",
   });
 }
 
-/* ======== Diplomacy Actions (spend money, mutate symmetric state) ======== */
+/* ======== Diplomacy Actions ======== */
 function spend(amount) {
   if (!econ) return false;
   if ((econ.treasury ?? 0) < amount) return false;
@@ -483,113 +536,93 @@ function spend(amount) {
   window.updateEconomy?.(); // refresh money readouts elsewhere
   return true;
 }
-
 function doImprove() {
   const pid = String(state?.gameState?.playerCountryId ?? "");
   const tid = String(state?.gameState?.selectedDiploTarget ?? "");
   if (!pid || !tid || pid === tid) return;
-
   const COST = 10_000_000; // $10M
   if (!spend(COST)) return;
   modRelScore(pid, tid, +10); // +10 relations
   renderDiplomacy();
 }
-
 function doDenounce() {
   const pid = String(state?.gameState?.playerCountryId ?? "");
   const tid = String(state?.gameState?.selectedDiploTarget ?? "");
   if (!pid || !tid || pid === tid) return;
-
   const COST = 10_000_000; // $10M
   if (!spend(COST)) return;
   modRelScore(pid, tid, -10); // -10 relations
   renderDiplomacy();
 }
-
 function doAid() {
   const pid = String(state?.gameState?.playerCountryId ?? "");
   const tid = String(state?.gameState?.selectedDiploTarget ?? "");
   if (!pid || !tid || pid === tid) return;
-
   const COST = 50_000_000; // $50M
   if (!spend(COST)) return;
   modRelScore(pid, tid, +15);
-  // small trade bump
   const R = getRel(pid, tid);
   R.trade = Math.min(3, (R.trade ?? 1) + 1);
   setRelSym(pid, tid, { trade: R.trade, score: R.score });
   renderDiplomacy();
 }
-
 function toggleNAP() {
   const pid = String(state?.gameState?.playerCountryId ?? "");
   const tid = String(state?.gameState?.selectedDiploTarget ?? "");
   if (!pid || !tid || pid === tid) return;
-
   const R = getRel(pid, tid);
   const now = !R.treaties.nap;
   R.treaties.nap = now;
-  // Signing a NAP nudges relations +5, renouncing -10
   modRelScore(pid, tid, now ? +5 : -10);
   setRelSym(pid, tid, { treaties: R.treaties, score: R.score });
   renderDiplomacy();
 }
-
 function toggleAlliance() {
   const pid = String(state?.gameState?.playerCountryId ?? "");
   const tid = String(state?.gameState?.selectedDiploTarget ?? "");
   if (!pid || !tid || pid === tid) return;
-
   const R = getRel(pid, tid);
   const becomingAllied = !R.treaties.alliance;
-
-  // Preconditions to join: relations ≥ 60, not at war
   if (becomingAllied && (R.score < 60 || R.atWar)) return;
-
   R.treaties.alliance = becomingAllied;
   modRelScore(pid, tid, becomingAllied ? +10 : -20);
   setRelSym(pid, tid, { treaties: R.treaties, score: R.score });
-
-  // Small trade boost when allied
   if (becomingAllied) {
     R.trade = Math.min(3, (R.trade ?? 1) + 1);
     setRelSym(pid, tid, { trade: R.trade });
   }
   renderDiplomacy();
 }
-
 function toggleWar() {
   const pid = String(state?.gameState?.playerCountryId ?? "");
   const tid = String(state?.gameState?.selectedDiploTarget ?? "");
   if (!pid || !tid || pid === tid) return;
-
   const R = getRel(pid, tid);
   const goingToWar = !R.atWar;
 
   if (goingToWar) {
-    // break treaties, tank relations to 0 (0..100 model)
     R.atWar = true;
     R.treaties.nap = false;
     R.treaties.alliance = false;
     R.trade = Math.max(0, (R.trade ?? 1) - 1);
     R.score = 0;
+    // Flash banner
+    const tname = state.countryData?.[tid]?.name || tid;
+    flashWarBanner(`⚔️ WAR DECLARED on ${tname}`, true);
   } else {
-    // peace: stop war, restore to at least 20
     R.atWar = false;
     R.score = Math.max(R.score, 20);
+    flashWarBanner(`Peace offered to ${state.countryData?.[tid]?.name || tid}`, false);
   }
   setRelSym(pid, tid, { atWar: R.atWar, treaties: R.treaties, trade: R.trade, score: R.score });
   renderDiplomacy();
 }
 
-
 /* ========================== Page: Economy ========================== */
-
-
 function buildEconomy() {
   const el = byId("content-economy");
   if (!el) return;
-  el.innerHTML = el.innerHTML = `
+  el.innerHTML = `
   <div class="econ-grid">
     <div class="econ-card">
       <div class="card-header">Stability</div>
@@ -663,32 +696,19 @@ function buildEconomy() {
 
 // keep this OUTSIDE buildEconomy so it's defined once
 function registerEconomyTips() {
-  tip("stab-value", "Overall social stability. Higher stability → higher labour-force participation. Tax policy affects stability growth.");
+  tip("stab-value", "Overall social stability.");
   tip("stab-growth", "Projected annual change in stability based on current tax rate.");
 
   tip("econ-gdp-total", "Total economic output from civilian labour (GDP).");
-  tip("econ-gdp-growth", "Estimated annual GDP growth, combining labour and productivity growth.");
+  tip("econ-gdp-growth", "Estimated annual GDP growth.");
 
-  tip("econ-population", "Total population. Consumption boosts population growth.");
+  tip("econ-population", "Total population.");
   tip("econ-labour-force", "Civilians available to work. Draft reduces this share.");
-  tip("econ-labour-productivity", "Output per worker. Investment increases productivity over time.");
-
-  tip("econ-treasury-total", "The current treasury balance available for government spending, increases from any surplus from government revenue.");
-  
-  // Sliders (users often hover these first)
-  tip("tax-slider", "Tax rate: increases revenue but slows stability growth above ~30% (neutral).");
-  tip("consumption-slider", "Consumption: higher = faster population growth; too low can hurt it.");
-  tip("investment-slider", "Investment: raises productivity growth; neglect slows future output.");
-
-  tip("tax-rate-display", "Current tax rate.");
-  tip("tax-stability-effect", "Stability growth impact from current tax.");
-  tip("tax-revenue-effect", "Estimated yearly government revenue from current tax.");
-
-  tip("consumption-display", "Current consumption share.");
-  tip("ci-pop-effect", "Population growth effect from consumption.");
-
-  tip("investment-display", "Current investment share.");
-  tip("ci-prod-effect", "Productivity growth effect from investment.");
+  tip("econ-labour-productivity", "Output per worker.");
+  tip("econ-treasury-total", "Treasury balance.");
+  tip("tax-slider", "Tax rate.");
+  tip("consumption-slider", "Consumption share.");
+  tip("investment-slider", "Investment share.");
 }
 
 /* ========================= Page: Military ========================= */
@@ -755,7 +775,18 @@ function buildMilitary() {
   </div>
 </div>
 `;
-  registerMilitaryTips()
+
+  // Tooltips
+  (function registerMilitaryTips() {
+    tip("mil-treasury", "Treasury for upkeep and procurement.");
+    tip("mil-daily-income", "Estimated yearly revenue (annualized).");
+    tip("mil-power", "Total military power = troop power + equipment power.");
+    tip("mil-readiness", "Operational readiness.");
+    tip("mil-upkeep", "Yearly cost to maintain troops and equipment.");
+    tip("defense-budget-slider", "Share of revenue for defense.");
+    tip("draft-slider", "Share of labour force conscripted.");
+  })();
+
   // budget
   const s = byId("defense-budget-slider");
   if (s) {
@@ -786,72 +817,217 @@ function buildMilitary() {
     d.addEventListener("input", updateDraft);
     updateDraft();
   }
-
-  function registerMilitaryTips() {
-    // Cards
-    tip("mil-treasury", "Your current treasury balance available for upkeep and procurement.");
-    tip("mil-daily-income", "Estimated yearly government revenue (shown annualized).");
-    tip("mil-power", "Total military power = troop power + equipment power.");
-    tip("mil-power-delta", "Projected yearly change in power from procurement gains and equipment decay.");
-    tip("mil-readiness", "Operational readiness. Falls if upkeep isn’t fully paid; slowly recovers when fully funded.");
-    tip("mil-readiness-trend", "Expected yearly drift in readiness based on current upkeep coverage.");
-    tip("mil-upkeep", "Yearly cost to maintain troops and equipment.");
-    tip("mil-upkeep-paid", "How much upkeep you’re actually paying (annualized).");
-    tip("mil-upkeep-req", "How much upkeep is required to avoid readiness penalties (annualized).");
-    tip("mil-net", "Annual net: revenue − (upkeep + procurement spend).");
-    tip("mil-troop-power", "Troop power scales with troops × √(productivity / baseline).");
-    tip("mil-equip-power", "Equipment power from procurement; it decays over time without upkeep.");
-
-    // Sliders + readouts
-    tip("defense-budget-slider", "Share of revenue allocated to the military (upkeep + procurement).");
-    tip("defense-budget-display", "Current defence budget as a % of revenue.");
-    tip("defense-planned-spend", "Planned annual spend from the current defence budget.");
-    tip("draft-slider", "Share of the labour force conscripted. Increases troops but reduces civilian labour (hurts GDP).");
-    tip("draft-display", "Current draft as a % of the labour force.");
-    tip("draft-troops", "Total drafted troops at the current draft percentage.");
-  }
 }
+
+// === War Room Military Power readout ===============================
+
+// Compact number formatting: 11680000 -> "11.68M", 4512000 -> "4.51M"
+function _fmtCompact(n) {
+  n = Number(n) || 0;
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+  if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + "k";
+  return Math.round(n).toString();
+}
+
+// Military power = explicit .military_power if defined, else infantry + equipment
+function _getCountryPower(id) {
+  const d = (state.countryData && state.countryData[id]) || {};
+  let mp = Number(d.military_power);
+  if (!Number.isFinite(mp) || mp <= 0) {
+    const inf = Number(d.infantry)  || 0;
+    const eq  = Number(d.equipment) || 0;
+    mp = inf + eq;
+  }
+  return Math.max(0, mp);
+}
+
+function _getName(id) {
+  return (state.countryData && state.countryData[id] && state.countryData[id].name) || id || "Unknown";
+}
+
+// Finds your War Room / Diplomacy card
+function _findWarCard() {
+  return document.getElementById("diplomacyCard") || document.querySelector(".diplomacy-card") || null;
+}
+
+// Heuristic: player id and currently focused/foe id.
+// If your UI stores the foe somewhere else, add that here.
+function _getPlayerId() {
+  return state?.gameState?.playerCountryId || null;
+}
+function _getFoeId() {
+  // Try a few common UI hooks you likely already have:
+  return (state?.ui?.warTargetId) || (state?.ui?.selectedCountryId) || null;
+}
+
+// === Unified War Room renderer (shows Military Power, Control, Yesterday losses) ===
+function renderWarPanel() {
+  const list = byId("war-list");
+  const emptyMsg = byId("war-room-empty");
+  if (!list) return;
+
+  const pid = String(state?.gameState?.playerCountryId ?? "");
+  if (typeof ensureDiplomacyState === "function") ensureDiplomacyState();
+
+  // helpers
+  const fmt = (n) => {
+    n = Number(n) || 0;
+    if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+    if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+    if (n >= 1e3) return (n / 1e3).toFixed(1) + "k";
+    return Math.round(n).toString();
+  };
+  const nameOf = (id) => state.countryData?.[id]?.name || id;
+  const powerOf = (id) => {
+    const d = state.countryData?.[id] || {};
+    const mp = Number(d.military_power);
+    if (Number.isFinite(mp) && mp > 0) return mp;
+    return (Number(d.infantry) || 0) + (Number(d.equipment) || 0);
+  };
+  const controlShare = (a, b) => {
+    if (typeof window.getControlShareAgainst === "function") return clamp01(window.getControlShareAgainst(a, b));
+    if (typeof window.getWarControl === "function") return clamp01(window.getWarControl(a, b));
+    return 0.5;
+  };
+  const lossesYesterday = (a, b) => {
+    if (typeof window.getWarLosses === "function") return window.getWarLosses(a, b);
+    return { ours:{inf:0,eq:0}, theirs:{inf:0,eq:0} };
+  };
+  const fmtLoss = (x) => `-${fmt(x)} ${x === 1 ? "troop" : "troops"}`;
+  const fmtEq   = (x) => `-${fmt(x)} eq`;
+
+  // gather all foes we are at war with (from our row)
+  const wars = [];
+  const myRow = state.diplomacy?.relations?.[pid] || {};
+  for (const foe in myRow) {
+    if (foe === pid) continue;
+    if (myRow[foe]?.atWar) wars.push(foe);
+  }
+
+  list.innerHTML = "";
+  if (wars.length === 0) {
+    if (emptyMsg) emptyMsg.style.display = "block";
+    return;
+  }
+  if (emptyMsg) emptyMsg.style.display = "none";
+
+  for (const foe of wars) {
+    const theirName = nameOf(foe);
+
+    // NEW: military power row
+    const myPow    = powerOf(pid);
+    const theirPow = powerOf(foe);
+
+    // control
+    const cs   = controlShare(pid, foe); // our share 0..1
+    const cYou = Math.round(cs * 100);
+    const cThem= 100 - cYou;
+
+    // yesterday losses
+    const L = lossesYesterday(pid, foe);
+    const ourLossTroops  = Number(L?.ours?.inf || 0);
+    const ourLossEq      = Number(L?.ours?.eq  || 0);
+    const theirLossTroops= Number(L?.theirs?.inf || 0);
+    const theirLossEq    = Number(L?.theirs?.eq  || 0);
+
+    const item = document.createElement("div");
+    item.className = "war-item";
+    item.innerHTML = `
+      <div class="war-head">
+        <div class="war-name">${theirName}</div>
+        <div class="war-tag">AT WAR</div>
+      </div>
+
+      <div class="war-row war-small">
+        <div>Military Power</div>
+        <div>${fmt(myPow)} <span class="muted">you</span> · ${fmt(theirPow)} <span class="muted">them</span></div>
+      </div>
+
+      <div class="war-row war-small" style="margin-top:6px;">
+        <div>Control</div>
+        <div>${cYou}% <span class="muted">you</span> · ${cThem}% <span class="muted">them</span></div>
+      </div>
+      <div class="bar"><span style="width:${cYou}%"></span></div>
+
+      <div class="war-row war-small" style="margin-top:6px;">
+        <div>Yesterday</div>
+        <div>
+          ${fmtLoss(ourLossTroops)}, ${fmtEq(ourLossEq)} <span class="muted">you</span>
+          &nbsp;·&nbsp;
+          ${fmtLoss(theirLossTroops)}, ${fmtEq(theirLossEq)} <span class="muted">them</span>
+        </div>
+      </div>
+
+      <div class="war-actions">
+        <button class="war-focus" data-foe="${foe}">Focus</button>
+        <button class="war-offer-peace" data-foe="${foe}">Offer Peace</button>
+      </div>
+    `;
+    list.appendChild(item);
+  }
+
+  // optional: if you rely on delegated handlers elsewhere, you can remove this
+  list.querySelectorAll(".war-focus").forEach(btn => {
+    btn.onclick = () => {
+      const foe = btn.getAttribute("data-foe");
+      if (typeof focusCountry === "function") focusCountry(foe);
+    };
+  });
+  list.querySelectorAll(".war-offer-peace").forEach(btn => {
+    btn.onclick = () => {
+      const foe = btn.getAttribute("data-foe");
+      if (typeof offerPeaceTo === "function") offerPeaceTo(foe);
+    };
+  });
+}
+
+
+
+// Keep it fresh without needing to hook into your render pipeline
+(function _installWarPowerTicker(){
+  try {
+    // Update once a second; cheap enough and robust to UI changes
+    setInterval(_renderWarPowerBlock, 1000);
+  } catch (e) {
+    // If something goes wrong, fail silently
+    console && console.debug && console.debug("war power ticker failed", e);
+  }
+})();
 
 /* ===================== Economy + Sim Logic ====================== */
 function initEconomyLogic() {
   // Elements exist because page just rendered
   const taxSlider = byId("tax-slider");
   const consSlider = byId("consumption-slider");
-  const invSlider = byId("investment-slider");
+  const invSlider  = byId("investment-slider");
 
+  // Sum-to-100 helper for CI sliders (optional)
   function normalizeSliders(changed) {
-    const tax = safeNumber(taxSlider?.value, 0);
-    const cons = safeNumber(consSlider?.value, 0);
-    const inv = safeNumber(invSlider?.value, 0);
-    const total = tax + cons + inv;
-    if (total === 100) return;
-    const all = [taxSlider, consSlider, invSlider].filter(Boolean);
-    const others = all.filter((s) => s !== changed);
-    const sumOthers = others.reduce((sum, s) => sum + safeNumber(s.value, 0), 0);
-    const remainder = 100 - safeNumber(changed.value, 0);
-    if (sumOthers <= 0) {
-      const each = Math.max(0, Math.round(remainder / others.length));
-      others.forEach((s) => (s.value = String(each)));
-    } else {
-      let acc = 0;
-      others.forEach((s, i) => {
-        const raw = (safeNumber(s.value, 0) * remainder) / sumOthers;
-        const v = i === others.length - 1 ? remainder - acc : Math.round(raw);
-        s.value = String(Math.max(0, v));
-        acc += v;
-      });
-    }
+    if (!consSlider || !invSlider) return;
+    if (!(changed === consSlider || changed === invSlider)) return;
+    const total = safeNumber(consSlider.value, 35) + safeNumber(invSlider.value, 35);
+    if (total <= 100) return;
+    const remainder = 100;
+    const sliders = [consSlider, invSlider];
+    let acc = 0;
+    sliders.forEach((s, idx) => {
+      const raw = safeNumber(s.value, 50);
+      const v = idx < sliders.length - 1 ? remainder - acc : Math.round(raw);
+      s.value = String(Math.max(0, v));
+      acc += v;
+    });
   }
 
-  // Seed from state
+  // Seed from state (rough but stable)
   const pid = state?.gameState?.playerCountryId;
-  const cd = state?.countryData?.[pid];
+  const cd = state?.countryData?.[pid] || {};
   const pop0 = safeNumber(cd?.population, 1_000_000);
   const gdpReported = safeNumber(cd?.GDP, 100); // millions
 
   const taxInit = safeNumber(taxSlider?.value, 30) / 100;
   const consInit = safeNumber(consSlider?.value, 35) / 100;
-  const invInit = safeNumber(invSlider?.value, 35) / 100;
+  const invInit  = safeNumber(invSlider?.value,  35) / 100;
 
   econ = {
     pop: pop0,
@@ -874,11 +1050,12 @@ function initEconomyLogic() {
     };
   };
 
-
+  // derive productivity and GDP in game-units
   const GDP_units = gdpReported * 1e6;
   econ.productivity = Math.max(1, GDP_units / Math.max(1, econ.labourForce));
   econ.GDP = econ.labourForce * econ.productivity;
 
+  // Defaults
   if (typeof econ.military.draftPct !== "number") econ.military.draftPct = 0.05;
   if (typeof econ.military.equipPower !== "number") econ.military.equipPower = 100;
   if (typeof econ.military.readiness !== "number") econ.military.readiness = 0.70;
@@ -901,54 +1078,39 @@ function initEconomyLogic() {
   function advanceEconomy(days = 1) {
     days = Math.max(0, Math.floor(days)) || 1;
 
-    // capture previous total power for correct trend
-    const prevTroops = Math.max(0, econ.troops ?? 0);
-    const prevSpt = strengthFromProd(econ.productivity);
-    const prevBasePower = prevTroops * prevSpt;
-    const prevEquipPower = Math.max(0, econ.military?.equipPower ?? 0);
-    const prevTotalPower = Math.max(0, prevBasePower + prevEquipPower);
+    // growth rates (very simple)
+    const rawStabRate = 0.3 - econ.taxRate;
+    const stabRate = econ.stability < 1 ? rawStabRate : 0;
+    econ.stability = clamp01(econ.stability + stabRate * (days / DAYS_IN_YEAR));
 
-    // Stability & growth
-    const annualStabRate = 0.3 - econ.taxRate;
-    econ.stability = clamp01(econ.stability + (annualStabRate / DAYS_IN_YEAR) * days);
+    const popRate  = econ.cons * 0.10 - 0.03;
+    const prodRate = econ.inv  * 0.10 - 0.03;
+    econ.pop += econ.pop * popRate * (days / DAYS_IN_YEAR);
 
-    const annualPopRate = econ.cons * 0.10 - 0.03;
-    econ.pop *= Math.pow(1 + annualPopRate / DAYS_IN_YEAR, days);
+    const draftPct = clamp01(econ.military?.draftPct ?? 0);
+    const troops = (econ.labourForce / Math.max(1e-9, 1 - draftPct)) * draftPct;
+    econ.labourForce = Math.max(0, econ.pop * 0.60 - troops);
 
-    const labourShare = 0.2 + clamp01(econ.stability) * (0.8 - 0.2);
-    const baseLF = econ.pop * labourShare;
-
-    const draftPct = Math.max(0, Math.min(0.30, econ.military?.draftPct ?? 0));
-    const draftedLF = baseLF * draftPct;
-    const econLF = baseLF * (1 - draftPct);
-
-    econ.labourForceBase = baseLF;
-    econ.troops = draftedLF;
-    econ.labourForce = econLF;
-
-    const annualProdRate = econ.inv * 0.10 - 0.03;
-    econ.productivity *= Math.pow(1 + annualProdRate / DAYS_IN_YEAR, days);
-
-    econ.GDP = econ.labourForce * econ.productivity;
+    econ.productivity *= Math.pow(1 + prodRate, days / DAYS_IN_YEAR);
+    econ.GDP = Math.max(0, econ.labourForce * econ.productivity);
 
     const dailyIncome = (econ.GDP * econ.taxRate) / DAYS_IN_YEAR;
     econ.treasury += dailyIncome * days;
 
-    // Military finances
-    const troops = draftedLF;
-    const spt = strengthFromProd(econ.productivity);
-    const basePower = troops * spt;
-    let equipPower = safeNumber(econ.military.equipPower, 0);
+    // --- military ---
+    const strength = strengthFromProd(econ.productivity);
+    const troopPower = troops * strength;
+    const basePower = troopPower;
+    let equipPower = Math.max(0, Number(econ.military?.equipPower ?? 0));
+    const prevTotalPower = Math.max(0, (econ.military?.power ?? 0));
 
-    const troopUpkPerDay = safeNumber(econ.military.upkeepPerTroopDaily, 0) * troops;
-    const equipUpkPerDay = (safeNumber(econ.military.upkeepPerEquipPowerAnnual, 0) / DAYS_IN_YEAR) * equipPower;
-    const requiredUpkeep = (troopUpkPerDay + equipUpkPerDay) * days;
-
-    // Budget pool = all defense budget for the day
-    const budgetPerDay = dailyIncome * clamp01(econ.military?.budgetPct ?? 0);
+    const budgetPerDay = Math.max(0, econ.military?.budgetPct ?? 0) * dailyIncome;
     let budgetPool = budgetPerDay * days;
 
-    // First cover upkeep from budget
+    const troopUpkPerDay = safeNumber(econ.military.upkeepPerTroopDaily, 50) * troops;
+    const equipUpkPerDay = safeNumber(econ.military.upkeepPerEquipPowerAnnual, 100_000) / DAYS_IN_YEAR * equipPower;
+    const requiredUpkeep = troopUpkPerDay + equipUpkPerDay;
+
     const upkeepPaid = Math.min(requiredUpkeep, budgetPool, Math.max(0, econ.treasury));
     budgetPool -= upkeepPaid;
     econ.treasury -= upkeepPaid;
@@ -976,7 +1138,6 @@ function initEconomyLogic() {
     econ.military.equipPower = Math.max(0, equipPower);
     econ.military.power = Math.max(0, basePower + equipPower);
 
-    // total power delta (per day)
     const newTotalPower = Math.max(0, econ.military.power);
     const deltaDay = (newTotalPower - prevTotalPower) / days;
 
@@ -990,6 +1151,53 @@ function initEconomyLogic() {
     econ.last.procurementSpend = procurementSpend / days;
     econ.last.actualDefense = econ.last.upkeepPaid + econ.last.procurementSpend;
     econ.last.powerDelta = deltaDay;
+        // --- SYNC for war system: keep countryData infantry/equipment up to date ---
+    try {
+      const pid = String(state.gameState?.playerCountryId ?? "");
+      if (pid && state.countryData && state.countryData[pid]) {
+        const cd = state.countryData[pid];
+
+        // These two are already computed earlier in advanceEconomy:
+        //   - troops  (drafted population)
+        //   - equipPower (econ.military.equipPower)
+        //   - strengthFromProd(...) is defined above
+
+        const troopPower = Math.max(0, troops * strengthFromProd(econ.productivity)); // same unit as we use for “Troop Power”
+        const equipPow   = Math.max(0, econ.military.equipPower);
+
+        cd.infantry       = troopPower;
+        cd.equipment      = equipPow;
+        cd.military_power = troopPower + equipPow;
+      }
+    } catch (e) {
+      // don’t crash the sim if something’s undefined early in boot
+      console.warn("[econ→war sync] skipped", e);
+    }
+    // --- SYNC for war system: keep ALL countries infantry/equipment up to date ---
+    try {
+      for (const id in state.countryData) {
+        const econ = state.economy?.[id];
+        const cd   = state.countryData[id];
+        if (!econ || !cd) continue;
+
+        // Troop power from drafted service
+        const troops = Number(econ.military?.service || 0);
+        const troopPower = Math.max(0, troops * strengthFromProd(econ.productivity || 1));
+
+        // Equipment power (you already compute/store this each tick)
+        const equipPow = Math.max(0, econ.military?.equipPower || 0);
+
+        cd.infantry       = troopPower;
+        cd.equipment      = equipPow;
+        cd.military_power = troopPower + equipPow;
+      }
+    } catch (e) {
+      console.warn("[econ→war sync all countries] skipped", e);
+    }
+// --- end sync ---
+
+    // --- end sync ---
+
   }
   window.advanceEconomy = advanceEconomy;
 
@@ -1025,34 +1233,28 @@ function initEconomyLogic() {
       ? econ.troops
       : (econ.labourForceBase ?? econ.labourForce / Math.max(1e-9, 1 - draftPct)) * draftPct;
 
-    const BASE = 100_000;
-    const spt = Math.max(0.25, Math.min(4, Math.sqrt(Math.max(econ.productivity, 1) / BASE)));
-    const basePower = troops * spt;
-    const equipPower = safeNumber(econ.military?.equipPower, 0);
-    const totalPower = Math.max(0, basePower + equipPower);
+    const strength = Math.sqrt(Math.max(econ.productivity, 1) / 100_000);
+    const troopPower = troops * Math.max(0.25, Math.min(4, strength));
+    const equipPower = Math.max(0, econ.military?.equipPower ?? 0);
+    const totalPower = troopPower + equipPower;
 
-    dv("draft-display", Math.round(draftPct * 100) + "%");
-    dv("draft-troops", formatCompactNumber(troops));
-    dv("mil-power", formatCompactNumber(Math.round(totalPower)));
-    dv("mil-troop-power", formatCompactNumber(Math.round(basePower)));
-    dv("mil-equip-power", formatCompactNumber(Math.round(equipPower)));
+    const upkeepDay = safeNumber(econ.military?.upkeepPerTroopDaily, 50) * troops
+      + safeNumber(econ.military?.upkeepPerEquipPowerAnnual, 100_000) / DAYS_IN_YEAR * equipPower;
 
-    const perTroopUpk = safeNumber(econ.military?.upkeepPerTroopDaily, 0) * troops;
-    const perEquipUpk = (safeNumber(econ.military?.upkeepPerEquipPowerAnnual, 0) / DAYS_IN_YEAR) * equipPower;
-    const upkeepDay = perTroopUpk + perEquipUpk;
-    dv("mil-upkeep", formatCompactNumber(upkeepDay * DAYS_IN_YEAR));
-    dv("mil-upkeep-paid", formatCompactNumber(safeNumber(econ.last?.upkeepPaid, 0) * DAYS_IN_YEAR));
-    dv("mil-upkeep-req", formatCompactNumber((safeNumber(econ.last?.upkeep, upkeepDay)) * DAYS_IN_YEAR));
+    const plannedDefense = safeNumber(econ.military?.budgetPct, 0.1) * dailyIncome;
+    const powerDeltaYr = safeNumber(econ.last?.powerDelta, 0) * DAYS_IN_YEAR;
+
     dv("mil-treasury", formatCompactNumber(econ.treasury));
-    dv("mil-daily-income", formatCompactNumber(safeNumber(econ.last?.dailyIncome, dailyIncome) * DAYS_IN_YEAR));
-    dv("mil-power-delta", formatCompactNumber(safeNumber(econ.last?.powerDelta, 0) * DAYS_IN_YEAR) + " /yr");
-    dv("mil-readiness", (clamp01(econ.military.readiness ?? 0.7) * 100).toFixed(0) + "%");
-
-    const defenseBudgetDay = dailyIncome * clamp01(econ.military?.budgetPct ?? 0);
-    const netDay = econ.last?.net ?? (dailyIncome - defenseBudgetDay);
-    dv("mil-net", formatCompactNumber(netDay * DAYS_IN_YEAR));
-    dv("defense-budget-display", Math.round(clamp01(econ.military?.budgetPct ?? 0) * 100) + "%");
-    dv("defense-planned-spend", formatCompactNumber(annualIncome * clamp01(econ.military?.budgetPct ?? 0)));
+    dv("mil-daily-income", formatCompactNumber(annualIncome));
+    dv("mil-power", formatCompactNumber(totalPower));
+    dv("mil-power-delta", (powerDeltaYr >= 0 ? "+" : "") + formatCompactNumber(powerDeltaYr) + "/yr");
+    dv("mil-readiness", Math.round(clamp01(econ.military?.readiness ?? 0.7) * 100) + "%");
+    dv("mil-upkeep", formatCompactNumber(upkeepDay * DAYS_IN_YEAR) );
+    dv("mil-upkeep-paid", formatCompactNumber(safeNumber(econ.last?.upkeepPaid, plannedDefense)));
+    dv("mil-upkeep-req", formatCompactNumber(upkeepDay));
+    dv("mil-net", formatCompactNumber(safeNumber(econ.last?.net, 0) * DAYS_IN_YEAR));
+    dv("mil-troop-power", formatCompactNumber(troopPower));
+    dv("mil-equip-power", formatCompactNumber(equipPower));
 
     // Readiness trend (yearly)
     const upk = safeNumber(econ.last?.upkeep, upkeepDay);
@@ -1066,7 +1268,7 @@ function initEconomyLogic() {
     dv("diplo-revenue", formatCompactNumber(annualIncome));
     // slider readouts + effects
     dv("tax-rate-display", (econ.taxRate * 100).toFixed(0) + "%");
-    dv("tax-stability-effect", (stabRate * 100).toFixed(2) + "% /yr");
+    dv("tax-stability-effect", (rawStabRate * 100).toFixed(2) + "% /yr");
     dv("tax-revenue-effect", formatCompactNumber(annualIncome));
 
     dv("consumption-display", (econ.cons * 100).toFixed(0) + "%");
@@ -1099,6 +1301,9 @@ export function startGame() {
     console.warn("[sidebar] No confirmedCountryId");
   }
   state.gameState.playerCountryId = state.confirmedCountryId ?? state.gameState.playerCountryId ?? 0;
+  state.gameState.selectedDiploTarget = state.gameState.selectedDiploTarget || null;
+
+  // Give the player a starting control bucket if not set
   state.gameState.control[state.gameState.playerCountryId] =
     (Number.isFinite(state.gameState.control[state.gameState.playerCountryId])
       ? state.gameState.control[state.gameState.playerCountryId]
@@ -1116,12 +1321,11 @@ export function handleSimulationTick(days = 1) {
   if (typeof window.advanceEconomy === "function") window.advanceEconomy(days);
   if (typeof window.updateEconomy === "function") window.updateEconomy();
   if (typeof window.stepAI === "function") window.stepAI(days);
-  if (window.stepAI) window.stepAI(days);
   if (window.updateDiplomacyStyles) window.updateDiplomacyStyles();
   if (window.updateWarLines) window.updateWarLines();
-
   scheduleLeaderboardUpdate(); // throttled refresh
   updateClockDisplay();
+  // Keep War Room fresh during sim
+  renderWarPanel();
 }
-
 window.handleSimulationTick = handleSimulationTick;
