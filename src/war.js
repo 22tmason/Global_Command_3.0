@@ -17,11 +17,11 @@ import { state } from "./state.js";
 
 const CFG = {
   // CONTROL: ΔC = controlStepPerDay * (2*shareA - 1), capped per day
-  controlStepPerDay: 1.5,
+  controlStepPerDay: 0.015,
   maxDailyControlMove: 1.0,
 
   // LOSSES: per day we destroy this share of TOTAL raw power on the field
-  intensityPerPower: 0.002,   // higher = bloodier
+  intensityPerPower: 2,   // higher = bloodier
 
   // Split infantry vs equipment in the daily loss
   infFrac: 0.60,
@@ -55,16 +55,9 @@ function ensurePair(a, b){
 
 function ensurePools(id){
   const d = state.countryData[id] || (state.countryData[id] = {});
-  if (Number.isFinite(+d.infantry) && Number.isFinite(+d.equipment)) {
-    d.infantry   = Math.max(0, +d.infantry);
-    d.equipment  = Math.max(0, +d.equipment);
-  } else {
-    // seed from any existing military_power
-    const mp = Math.max(0, Number(d.military_power) || 0);
-    d.infantry  = Math.max(0, d.infantry  ?? mp * 0.60);
-    d.equipment = Math.max(0, d.equipment ?? mp * 0.40);
-  }
-  d.military_power = d.infantry + d.equipment;
+  if (Number.isFinite(+d.infantry))  d.infantry  = Math.max(0, +d.infantry);
+  if (Number.isFinite(+d.equipment)) d.equipment = Math.max(0, +d.equipment);
+  d.military_power = Math.max(0, Number(d.military_power) || 0);
   return d;
 }
 
@@ -73,9 +66,15 @@ function annex(winnerId, loserId){
   const L = ensurePools(loserId);
 
   // capture some equipment
-  const cap = L.equipment * CFG.captureEqRatio;
-  W.equipment += cap;
-  L.equipment = Math.max(0, L.equipment - cap);
+  const L_eq = Math.max(0, Number(L.equipment) || 0);
+  const cap = L_eq * CFG.captureEqRatio;
+  if (Number.isFinite(+W.equipment)) {
+    W.equipment += cap;
+  } else if (cap > 0) {
+    W.equipment = cap;
+  }
+  L.equipment = Math.max(0, L_eq - cap);
+  W.military_power = Math.max(0, W.military_power + cap);
 
   // fold economy & population
   const keep = clamp01(CFG.annexGDPKeepLoser);
@@ -119,8 +118,8 @@ function resolvePairDay(a, b, days=1){
   const dA = ensurePools(A);
   const dB = ensurePools(B);
 
-  const PA = dA.infantry + dA.equipment; // raw power
-  const PB = dB.infantry + dB.equipment;
+  const PA = dA.military_power; // raw power
+  const PB = dB.military_power;
   if (PA <= 0 && PB <= 0) return;
 
   // CONTROL: strictly raw power share
@@ -142,13 +141,12 @@ function resolvePairDay(a, b, days=1){
   const B_eqLoss  = lossB_power * (1 - CFG.infFrac);
 
   // apply losses
-  dA.infantry  = Math.max(0, dA.infantry  - A_infLoss);
-  dA.equipment = Math.max(0, dA.equipment - A_eqLoss);
-  dB.infantry  = Math.max(0, dB.infantry  - B_infLoss);
-  dB.equipment = Math.max(0, dB.equipment - B_eqLoss);
-
-  dA.military_power = dA.infantry + dA.equipment;
-  dB.military_power = dB.infantry + dB.equipment;
+  dA.military_power = Math.max(0, dA.military_power - lossA_power);
+  dB.military_power = Math.max(0, dB.military_power - lossB_power);
+  if (Number.isFinite(+dA.infantry))  dA.infantry  = Math.max(0, dA.infantry  - A_infLoss);
+  if (Number.isFinite(+dA.equipment)) dA.equipment = Math.max(0, dA.equipment - A_eqLoss);
+  if (Number.isFinite(+dB.infantry))  dB.infantry  = Math.max(0, dB.infantry  - B_infLoss);
+  if (Number.isFinite(+dB.equipment)) dB.equipment = Math.max(0, dB.equipment - B_eqLoss);
 
   // light societal effects
   if (Number.isFinite(+dA.population)) dA.population = Math.max(0, dA.population - A_infLoss);

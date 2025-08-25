@@ -1165,9 +1165,20 @@ function initEconomyLogic() {
         const troopPower = Math.max(0, troops * strengthFromProd(econ.productivity)); // same unit as we use for “Troop Power”
         const equipPow   = Math.max(0, econ.military.equipPower);
 
-        cd.infantry       = troopPower;
-        cd.equipment      = equipPow;
-        cd.military_power = troopPower + equipPow;
+        const lossInf = Math.max(0, Number(cd?.losses?.inf || 0));
+        const lossEq  = Math.max(0, Number(cd?.losses?.eq  || 0));
+
+        const nextInf = Math.max(0, troopPower - lossInf);
+        const nextEq  = Math.max(0, equipPow - lossEq);
+
+        const gainInf = Math.max(0, nextInf - (Number(cd.infantry) || 0));
+        const gainEq  = Math.max(0, nextEq  - (Number(cd.equipment) || 0));
+
+        cd.infantry       = Math.max(0, (Number(cd.infantry) || 0) + gainInf);
+        cd.equipment      = Math.max(0, (Number(cd.equipment) || 0) + gainEq);
+        cd.military_power = cd.infantry + cd.equipment;
+
+        if (cd.losses) { cd.losses.inf = 0; cd.losses.eq = 0; }
       }
     } catch (e) {
       // don’t crash the sim if something’s undefined early in boot
@@ -1187,16 +1198,24 @@ function initEconomyLogic() {
         // Equipment power (you already compute/store this each tick)
         const equipPow = Math.max(0, econ.military?.equipPower || 0);
 
-        cd.infantry       = troopPower;
-        cd.equipment      = equipPow;
-        cd.military_power = troopPower + equipPow;
-      }
-    } catch (e) {
+        const lossInf = Math.max(0, Number(cd?.losses?.inf || 0));
+        const lossEq  = Math.max(0, Number(cd?.losses?.eq  || 0));
+
+        const nextInf = Math.max(0, troopPower - lossInf);
+        const nextEq  = Math.max(0, equipPow - lossEq);
+
+        const gainInf = Math.max(0, nextInf - (Number(cd.infantry) || 0));
+        const gainEq  = Math.max(0, nextEq  - (Number(cd.equipment) || 0));
+
+        cd.infantry       = Math.max(0, (Number(cd.infantry) || 0) + gainInf);
+        cd.equipment      = Math.max(0, (Number(cd.equipment) || 0) + gainEq);
+        cd.military_power = cd.infantry + cd.equipment;
+
+        if (cd.losses) { cd.losses.inf = 0; cd.losses.eq = 0; }
+    } 
+        } catch (e) {
       console.warn("[econ→war sync all countries] skipped", e);
     }
-// --- end sync ---
-
-    // --- end sync ---
 
   }
   window.advanceEconomy = advanceEconomy;
