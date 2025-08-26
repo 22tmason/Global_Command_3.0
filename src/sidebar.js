@@ -1088,17 +1088,28 @@ function initEconomyLogic() {
     econ.pop += econ.pop * popRate * (days / DAYS_IN_YEAR);
 
     const draftPct = clamp01(econ.military?.draftPct ?? 0);
-    const troops = (econ.labourForce / Math.max(1e-9, 1 - draftPct)) * draftPct;
-    econ.labourForce = Math.max(0, econ.pop * 0.60 - troops);
+    let troops = (econ.labourForce / Math.max(1e-9, 1 - draftPct)) * draftPct;
 
     econ.productivity *= Math.pow(1 + prodRate, days / DAYS_IN_YEAR);
+    const strength = strengthFromProd(econ.productivity);
+
+    const pid = String(state.gameState?.playerCountryId ?? "");
+    const cdLoss = state.countryData?.[pid]?.losses;
+    if (cdLoss) {
+      const lossInf = Math.max(0, Number(cdLoss.inf || 0));
+      const lossEq  = Math.max(0, Number(cdLoss.eq  || 0));
+      const troopLoss = lossInf / Math.max(strength, 1e-9);
+      troops = Math.max(0, troops - troopLoss);
+      econ.military.equipPower = Math.max(0, (econ.military.equipPower || 0) - lossEq);
+    }
+
+    econ.labourForce = Math.max(0, econ.pop * 0.60 - troops);
     econ.GDP = Math.max(0, econ.labourForce * econ.productivity);
 
     const dailyIncome = (econ.GDP * econ.taxRate) / DAYS_IN_YEAR;
     econ.treasury += dailyIncome * days;
 
     // --- military ---
-    const strength = strengthFromProd(econ.productivity);
     const troopPower = troops * strength;
     const basePower = troopPower;
     let equipPower = Math.max(0, Number(econ.military?.equipPower ?? 0));
@@ -1162,20 +1173,11 @@ function initEconomyLogic() {
         //   - equipPower (econ.military.equipPower)
         //   - strengthFromProd(...) is defined above
 
-        const troopPower = Math.max(0, troops * strengthFromProd(econ.productivity)); // same unit as we use for “Troop Power”
+        const troopPower = Math.max(0, troops * strengthFromProd(econ.productivity));
         const equipPow   = Math.max(0, econ.military.equipPower);
 
-        const lossInf = Math.max(0, Number(cd?.losses?.inf || 0));
-        const lossEq  = Math.max(0, Number(cd?.losses?.eq  || 0));
-
-        const nextInf = Math.max(0, troopPower - lossInf);
-        const nextEq  = Math.max(0, equipPow - lossEq);
-
-        const gainInf = Math.max(0, nextInf - (Number(cd.infantry) || 0));
-        const gainEq  = Math.max(0, nextEq  - (Number(cd.equipment) || 0));
-
-        cd.infantry       = Math.max(0, (Number(cd.infantry) || 0) + gainInf);
-        cd.equipment      = Math.max(0, (Number(cd.equipment) || 0) + gainEq);
+        cd.infantry       = troopPower;
+        cd.equipment      = equipPow;
         cd.military_power = cd.infantry + cd.equipment;
 
         if (cd.losses) { cd.losses.inf = 0; cd.losses.eq = 0; }
@@ -1191,28 +1193,25 @@ function initEconomyLogic() {
         const cd   = state.countryData[id];
         if (!econ || !cd) continue;
 
-        // Troop power from drafted service
-        const troops = Number(econ.military?.service || 0);
-        const troopPower = Math.max(0, troops * strengthFromProd(econ.productivity || 1));
-
-        // Equipment power (you already compute/store this each tick)
-        const equipPow = Math.max(0, econ.military?.equipPower || 0);
-
+        let troops = Number(econ.military?.service || 0);
+        let equipPow = Math.max(0, econ.military?.equipPower || 0);
+        const strength = strengthFromProd(econ.productivity || 1);
         const lossInf = Math.max(0, Number(cd?.losses?.inf || 0));
         const lossEq  = Math.max(0, Number(cd?.losses?.eq  || 0));
-
-        const nextInf = Math.max(0, troopPower - lossInf);
-        const nextEq  = Math.max(0, equipPow - lossEq);
-
-        const gainInf = Math.max(0, nextInf - (Number(cd.infantry) || 0));
-        const gainEq  = Math.max(0, nextEq  - (Number(cd.equipment) || 0));
-
-        cd.infantry       = Math.max(0, (Number(cd.infantry) || 0) + gainInf);
-        cd.equipment      = Math.max(0, (Number(cd.equipment) || 0) + gainEq);
+        const troopLoss = lossInf / Math.max(strength, 1e-9);
+        troops   = Math.max(0, troops - troopLoss);
+        equipPow = Math.max(0, equipPow - lossEq);
+        if (econ.military) {
+          econ.military.service = troops;
+          econ.military.equipPower = equipPow;
+        }
+        const troopPower = troops * strength;
+        cd.infantry       = troopPower;
+        cd.equipment      = equipPow;
         cd.military_power = cd.infantry + cd.equipment;
 
         if (cd.losses) { cd.losses.inf = 0; cd.losses.eq = 0; }
-    } 
+    }
         } catch (e) {
       console.warn("[econ→war sync all countries] skipped", e);
     }
@@ -1247,14 +1246,11 @@ function initEconomyLogic() {
     dv("econ-gov-revenue", formatCompactNumber(annualIncome));
 
     // Military reads
-    const draftPct = clamp01(econ.military?.draftPct ?? 0);
-    const troops = typeof econ.troops === "number"
-      ? econ.troops
-      : (econ.labourForceBase ?? econ.labourForce / Math.max(1e-9, 1 - draftPct)) * draftPct;
-
+    const cd = state.countryData?.[state.gameState?.playerCountryId] || {};
     const strength = Math.sqrt(Math.max(econ.productivity, 1) / 100_000);
-    const troopPower = troops * Math.max(0.25, Math.min(4, strength));
-    const equipPower = Math.max(0, econ.military?.equipPower ?? 0);
+    const troopPower = Math.max(0, Number(cd.infantry) || 0);
+    const equipPower = Math.max(0, Number(cd.equipment) || 0);
+    const troops = troopPower / Math.max(0.25, Math.min(4, strength));
     const totalPower = troopPower + equipPower;
 
     const upkeepDay = safeNumber(econ.military?.upkeepPerTroopDaily, 50) * troops
