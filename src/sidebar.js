@@ -91,7 +91,7 @@ function stanceWord(score) {
 
 /* =============================== Tips ============================== */
 (function setupUITooltips(){
-  if (window.__gcTipsInit) return; // ensure once
+  if (window.__gcTipsInit) return;
   window.__gcTipsInit = true;
 
   const box = document.createElement("div");
@@ -179,16 +179,14 @@ export function buildGameSidebar() {
 
 <!-- Settings + Time -->
 <div class="box" id="box-settings">
-  <button id="settings-btn-sidebar" class="time-btn">Settings</button>
   <div id="time-box">
     <div id="time-date">Date: <span id="sim-clock" class="toolbar-date">—</span></div>
     <div id="time-controls">
       <button data-speed="0" class="time-btn" title="Pause">❚❚</button>
-      <button data-speed="5" class="time-btn" title="5× speed">5×</button>
-      <button data-speed="15" class="time-btn" title="15× speed">15×</button>
+      <button data-speed="1" class="time-btn" title="1× speed">1×</button>
+      <button data-speed="10" class="time-btn" title="10× speed">10×</button>
       <button data-speed="50" class="time-btn" title="50× speed">50×</button>
       <button data-speed="100" class="time-btn" title="100× speed">100×</button>
-      <button data-speed="100000" class="time-btn" title="100000× speed">100000×</button>
     </div>
   </div>
 </div>
@@ -709,6 +707,7 @@ function registerEconomyTips() {
   tip("tax-slider", "Tax rate.");
   tip("consumption-slider", "Consumption share.");
   tip("investment-slider", "Investment share.");
+  
 }
 
 /* ========================= Page: Military ========================= */
@@ -870,6 +869,8 @@ function renderWarPanel() {
   const pid = String(state?.gameState?.playerCountryId ?? "");
   if (typeof ensureDiplomacyState === "function") ensureDiplomacyState();
 
+
+
   // helpers
   const fmt = (n) => {
     n = Number(n) || 0;
@@ -988,7 +989,8 @@ function renderWarPanel() {
 (function _installWarPowerTicker(){
   try {
     // Update once a second; cheap enough and robust to UI changes
-    setInterval(_renderWarPowerBlock, 1000);
+    setInterval(renderWarPanel, 1000);
+
   } catch (e) {
     // If something goes wrong, fail silently
     console && console.debug && console.debug("war power ticker failed", e);
@@ -1001,35 +1003,93 @@ function initEconomyLogic() {
   const taxSlider = byId("tax-slider");
   const consSlider = byId("consumption-slider");
   const invSlider  = byId("investment-slider");
+  
+// Normalize slider ranges to 0..100 (prevents visual mismatch like "49%" shown near full scale)
+[taxSlider, consSlider, invSlider].forEach((s) => { if (s) { s.min = "0"; s.max = "100"; s.step = "1"; }});
 
-  // Sum-to-100 helper for CI sliders (optional)
-  function normalizeSliders(changed) {
-    if (!consSlider || !invSlider) return;
-    if (!(changed === consSlider || changed === invSlider)) return;
-    const total = safeNumber(consSlider.value, 35) + safeNumber(invSlider.value, 35);
-    if (total <= 100) return;
-    const remainder = 100;
-    const sliders = [consSlider, invSlider];
-    let acc = 0;
-    sliders.forEach((s, idx) => {
-      const raw = safeNumber(s.value, 50);
-      const v = idx < sliders.length - 1 ? remainder - acc : Math.round(raw);
-      s.value = String(Math.max(0, v));
-      acc += v;
-    });
+// Sum-to-100 across Tax + Consumption + Investment
+function enforceTriSum(changed) {
+  const taxSlider = byId("tax-slider");
+  const consSlider = byId("consumption-slider");
+  const invSlider  = byId("investment-slider");
+  if (!taxSlider || !consSlider || !invSlider) return;
+
+  const sliders = [taxSlider, consSlider, invSlider];
+  const idx = sliders.indexOf(changed);
+  const hasIdx = idx >= 0;
+
+  // current values (clamped & rounded to integers)
+  let vals = sliders.map(s => {
+    const v = Math.max(0, Math.min(100, Number(s?.value ?? 0)));
+    return Math.round(v);
+  });
+
+  if (hasIdx) {
+    // keep changed slider fixed; rescale the other two proportionally
+    const a = idx;
+    const others = [0,1,2].filter(i => i !== a);
+    const remainder = Math.max(0, Math.min(100, 100 - vals[a]));
+    const sOther = vals[others[0]] + vals[others[1]];
+    if (sOther <= 0) {
+      const v0 = Math.floor(remainder / 2);
+      const v1 = remainder - v0;
+      vals[others[0]] = v0;
+      vals[others[1]] = v1;
+    } else {
+      const r0 = vals[others[0]] / sOther;
+      const v0 = Math.round(remainder * r0);
+      const v1 = remainder - v0; // exact 100%
+      vals[others[0]] = Math.max(0, Math.min(100, v0));
+      vals[others[1]] = Math.max(0, Math.min(100, v1));
+    }
+  } else {
+    // proportional rescale to sum exactly 100
+    const total = vals[0] + vals[1] + vals[2];
+    if (total > 0) {
+      vals = vals.map(v => Math.round(100 * v / total));
+      // fix rounding drift so sum is exactly 100
+      let sumNow = vals[0] + vals[1] + vals[2];
+      const drift = 100 - sumNow;
+      if (drift !== 0) {
+        let idxMax = 0;
+        if (vals[1] > vals[idxMax]) idxMax = 1;
+        if (vals[2] > vals[idxMax]) idxMax = 2;
+        vals[idxMax] = Math.max(0, Math.min(100, vals[idxMax] + drift));
+      }
+    } else {
+      vals = [30, 35, 35]; // fallback 30/35/35 split
+    }
   }
 
-  // Seed from state (rough but stable)
+  // write back
+  [taxSlider, consSlider, invSlider].forEach((s, i) => { if (s) s.value = String(vals[i]); });
+}
+// Seed from state (rough but stable)
   const pid = state?.gameState?.playerCountryId;
   const cd = state?.countryData?.[pid] || {};
   const pop0 = safeNumber(cd?.population, 1_000_000);
   const gdpReported = safeNumber(cd?.GDP, 100); // millions
 
-  const taxInit = safeNumber(taxSlider?.value, 30) / 100;
-  const consInit = safeNumber(consSlider?.value, 35) / 100;
-  const invInit  = safeNumber(invSlider?.value,  35) / 100;
+  
+  let taxInit = safeNumber(taxSlider?.value, 30) / 100;
+  let consInit = safeNumber(consSlider?.value, 35) / 100;
+  let invInit  = safeNumber(invSlider?.value,  35) / 100;
 
-  econ = {
+  // Tri-sum seed: proportionally normalize Tax+Cons+Inv to sum to 1
+  (function triSeedNormalize() {
+    let t = clamp01(taxInit), c = clamp01(consInit), i = clamp01(invInit);
+    const total = t + c + i;
+    if (Math.abs(total - 1) > 1e-9) {
+      if (total > 0) { t /= total; c /= total; i /= total; }
+      else { t = 0.30; c = 0.35; i = 0.35; }
+      const ts = byId("tax-slider"), cs = byId("consumption-slider"), is = byId("investment-slider");
+      if (ts) ts.value = String(Math.round(t * 100));
+      if (cs) cs.value = String(Math.round(c * 100));
+      if (is) is.value = String(Math.round(i * 100));
+    }
+    taxInit = t; consInit = c; invInit = i;
+  })();
+econ = {
     pop: pop0,
     stability: 0.60,
     labourForce: pop0 * 0.60,
@@ -1083,22 +1143,37 @@ function initEconomyLogic() {
     const stabRate = econ.stability < 1 ? rawStabRate : 0;
     econ.stability = clamp01(econ.stability + stabRate * (days / DAYS_IN_YEAR));
 
+
     const popRate  = econ.cons * 0.10 - 0.03;
     const prodRate = econ.inv  * 0.10 - 0.03;
     econ.pop += econ.pop * popRate * (days / DAYS_IN_YEAR);
 
     const draftPct = clamp01(econ.military?.draftPct ?? 0);
-    const troops = (econ.labourForce / Math.max(1e-9, 1 - draftPct)) * draftPct;
-    econ.labourForce = Math.max(0, econ.pop * 0.60 - troops);
+    let troops = econ.pop * draftPct;
 
     econ.productivity *= Math.pow(1 + prodRate, days / DAYS_IN_YEAR);
+    const strength = strengthFromProd(econ.productivity);
+
+    const pid = String(state.gameState?.playerCountryId ?? "");
+    const cdLoss = state.countryData?.[pid]?.losses;
+    if (cdLoss) {
+      const lossInf = Math.max(0, Number(cdLoss.inf || 0));
+      const lossEq  = Math.max(0, Number(cdLoss.eq  || 0));
+      const troopLoss = lossInf / Math.max(strength, 1e-9);
+      troops = Math.max(0, troops - troopLoss);
+      econ.military.equipPower = Math.max(0, (econ.military.equipPower || 0) - lossEq);
+    }
+
+    const minLF = econ.pop * 0.20;
+    const maxLF = econ.pop * 0.80;
+    const rawLF = Math.max(0, econ.pop * econ.stability - troops);
+    econ.labourForce = Math.max(minLF, Math.min(maxLF, rawLF));
     econ.GDP = Math.max(0, econ.labourForce * econ.productivity);
 
     const dailyIncome = (econ.GDP * econ.taxRate) / DAYS_IN_YEAR;
     econ.treasury += dailyIncome * days;
 
     // --- military ---
-    const strength = strengthFromProd(econ.productivity);
     const troopPower = troops * strength;
     const basePower = troopPower;
     let equipPower = Math.max(0, Number(econ.military?.equipPower ?? 0));
@@ -1162,20 +1237,11 @@ function initEconomyLogic() {
         //   - equipPower (econ.military.equipPower)
         //   - strengthFromProd(...) is defined above
 
-        const troopPower = Math.max(0, troops * strengthFromProd(econ.productivity)); // same unit as we use for “Troop Power”
+        const troopPower = Math.max(0, troops * strengthFromProd(econ.productivity));
         const equipPow   = Math.max(0, econ.military.equipPower);
 
-        const lossInf = Math.max(0, Number(cd?.losses?.inf || 0));
-        const lossEq  = Math.max(0, Number(cd?.losses?.eq  || 0));
-
-        const nextInf = Math.max(0, troopPower - lossInf);
-        const nextEq  = Math.max(0, equipPow - lossEq);
-
-        const gainInf = Math.max(0, nextInf - (Number(cd.infantry) || 0));
-        const gainEq  = Math.max(0, nextEq  - (Number(cd.equipment) || 0));
-
-        cd.infantry       = Math.max(0, (Number(cd.infantry) || 0) + gainInf);
-        cd.equipment      = Math.max(0, (Number(cd.equipment) || 0) + gainEq);
+        cd.infantry       = troopPower;
+        cd.equipment      = equipPow;
         cd.military_power = cd.infantry + cd.equipment;
 
         if (cd.losses) { cd.losses.inf = 0; cd.losses.eq = 0; }
@@ -1191,28 +1257,25 @@ function initEconomyLogic() {
         const cd   = state.countryData[id];
         if (!econ || !cd) continue;
 
-        // Troop power from drafted service
-        const troops = Number(econ.military?.service || 0);
-        const troopPower = Math.max(0, troops * strengthFromProd(econ.productivity || 1));
-
-        // Equipment power (you already compute/store this each tick)
-        const equipPow = Math.max(0, econ.military?.equipPower || 0);
-
+        let troops = Number(econ.military?.service || 0);
+        let equipPow = Math.max(0, econ.military?.equipPower || 0);
+        const strength = strengthFromProd(econ.productivity || 1);
         const lossInf = Math.max(0, Number(cd?.losses?.inf || 0));
         const lossEq  = Math.max(0, Number(cd?.losses?.eq  || 0));
-
-        const nextInf = Math.max(0, troopPower - lossInf);
-        const nextEq  = Math.max(0, equipPow - lossEq);
-
-        const gainInf = Math.max(0, nextInf - (Number(cd.infantry) || 0));
-        const gainEq  = Math.max(0, nextEq  - (Number(cd.equipment) || 0));
-
-        cd.infantry       = Math.max(0, (Number(cd.infantry) || 0) + gainInf);
-        cd.equipment      = Math.max(0, (Number(cd.equipment) || 0) + gainEq);
+        const troopLoss = lossInf / Math.max(strength, 1e-9);
+        troops   = Math.max(0, troops - troopLoss);
+        equipPow = Math.max(0, equipPow - lossEq);
+        if (econ.military) {
+          econ.military.service = troops;
+          econ.military.equipPower = equipPow;
+        }
+        const troopPower = troops * strength;
+        cd.infantry       = troopPower;
+        cd.equipment      = equipPow;
         cd.military_power = cd.infantry + cd.equipment;
 
         if (cd.losses) { cd.losses.inf = 0; cd.losses.eq = 0; }
-    } 
+    }
         } catch (e) {
       console.warn("[econ→war sync all countries] skipped", e);
     }
@@ -1221,9 +1284,10 @@ function initEconomyLogic() {
   window.advanceEconomy = advanceEconomy;
 
   function recalc() {
+    
     const rawStabRate = 0.3 - econ.taxRate;
-    const popRate = econ.cons * 0.10 - 0.03;
-    const prodRate = econ.inv * 0.10 - 0.03;
+    const popRate  = econ.cons * 0.10 - 0.03;
+    const prodRate = econ.inv  * 0.10 - 0.03;
     const stabRate = econ.stability < 1 ? rawStabRate : 0;
     const labourRate = (1 + popRate) * (1 + stabRate) - 1;
     const annualGdpRate = (1 + labourRate) * (1 + prodRate) - 1;
@@ -1245,22 +1309,19 @@ function initEconomyLogic() {
     const annualIncome = dailyIncome * DAYS_IN_YEAR;
     dv("econ-treasury-total", formatCompactNumber(econ.treasury));
     dv("econ-gov-revenue", formatCompactNumber(annualIncome));
+    const plannedDefense = safeNumber(econ.military?.budgetPct, 0.1) * dailyIncome;
 
     // Military reads
-    const draftPct = clamp01(econ.military?.draftPct ?? 0);
-    const troops = typeof econ.troops === "number"
-      ? econ.troops
-      : (econ.labourForceBase ?? econ.labourForce / Math.max(1e-9, 1 - draftPct)) * draftPct;
-
+    const cd = state.countryData?.[state.gameState?.playerCountryId] || {};
     const strength = Math.sqrt(Math.max(econ.productivity, 1) / 100_000);
-    const troopPower = troops * Math.max(0.25, Math.min(4, strength));
-    const equipPower = Math.max(0, econ.military?.equipPower ?? 0);
+    const troopPower = Math.max(0, Number(cd.infantry) || 0);
+    const equipPower = Math.max(0, Number(cd.equipment) || 0);
+    const troops = troopPower / Math.max(0.25, Math.min(4, strength));
     const totalPower = troopPower + equipPower;
 
     const upkeepDay = safeNumber(econ.military?.upkeepPerTroopDaily, 50) * troops
       + safeNumber(econ.military?.upkeepPerEquipPowerAnnual, 100_000) / DAYS_IN_YEAR * equipPower;
 
-    const plannedDefense = safeNumber(econ.military?.budgetPct, 0.1) * dailyIncome;
     const powerDeltaYr = safeNumber(econ.last?.powerDelta, 0) * DAYS_IN_YEAR;
 
     dv("mil-treasury", formatCompactNumber(econ.treasury));
@@ -1274,8 +1335,11 @@ function initEconomyLogic() {
     dv("mil-net", formatCompactNumber(safeNumber(econ.last?.net, 0) * DAYS_IN_YEAR));
     dv("mil-troop-power", formatCompactNumber(troopPower));
     dv("mil-equip-power", formatCompactNumber(equipPower));
-
-    // Readiness trend (yearly)
+    // Defense budget & draft slider readouts
+    dv("defense-planned-spend", formatCompactNumber(plannedDefense * DAYS_IN_YEAR));
+    dv("draft-display", Math.round(clamp01(econ.military?.draftPct ?? 0) * 100) + "%");
+    dv("draft-troops", formatCompactNumber(troops));
+// Readiness trend (yearly)
     const upk = safeNumber(econ.last?.upkeep, upkeepDay);
     const upkPaid = safeNumber(econ.last?.upkeepPaid, upk);
     const coverage = upk > 0 ? upkPaid / upk : 1;
@@ -1297,17 +1361,17 @@ function initEconomyLogic() {
     dv("ci-prod-effect", (prodRate * 100).toFixed(2) + "% /yr");
   }
 
+  
   [taxSlider, consSlider, invSlider].filter(Boolean).forEach((slider) =>
     slider.addEventListener("input", () => {
-      normalizeSliders(slider);
+      enforceTriSum(slider);
       econ.taxRate = clamp01(safeNumber(taxSlider.value, 30) / 100);
-      econ.cons = clamp01(safeNumber(consSlider.value, 35) / 100);
-      econ.inv = clamp01(safeNumber(invSlider.value, 35) / 100);
+      econ.cons    = clamp01(safeNumber(consSlider.value, 35) / 100);
+      econ.inv     = clamp01(safeNumber(invSlider.value, 35) / 100);
       recalc();
     })
   );
-
-  window.updateEconomy = recalc;
+window.updateEconomy = recalc;
   recalc();
   updateClockDisplay();
 }

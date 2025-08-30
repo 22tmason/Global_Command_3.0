@@ -26,6 +26,7 @@ export function advanceDays(days = 1) {
   if (window.handleSimulationTick) window.handleSimulationTick(days);
   if (window.stepWar)              window.stepWar(days);
 
+
   // optional: coalesced UI refreshes
   if (window.scheduleLeaderboardUpdate) window.scheduleLeaderboardUpdate();
   if (window.scheduleWarLinesUpdate)    window.scheduleWarLinesUpdate();
@@ -64,3 +65,4 @@ export function setTimeScale(newScale) {
 
 // (optional) expose for console/testing
 window.advanceDays = advanceDays;
+

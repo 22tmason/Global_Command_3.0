@@ -21,7 +21,7 @@ const CFG = {
   maxDailyControlMove: 1.0,
 
   // LOSSES: per day we destroy this share of TOTAL raw power on the field
-  intensityPerPower: 2,   // higher = bloodier
+  intensityPerPower: 0.02,   // higher = bloodier
 
   // Split infantry vs equipment in the daily loss
   infFrac: 0.60,
@@ -147,6 +147,13 @@ function resolvePairDay(a, b, days=1){
   if (Number.isFinite(+dA.equipment)) dA.equipment = Math.max(0, dA.equipment - A_eqLoss);
   if (Number.isFinite(+dB.infantry))  dB.infantry  = Math.max(0, dB.infantry  - B_infLoss);
   if (Number.isFinite(+dB.equipment)) dB.equipment = Math.max(0, dB.equipment - B_eqLoss);
+  // track losses for economy sync
+  dA.losses = dA.losses || { inf: 0, eq: 0 };
+  dA.losses.inf = (dA.losses.inf || 0) + A_infLoss;
+  dA.losses.eq  = (dA.losses.eq  || 0) + A_eqLoss;
+  dB.losses = dB.losses || { inf: 0, eq: 0 };
+  dB.losses.inf = (dB.losses.inf || 0) + B_infLoss;
+  dB.losses.eq  = (dB.losses.eq  || 0) + B_eqLoss;
 
   // light societal effects
   if (Number.isFinite(+dA.population)) dA.population = Math.max(0, dA.population - A_infLoss);
